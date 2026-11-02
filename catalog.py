@@ -184,8 +184,6 @@ _MORE = [
      "Whose population is growing the fastest {g}?", "population growth"),
     ("shrink", "SP.POP.GROW", "asc", ("SHRINKING", "COUNTRIES"), "Population growth (yearly %)", "pct",
      "Which countries are shrinking the fastest {g}?", "population decline"),
-    ("phones", "IT.CEL.SETS.P2", "desc", ("MOST PHONES", "PER PERSON"), "Mobile subscriptions per 100 people",
-     "dec1", "Where do people have the most phones {g}?", "tech mobile"),
 ]
 TOPICS += [dict(zip(("id", "ind", "order", "hook", "sub", "fmt", "question", "tags"), t)) for t in _MORE]
 
