@@ -1,0 +1,11 @@
+.venv/
+bin/
+work/
+__pycache__/
+к-публикации/
+data/cache/
+data/instagram.json
+data/used.json
+data/posted_instagram.json
+data/*.log
+.DS_Store

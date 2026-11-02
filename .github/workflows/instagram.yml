@@ -1,0 +1,60 @@
+name: Instagram Reels
+
+on:
+  schedule:
+    - cron: "7 18 * * *"   # 13:07 Нью-Йорк (зима) = 22:07 Баку
+    - cron: "7 0 * * *"    # 19:07 Нью-Йорк (зима) = 04:07 Баку
+  workflow_dispatch:        # ручной запуск кнопкой Run workflow
+    inputs:
+      dry_run:
+        description: "Только сделать ролик, не публиковать"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: instagram
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Установить зависимости
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -r requirements.txt
+
+      - name: Сделать и опубликовать ролик
+        id: post
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+        run: python cloud_post.py ${{ inputs.dry_run && '--dry-run' || '' }}
+
+      - name: Сохранить ролик (можно скачать для YouTube/TikTok, хранится 14 дней)
+        if: always() && steps.post.outputs.video
+        uses: actions/upload-artifact@v4
+        with:
+          name: reel-${{ github.run_number }}
+          path: ${{ steps.post.outputs.video }}
+          retention-days: 14
+
+      - name: Запомнить, какие темы уже вышли
+        if: success() && !inputs.dry_run
+        run: |
+          git config user.name "reels-bot"
+          git config user.email "reels-bot@users.noreply.github.com"
+          git add data/used_cloud.json data/history_cloud.json
+          git diff --cached --quiet || git commit -m "Опубликован ролик #${{ github.run_number }}"
+          git push

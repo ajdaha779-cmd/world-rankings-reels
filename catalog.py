@@ -1,0 +1,121 @@
+"""Каталог: страны, группы стран и темы рейтингов (индикаторы Всемирного банка)."""
+import json, os
+
+BASE = os.path.dirname(os.path.abspath(__file__))
+
+# территории и спорные образования — не берём, чтобы не было претензий «это не страна»
+EXCLUDE = set("AS AW BM VG KY CW FO PF GI GL GU HK IM MO MF NC MP PR SX TC VI JG XK PS KP".split())
+
+SHORT = {"BS": "Bahamas", "BN": "Brunei", "CD": "DR Congo", "CG": "Congo", "EG": "Egypt", "FM": "Micronesia",
+         "GM": "Gambia", "IR": "Iran", "KN": "St Kitts & Nevis", "KR": "South Korea", "RU": "Russia",
+         "SO": "Somalia", "ST": "São Tomé", "SY": "Syria", "TT": "Trinidad & Tobago", "VC": "St Vincent",
+         "VE": "Venezuela", "YE": "Yemen", "LA": "Laos", "KG": "Kyrgyzstan", "SK": "Slovakia", "CZ": "Czechia",
+         "VN": "Vietnam", "TR": "Turkey", "CI": "Ivory Coast", "US": "USA", "GB": "UK", "AE": "UAE",
+         "BA": "Bosnia", "CF": "Central Africa", "DO": "Dominican Rep.", "GQ": "Eq. Guinea",
+         "PG": "Papua New Guinea", "AG": "Antigua & Barbuda", "MK": "North Macedonia", "SZ": "Eswatini",
+         "TL": "Timor-Leste", "LC": "St Lucia", "MH": "Marshall Islands", "SB": "Solomon Islands"}
+
+
+def _load_countries():
+    raw = json.load(open(os.path.join(BASE, "data", "countries_raw.json")))[1]
+    out = {}
+    for c in raw:
+        iso = c["iso2Code"]
+        if c["region"]["value"] == "Aggregates" or iso in EXCLUDE:
+            continue
+        out[iso] = SHORT.get(iso, c["name"])
+    return out
+
+
+COUNTRIES = _load_countries()
+
+_g = lambda s: [x for x in s.split() if x in COUNTRIES]
+GROUPS = {
+    "world": ("the world", list(COUNTRIES)),
+    "europe": ("Europe", _g("AL AD AT BY BE BA BG HR CY CZ DK EE FI FR DE GR HU IS IE IT LV LI LT LU MT MD MC ME "
+                            "NL MK NO PL PT RO RU SM RS SK SI ES SE CH UA GB")),
+    "asia": ("Asia", _g("CN JP KR IN ID TH VN MY PH SG BD PK LK NP MM KH LA MN KZ UZ KG TJ TM AF IR IQ SA AE QA "
+                        "KW BH OM YE JO LB SY IL TR AZ GE AM BT MV BN TL")),
+    "americas": ("the Americas", _g("US CA MX GT BZ HN SV NI CR PA CU JM HT DO BS BB TT CO VE EC PE BO BR PY UY "
+                                    "AR CL GY SR")),
+    "africa": ("Africa", _g("DZ EG LY MA TN NG GH CI SN ML BF NE TD SD SS ET ER DJ SO KE UG RW BI TZ MZ MW ZM "
+                            "ZW BW NA ZA LS SZ MG AO CD CG GA CM CF GQ BJ TG LR SL GN GW GM MR CV MU SC KM ST")),
+    "mideast": ("the Middle East", _g("SA AE QA KW BH OM YE JO LB SY IQ IR IL TR EG")),
+    "exussr": ("ex-USSR countries", _g("AM AZ BY EE GE KZ KG LV LT MD RU TJ TM UA UZ")),
+    "g20": ("G20 countries", _g("AR AU BR CA CN FR DE IN ID IT JP KR MX RU SA ZA TR GB US")),
+    "eu": ("the EU", _g("AT BE BG HR CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE")),
+}
+
+
+# ---------- форматы чисел ----------
+def _compact(v, prefix=""):
+    a = abs(v)
+    sign = "-" if v < 0 else ""
+    for lim, suf in ((1e12, "T"), (1e9, "B"), (1e6, "M"), (1e3, "K")):
+        if a >= lim:
+            return f"{sign}{prefix}{a / lim:.1f}{suf}" if a / lim < 100 else f"{sign}{prefix}{a / lim:.0f}{suf}"
+    return f"{sign}{prefix}{a:,.0f}"
+
+
+FMT = {
+    "money": lambda v: f"${v:,.0f}" if v < 1e6 else _compact(v, "$"),
+    "pct": lambda v: f"{v:.1f}%",
+    "years": lambda v: f"{v:.1f} yrs",
+    "dec2": lambda v: f"{v:.2f}",
+    "dec1": lambda v: f"{v:.1f}",
+    "people": lambda v: _compact(v),
+    "signed": lambda v: ("+" if v > 0 else "") + _compact(v),
+    "density": lambda v: f"{v:,.0f}/km²",
+    "tonnes": lambda v: f"{v:.1f} t",
+}
+
+# id, индикатор, порядок, хук (2 строки), подпись, формат, вопрос для заголовка, теги
+TOPICS = [
+    ("rich", "NY.GDP.PCAP.CD", "desc", ("RICHEST", "PER PERSON"), "GDP per person (USD)", "money",
+     "Which countries are the richest per person {g}?", "money economy gdp"),
+    ("poor", "NY.GDP.PCAP.CD", "asc", ("POOREST", "PER PERSON"), "GDP per person (USD)", "money",
+     "Which countries are the poorest {g}?", "money economy poverty"),
+    ("life", "SP.DYN.LE00.IN", "desc", ("WHERE PEOPLE", "LIVE LONGEST"), "Life expectancy at birth", "years",
+     "Where do people live the longest {g}?", "health lifeexpectancy"),
+    ("babies", "SP.DYN.TFRT.IN", "desc", ("MOST BABIES", "PER WOMAN"), "Births per woman", "dec2",
+     "Where do women have the most babies {g}?", "population birthrate"),
+    ("lowbirth", "SP.DYN.TFRT.IN", "asc", ("LOWEST", "BIRTH RATE"), "Births per woman", "dec2",
+     "Which countries have the lowest birth rate {g}?", "population birthrate"),
+    ("unemp", "SL.UEM.TOTL.ZS", "desc", ("HIGHEST", "UNEMPLOYMENT"), "Unemployment (% of workforce)", "pct",
+     "Where is unemployment the highest {g}?", "jobs economy"),
+    ("jobs", "SL.UEM.TOTL.ZS", "asc", ("LOWEST", "UNEMPLOYMENT"), "Unemployment (% of workforce)", "pct",
+     "Where is it easiest to find a job {g}?", "jobs economy"),
+    ("inflation", "FP.CPI.TOTL.ZG", "desc", ("WHERE PRICES", "RISE FASTEST"), "Inflation (yearly %)", "pct",
+     "Where are prices rising the fastest {g}?", "inflation prices economy"),
+    ("online", "IT.NET.USER.ZS", "desc", ("MOST", "ONLINE"), "Internet users (% of people)", "pct",
+     "Which countries are the most online {g}?", "internet tech"),
+    ("offline", "IT.NET.USER.ZS", "asc", ("LEAST", "ONLINE"), "Internet users (% of people)", "pct",
+     "Which countries are the least online {g}?", "internet tech"),
+    ("pop", "SP.POP.TOTL", "desc", ("MOST", "POPULATED"), "Total population", "people",
+     "Which countries have the most people {g}?", "population"),
+    ("health", "SH.XPD.CHEX.PC.CD", "desc", ("WHO SPENDS MOST", "ON HEALTH?"), "Health spending per person (USD)",
+     "money", "Who spends the most on health {g}?", "health healthcare"),
+    ("old", "SP.POP.65UP.TO.ZS", "desc", ("OLDEST", "COUNTRIES"), "People aged 65+ (% of population)", "pct",
+     "Which countries are the oldest {g}?", "population aging"),
+    ("doctors", "SH.MED.PHYS.ZS", "desc", ("MOST DOCTORS", "PER PERSON"), "Doctors per 1,000 people", "dec1",
+     "Where are the most doctors {g}?", "health doctors"),
+    ("crowded", "EN.POP.DNST", "desc", ("MOST", "CROWDED"), "People per km²", "density",
+     "Which countries are the most crowded {g}?", "population density"),
+    ("green", "AG.LND.FRST.ZS", "desc", ("GREENEST", "COUNTRIES"), "Forest area (% of land)", "pct",
+     "Which countries are the greenest {g}?", "nature forest"),
+    ("co2", "EN.GHG.CO2.PC.CE.AR5", "desc", ("BIGGEST POLLUTERS", "PER PERSON"), "CO2 per person (tonnes/year)",
+     "tonnes", "Who pollutes the most per person {g}?", "climate environment"),
+    ("women", "SL.TLF.CACT.FE.ZS", "desc", ("WHERE MOST", "WOMEN WORK"), "Women in the workforce (% of women 15+)",
+     "pct", "Where do the most women work {g}?", "women jobs"),
+    ("economy", "NY.GDP.MKTP.CD", "desc", ("BIGGEST", "ECONOMIES"), "GDP (USD)", "money",
+     "What are the biggest economies {g}?", "economy gdp money"),
+    ("growth", "NY.GDP.MKTP.KD.ZG", "desc", ("FASTEST GROWING", "ECONOMIES"), "GDP growth (yearly %)", "pct",
+     "Which economies are growing the fastest {g}?", "economy growth"),
+    ("movein", "SM.POP.NETM", "desc", ("WHERE EVERYONE", "IS MOVING"), "Net migration (people per year)", "signed",
+     "Where is everyone moving to {g}?", "migration population"),
+    ("moveout", "SM.POP.NETM", "asc", ("WHERE PEOPLE", "ARE LEAVING"), "Net migration (people per year)", "signed",
+     "Which countries are people leaving {g}?", "migration population"),
+]
+TOPICS = [dict(zip(("id", "ind", "order", "hook", "sub", "fmt", "question", "tags"), t)) for t in TOPICS]
+
+ACCENTS = [(255, 196, 46), (46, 204, 113), (64, 196, 255), (255, 92, 120), (190, 120, 255), (255, 140, 50)]
