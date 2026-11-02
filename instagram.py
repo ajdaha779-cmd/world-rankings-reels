@@ -12,7 +12,8 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 CONF = os.path.join(BASE, "data", "instagram.json")
 POSTED = os.path.join(BASE, "data", "posted_instagram.json")
 OUTBOX = os.path.join(BASE, "к-публикации")
-API = "https://graph.instagram.com/v23.0"
+API_IG = "https://graph.instagram.com/v23.0"  # токен входа через Instagram (IG...), живёт 60 дней
+API_FB = "https://graph.facebook.com/v23.0"   # токен системного пользователя (EAA...), бессрочный
 RUPLOAD = "https://rupload.facebook.com/ig-api-upload/v23.0"
 SSL = ssl.create_default_context(cafile=certifi.where())
 MAX_LATE_HOURS = 48  # ролик, опоздавший больше чем на 2 суток, пропускаем — следующие важнее
@@ -54,14 +55,20 @@ def save(path, obj):
     json.dump(obj, open(path, "w"), ensure_ascii=False, indent=2)
 
 
+def api_for(token):
+    return API_IG if token.startswith("IG") else API_FB
+
+
 def conf():
-    if os.environ.get("IG_TOKEN"):  # GitHub Actions: токен в секретах, продлевает отдельный workflow
-        return {"token": os.environ["IG_TOKEN"], "user_id": os.environ["IG_USER_ID"]}
+    if os.environ.get("IG_TOKEN"):  # GitHub Actions: токен в секретах
+        tok = os.environ["IG_TOKEN"].strip()
+        return {"token": tok, "user_id": os.environ["IG_USER_ID"].strip(), "api": api_for(tok)}
     c = load(CONF, None)
     if not c:
         sys.exit("Сначала: .venv/bin/python instagram.py setup")
-    # долгий токен живёт 60 дней — продлеваем раз в 20 дней
-    if time.time() - c.get("refreshed", 0) > 20 * 86400:
+    c["api"] = api_for(c["token"])
+    # токен входа через Instagram живёт 60 дней — продлеваем раз в 20 дней (системный токен бессрочный)
+    if c["api"] == API_IG and time.time() - c.get("refreshed", 0) > 20 * 86400:
         try:
             r = http("GET", "https://graph.instagram.com/refresh_access_token",
                      {"grant_type": "ig_refresh_token", "access_token": c["token"]})
@@ -76,9 +83,28 @@ def conf():
 
 def setup():
     token = input("Вставь токен доступа Instagram и нажми Enter:\n> ").strip()
-    me = http("GET", f"{API}/me", {"fields": "user_id,username,account_type", "access_token": token})
-    save(CONF, {"token": token, "user_id": me["user_id"], "username": me["username"], "refreshed": time.time()})
-    print(f"Готово: @{me['username']} ({me.get('account_type')}), id {me['user_id']}")
+    if api_for(token) == API_IG:
+        me = http("GET", f"{API_IG}/me", {"fields": "user_id,username,account_type", "access_token": token})
+        ig_id, username = me["user_id"], me["username"]
+    else:
+        # системный токен: id аккаунта Instagram берём из списка объектов, к которым токен дал доступ
+        dbg = http("GET", f"{API_FB}/debug_token", {"input_token": token, "access_token": token})["data"]
+        if not dbg.get("is_valid"):
+            sys.exit(f"Токен недействителен: {dbg}")
+        scopes = {g["scope"]: g.get("target_ids", []) for g in dbg.get("granular_scopes", [])}
+        if "instagram_content_publish" not in dbg.get("scopes", []):
+            sys.exit("У токена нет разрешения instagram_content_publish — пересоздай его с этим разрешением")
+        ids = scopes.get("instagram_content_publish") or scopes.get("instagram_basic") or []
+        if not ids:
+            pages = http("GET", f"{API_FB}/me/accounts",
+                         {"fields": "instagram_business_account", "access_token": token}).get("data", [])
+            ids = [p["instagram_business_account"]["id"] for p in pages if p.get("instagram_business_account")]
+        if not ids:
+            sys.exit("Токен не видит ни одного аккаунта Instagram — добавь аккаунт в объекты конфигурации")
+        ig_id = ids[0]
+        username = http("GET", f"{API_FB}/{ig_id}", {"fields": "username", "access_token": token})["username"]
+    save(CONF, {"token": token, "user_id": ig_id, "username": username, "refreshed": time.time()})
+    print(f"Готово: @{username}, id {ig_id}")
 
 
 def queue():
@@ -100,7 +126,7 @@ def caption(m):
 def publish(c, m):
     size = os.path.getsize(m["path"])
     log(f"публикую {m['key']} ({size // 1024} КБ)")
-    cont = http("POST", f"{API}/{c['user_id']}/media",
+    cont = http("POST", f"{c['api']}/{c['user_id']}/media",
                 {"media_type": "REELS", "upload_type": "resumable", "caption": caption(m),
                  "share_to_feed": "true", "access_token": c["token"]})
     cid = cont["id"]
@@ -108,7 +134,7 @@ def publish(c, m):
         http("POST", f"{RUPLOAD}/{cid}", body=f.read(), timeout=600,
              headers={"Authorization": f"OAuth {c['token']}", "offset": "0", "file_size": str(size)})
     for _ in range(60):  # Instagram обрабатывает видео — ждём до 10 минут
-        st = http("GET", f"{API}/{cid}", {"fields": "status_code,status", "access_token": c["token"]})
+        st = http("GET", f"{c['api']}/{cid}", {"fields": "status_code,status", "access_token": c["token"]})
         if st.get("status_code") == "FINISHED":
             break
         if st.get("status_code") in ("ERROR", "EXPIRED"):
@@ -116,7 +142,7 @@ def publish(c, m):
         time.sleep(10)
     else:
         raise RuntimeError("Instagram слишком долго обрабатывает видео")
-    pub = http("POST", f"{API}/{c['user_id']}/media_publish", {"creation_id": cid, "access_token": c["token"]})
+    pub = http("POST", f"{c['api']}/{c['user_id']}/media_publish", {"creation_id": cid, "access_token": c["token"]})
     log(f"опубликовано: {m['key']} → media {pub['id']}")
     return pub["id"]
 
