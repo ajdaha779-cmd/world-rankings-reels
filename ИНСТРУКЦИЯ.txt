@@ -77,3 +77,16 @@ Instagram (приложение Instagram или Meta Business Suite)
   Новые темы добавляются в catalog.py (Claude сделает).
 • Данные обновляются с сайта Всемирного банка раз в неделю; источник и год видны в кадре.
 • Код: engine.py (графика/звук), render.py (ролик), catalog.py (темы), make_batch.py (пачка).
+
+
+INSTAGRAM — ПОЛНОСТЬЮ АВТОМАТИЧЕСКИ ЧЕРЕЗ GITHUB
+================================================
+Серверы GitHub дважды в день (22:07 и 04:07 по Баку) сами делают новый ролик
+и публикуют его в Instagram. Mac для этого не нужен.
+  • .github/workflows/instagram.yml     — расписание и шаги
+  • .github/workflows/refresh-token.yml — продлевает токен Instagram 1-го и 15-го числа
+  • cloud_post.py                       — выбрать тему → сделать ролик → опубликовать
+  • data/used_cloud.json                — какие темы уже вышли в Instagram
+Каждый ролик сохраняется в GitHub на 14 дней: вкладка Actions → запуск → Artifacts.
+Проверка без публикации: Actions → Instagram Reels → Run workflow → галочка «Только сделать ролик».
+Секреты репозитория (Settings → Secrets → Actions): IG_TOKEN, IG_USER_ID, GH_PAT.
