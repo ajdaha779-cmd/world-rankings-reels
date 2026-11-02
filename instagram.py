@@ -99,6 +99,8 @@ def setup():
             pages = http("GET", f"{API_FB}/me/accounts",
                          {"fields": "instagram_business_account", "access_token": token}).get("data", [])
             ids = [p["instagram_business_account"]["id"] for p in pages if p.get("instagram_business_account")]
+        if not ids and load(CONF, {}).get("user_id"):  # тот же аккаунт, что и в прошлый раз
+            ids = [load(CONF, {})["user_id"]]
         if not ids:  # у системных токенов Meta часто не перечисляет объекты — спросим id из настроек портфолио
             ids = [input("id аккаунта Instagram (Настройки портфолио → Аккаунты Instagram):\n> ").strip()]
         ig_id = ids[0]
