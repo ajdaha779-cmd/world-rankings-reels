@@ -1,105 +1,79 @@
-"""Аватар канала: объёмный глобус из флагов + золотая медаль #1 с лентами.
+"""Аватар канала: минималистичный знак — линии глобуса и пьедестал 2-1-3 (золото, серебро, бронза).
+Рисуется в 3x и уменьшается — края гладкие. Читается даже в маленьком кружке.
   .venv/bin/python оформление/make_avatar.py
 """
-import glob, os, random
+import os
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-S = 1080
-y, x = np.mgrid[0:S, 0:S].astype(np.float64)
+S, K = 1080, 3
+B = S * K  # холст с запасом для сглаживания
 
 
-def flag_texture(tw=2600, th=1300, cw=104, ch=70):
-    codes = [os.path.basename(p)[:-4] for p in sorted(glob.glob(os.path.join(BASE, "assets/flags/*.png")))]
-    random.Random(11).shuffle(codes)
-    tex = Image.new("RGB", (tw, th), (12, 12, 20))
-    k = 0
-    for yy in range(0, th, ch):
-        off = (yy // ch) % 2 * cw // 2
-        for xx in range(-cw, tw, cw):
-            f = Image.open(os.path.join(BASE, f"assets/flags/{codes[k % len(codes)]}.png")).convert("RGB")
-            tex.paste(f.resize((cw - 5, ch - 5), Image.LANCZOS), (xx + off + 2, yy + 2))
-            k += 1
-    a = np.asarray(tex).astype(np.float64) / 255
-    gray = a.mean(axis=2, keepdims=True)
-    return np.clip(gray + (a - gray) * 1.25, 0, 1)  # чуть сочнее цвета
+def background():
+    y, x = np.mgrid[0:S, 0:S].astype(np.float64)
+    d = np.sqrt((x - S / 2) ** 2 + (y - S * 0.46) ** 2) / (S * 0.75)
+    inner, outer = np.array([34, 46, 120]), np.array([7, 8, 26])
+    t = np.clip(d, 0, 1)[:, :, None] ** 1.3
+    arr = inner * (1 - t) + outer * t
+    return Image.fromarray(arr.astype(np.uint8)).resize((B, B), Image.BICUBIC).convert("RGBA")
 
 
-def globe(cx, cy, R, rot=0.6, tilt=-0.32):
-    T = flag_texture()
-    th, tw = T.shape[:2]
-    nx, ny = (x - cx) / R, (y - cy) / R
-    rr = nx ** 2 + ny ** 2
-    nz = np.sqrt(np.clip(1 - rr, 0, 1))
-    py = ny * np.cos(tilt) - nz * np.sin(tilt)
-    pz = ny * np.sin(tilt) + nz * np.cos(tilt)
-    lat = np.arcsin(np.clip(-py, -1, 1))
-    lon = np.arctan2(nx, pz) + rot
-    u = ((lon / (2 * np.pi)) % 1 * (tw - 1)).astype(int)
-    v = ((0.5 - lat / np.pi) * (th - 1)).astype(int).clip(0, th - 1)
-    col = T[v, u]
-    L = np.array([-0.5, -0.62, 0.6]); L /= np.linalg.norm(L)
-    lam = np.clip(nx * L[0] + ny * L[1] + nz * L[2], 0, 1)
-    Hh = L + np.array([0, 0, 1.0]); Hh /= np.linalg.norm(Hh)
-    spec = np.clip(nx * Hh[0] + ny * Hh[1] + nz * Hh[2], 0, 1) ** 55
-    rim = np.clip((np.sqrt(rr) - 0.8) / 0.2, 0, 1) ** 2
-    sph = col * (0.18 + 1.0 * lam)[:, :, None] + spec[:, :, None] * 0.6
-    sph = sph * (1 - 0.4 * rim[:, :, None]) + np.array([0.35, 0.65, 1.0]) * 0.4 * rim[:, :, None]
-    alpha = np.clip((1 - np.sqrt(rr)) * R, 0, 1)  # мягкий край
-    return sph, alpha
-
-
-def background(cx, cy, R):
-    t = (y / S)[:, :, None]
-    bg = np.array([0.11, 0.09, 0.25]) * (1 - t) + np.array([0.02, 0.02, 0.07]) * t
-    d = np.sqrt((x - cx) ** 2 + (y - cy) ** 2) / R
-    halo = np.exp(-((d - 1.0) / 0.13) ** 2) * (d > 0.97)
-    return bg + halo[:, :, None] * np.array([0.25, 0.5, 1.0]) * 0.6
-
-
-def medal(im, mx, my, mr):
-    d = ImageDraw.Draw(im)
-    # ленты за медалью
-    for dx, colr in ((-0.42, (214, 48, 64)), (0.42, (40, 110, 230))):
-        bx = mx + dx * mr
-        pts = [(bx - 0.28 * mr, my), (bx + 0.28 * mr, my), (bx + 0.28 * mr + dx * 0.5 * mr, my + 1.25 * mr),
-               (bx + dx * 0.5 * mr, my + 1.02 * mr), (bx - 0.28 * mr + dx * 0.5 * mr, my + 1.25 * mr)]
-        d.polygon(pts, fill=colr)
-    # тень
-    sh = Image.new("L", (S, S), 0)
-    ImageDraw.Draw(sh).ellipse((mx - mr, my - mr + 22, mx + mr, my + mr + 22), fill=180)
-    im.paste((0, 0, 0), mask=sh.filter(ImageFilter.GaussianBlur(24)))
-    arr = np.asarray(im).astype(np.float64) / 255
-    md = np.sqrt((x - mx) ** 2 + (y - my) ** 2) / mr
-    gy = np.clip((y - (my - mr)) / (2 * mr), 0, 1)[:, :, None]
-    face = np.array([1.0, 0.88, 0.42]) * (1 - gy) + np.array([0.86, 0.56, 0.10]) * gy
-    ring = np.array([0.80, 0.50, 0.06]) * (1 - gy) + np.array([1.0, 0.84, 0.36]) * gy  # ободок наоборот — даёт объём
-    groove = np.abs(md - 0.80) < 0.025
-    m = np.where((md <= 0.82)[:, :, None], face, ring)
-    m = np.where(groove[:, :, None], m * 0.62, m)
-    # блик по верхней дуге
-    shine = np.clip(1 - np.abs(md - 0.62) / 0.12, 0, 1) * np.clip((my - y) / mr, 0, 1) * np.clip((mx - x) / mr + 0.6, 0, 1)
-    m = m + shine[:, :, None] * 0.35
-    aa = np.clip((1 - md) * mr, 0, 1)[:, :, None]
-    arr = arr * (1 - aa) + m.clip(0, 1) * aa
-    im = Image.fromarray((arr.clip(0, 1) * 255).astype(np.uint8))
-    d = ImageDraw.Draw(im)
-    f = ImageFont.truetype(os.path.join(BASE, "assets/fonts/Montserrat-Black.ttf"), int(mr * 0.98))
-    d.text((mx + 5, my + 8), "#1", font=f, fill=(128, 76, 0), anchor="mm")
-    d.text((mx, my), "#1", font=f, fill=(255, 252, 240), anchor="mm", stroke_width=2, stroke_fill=(150, 92, 0))
-    return im
+def vertical_gradient(w, h, top, bottom):
+    t = np.linspace(0, 1, h)[:, None, None]
+    arr = np.array(top)[None, None, :] * (1 - t) + np.array(bottom)[None, None, :] * t
+    return Image.fromarray(np.repeat(arr, w, axis=1).astype(np.uint8))
 
 
 def main():
-    cx, cy, R = S * 0.47, S * 0.45, S * 0.36
-    sph, a = globe(cx, cy, R)
-    bg = background(cx, cy, R)
-    img = sph * a[:, :, None] + bg * (1 - a[:, :, None])
-    im = Image.fromarray((img.clip(0, 1) * 255).astype(np.uint8))
-    im = medal(im, S * 0.655, S * 0.635, S * 0.18)
+    im = background()
+    cx, cy, R = B / 2, B * 0.45, B * 0.34
+    lw = int(B * 0.009)
+
+    # линии глобуса — полупрозрачные, чтобы пьедестал был главным
+    g = Image.new("RGBA", (B, B), (0, 0, 0, 0))
+    d = ImageDraw.Draw(g)
+    line = (190, 210, 255, 95)
+    d.ellipse((cx - R, cy - R, cx + R, cy + R), outline=(215, 228, 255, 150), width=int(lw * 1.4))
+    for k in (0.38, 0.75):  # меридианы
+        d.ellipse((cx - R * k, cy - R, cx + R * k, cy + R), outline=line, width=lw)
+    d.line((cx, cy - R, cx, cy + R), fill=line, width=lw)
+    for lat in (-0.5, 0.0, 0.5):  # параллели
+        yy = cy + lat * R
+        half = R * np.sqrt(1 - lat ** 2)
+        d.line((cx - half, yy, cx + half, yy), fill=line, width=lw)
+    im = Image.alpha_composite(im, g)
+
+    # пьедестал 2-1-3
+    bw, gap = B * 0.17, B * 0.025
+    base = cy + R * 0.92
+    bars = [(-1, 0.30, (232, 238, 250), (150, 165, 190)),   # серебро
+            (0, 0.47, (255, 214, 92), (214, 140, 18)),       # золото
+            (1, 0.22, (248, 170, 110), (176, 92, 40))]       # бронза
+    glow = Image.new("RGBA", (B, B), (0, 0, 0, 0))
+    gx0 = cx - bw / 2
+    ImageDraw.Draw(glow).rounded_rectangle((gx0 - B * 0.04, base - B * 0.47 - B * 0.04, gx0 + bw + B * 0.04, base),
+                                           int(B * 0.06), fill=(255, 190, 40, 140))
+    im = Image.alpha_composite(im, glow.filter(ImageFilter.GaussianBlur(B * 0.045)))
+    f = ImageFont.truetype(os.path.join(BASE, "assets/fonts/Montserrat-Black.ttf"), int(B * 0.2))
+    for pos, h, top, bottom in bars:
+        x0 = cx - bw / 2 + pos * (bw + gap)
+        y0 = base - B * h
+        grad = vertical_gradient(int(bw), int(B * h), top, bottom).convert("RGBA")
+        mask = Image.new("L", grad.size, 0)
+        ImageDraw.Draw(mask).rounded_rectangle((0, 0, grad.width - 1, grad.height - 1), int(B * 0.03), fill=255)
+        # тень под столбиком
+        sh = Image.new("RGBA", (B, B), (0, 0, 0, 0))
+        ImageDraw.Draw(sh).rounded_rectangle((x0 + B * 0.008, y0 + B * 0.012, x0 + bw + B * 0.008, base + B * 0.012),
+                                             int(B * 0.03), fill=(0, 0, 0, 120))
+        im = Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(B * 0.01)))
+        im.paste(grad, (int(x0), int(y0)), mask)
+        if pos == 0:
+            ImageDraw.Draw(im).text((cx, y0 + B * 0.15), "1", font=f, fill=(24, 26, 64), anchor="mm")
+
     out = os.path.join(BASE, "оформление", "аватар.png")
-    im.save(out)
+    im.convert("RGB").resize((S, S), Image.LANCZOS).save(out)
     return out
 
 
