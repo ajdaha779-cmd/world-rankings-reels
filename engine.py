@@ -203,28 +203,31 @@ class Video:
     def write(self, img):
         self.p.stdin.write(img.tobytes())
 
-    def finish(self, music=None, music_vol=0.22):
+    def finish(self, music=None, music_vol=0.22, audio=None):
+        """audio — готовая стереодорожка (n, 2); иначе старое моно-сведение из music и self.events."""
         self.p.stdin.close()
         self.p.wait()
-        n = int(self.duration * SR) + SR
-        audio = np.zeros(n)
-        if music is not None:
-            m = music[:n]
-            fade = np.ones(len(m))
-            fl = int(0.8 * SR)
-            fade[-fl:] = np.linspace(1, 0, fl)
-            audio[:len(m)] += m * fade * music_vol
-        for t, kind, vol, kw in self.events:
-            w_ = sfx_wave(kind, **kw) * vol
-            s = int(t * SR)
-            if s >= n:
-                continue
-            audio[s:s + len(w_)] += w_[:n - s]
-        audio = np.tanh(audio * 1.1) * 0.9
-        pcm = (audio[:int(self.duration * SR)] * 32767).astype(np.int16)
+        channels = 2 if audio is not None else 1
+        if audio is None:
+            n = int(self.duration * SR) + SR
+            audio = np.zeros(n)
+            if music is not None:
+                m = music[:n]
+                fade = np.ones(len(m))
+                fl = int(0.8 * SR)
+                fade[-fl:] = np.linspace(1, 0, fl)
+                audio[:len(m)] += m * fade * music_vol
+            for t, kind, vol, kw in self.events:
+                w_ = sfx_wave(kind, **kw) * vol
+                s = int(t * SR)
+                if s >= n:
+                    continue
+                audio[s:s + len(w_)] += w_[:n - s]
+            audio = np.tanh(audio * 1.1) * 0.9
+        pcm = (np.clip(audio[:int(self.duration * SR)], -1, 1) * 32767).astype(np.int16)
         wav = os.path.join(OUT, f"_{self.name}.wav")
         with wave.open(wav, "wb") as f:
-            f.setnchannels(1)
+            f.setnchannels(channels)
             f.setsampwidth(2)
             f.setframerate(SR)
             f.writeframes(pcm.tobytes())

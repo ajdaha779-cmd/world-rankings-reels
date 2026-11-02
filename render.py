@@ -1,6 +1,7 @@
 """Рендер ролика-рейтинга: строки открываются с последнего места к первому, перед №1 пауза."""
 from engine import *
 from catalog import FMT
+from sound import ranking_track
 
 BAR, PANEL = (66, 78, 112), (27, 30, 44)
 T0, STEP, PAUSE = 0.7, 1.15, 1.1
@@ -32,16 +33,6 @@ def render(rows, topic, group_name, accent, out_path, seed=0):
     row_h = min(90, int((1790 - row_y0) / n) - gap)
     maxv = max(abs(r[2]) for r in rows) or 1
 
-    for rank in range(n, 1, -1):
-        t = reveal[rank]
-        v.sfx(t, "whoosh", 0.6, seed=rank + seed)
-        v.sfx(t + 0.08, "pop", 0.8)
-        v.sfx(t + 0.6, "tick", 0.6)
-    v.sfx(reveal[2] + STEP, "riser", 0.9, dur=PAUSE)
-    v.sfx(reveal[1], "boom", 1.0)
-    v.sfx(reveal[1] + 0.05, "tada", 0.8)
-    v.sfx(end, "whoosh", 0.7, dur=0.5)
-    v.sfx(end + 0.2, "ding", 0.6)
 
     h1, h2 = topic["hook"]
     sub = f"{topic['sub']} · {group_name}"
@@ -116,5 +107,5 @@ def render(rows, topic, group_name, accent, out_path, seed=0):
             text(d, (W // 2, cy + 140), "Follow for daily rankings", font(32, False), fill=(120, 120, 135))
         v.write(im)
 
-    roots = (55.0, 49.0, 46.25, 51.9, 58.3)
-    return v.finish(music_bed(dur + 1, bpm=114 + (seed % 4) * 4, root=roots[seed % len(roots)]))
+    track = ranking_track(dur, reveal, n, reveal[2] + STEP, reveal[1], end, seed=seed)
+    return v.finish(audio=track)
