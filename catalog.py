@@ -163,3 +163,34 @@ DUEL_STATS = [("NY.GDP.PCAP.CD", "Richer per person", "money", True),
 
 def flag_emoji(iso):
     return "".join(chr(0x1F1E6 + ord(ch) - 65) for ch in iso)
+
+# ---------- дополнительные темы рейтингов (6 роликов в день — нужен большой запас) ----------
+_MORE = [
+    ("urban", "SP.URB.TOTL.IN.ZS", "desc", ("MOST", "URBAN"), "People living in cities (%)", "pct",
+     "Which countries are the most urban {g}?", "cities urbanization"),
+    ("rural", "SP.URB.TOTL.IN.ZS", "asc", ("MOST", "RURAL"), "People living in cities (%)", "pct",
+     "Which countries are the most rural {g}?", "village countryside"),
+    ("flights", "IS.AIR.PSGR", "desc", ("BUSIEST", "SKIES"), "Air passengers per year", "people",
+     "Which countries fly the most {g}?", "travel aviation"),
+    ("renew", "EG.ELC.RNEW.ZS", "desc", ("CLEANEST", "ELECTRICITY"), "Renewable electricity (% of total)", "pct",
+     "Who has the cleanest electricity {g}?", "energy renewable climate"),
+    ("school", "SE.XPD.TOTL.GD.ZS", "desc", ("WHO INVESTS MOST", "IN EDUCATION?"), "Education spending (% of GDP)", "pct",
+     "Who invests the most in education {g}?", "education school"),
+    ("ppp", "NY.GNP.PCAP.PP.CD", "desc", ("REAL BUYING", "POWER"), "Income per person, adjusted for prices ($)",
+     "money", "Where does money go the furthest {g}?", "money income"),
+    ("young", "SP.POP.0014.TO.ZS", "desc", ("YOUNGEST", "COUNTRIES"), "Children under 15 (% of population)", "pct",
+     "Which countries are the youngest {g}?", "population youth"),
+    ("boom", "SP.POP.GROW", "desc", ("FASTEST GROWING", "POPULATION"), "Population growth (yearly %)", "pct",
+     "Whose population is growing the fastest {g}?", "population growth"),
+    ("shrink", "SP.POP.GROW", "asc", ("SHRINKING", "COUNTRIES"), "Population growth (yearly %)", "pct",
+     "Which countries are shrinking the fastest {g}?", "population decline"),
+    ("phones", "IT.CEL.SETS.P2", "desc", ("MOST PHONES", "PER PERSON"), "Mobile subscriptions per 100 people",
+     "dec1", "Where do people have the most phones {g}?", "tech mobile"),
+]
+TOPICS += [dict(zip(("id", "ind", "order", "hook", "sub", "fmt", "question", "tags"), t)) for t in _MORE]
+
+DUEL_PAIRS += [("US", "RU"), ("JP", "CN"), ("FR", "ES"), ("SE", "FI"), ("BR", "PT"), ("AR", "CL"), ("MX", "ES"),
+               ("ID", "MY"), ("EG", "SA"), ("NG", "GH"), ("KE", "TZ"), ("ZA", "AU"), ("NL", "DE"), ("BE", "FR"),
+               ("HU", "AT"), ("RO", "BG"), ("UZ", "KG"), ("GE", "TR"), ("KZ", "MN"), ("IE", "IS"), ("NO", "DK"),
+               ("CA", "MX"), ("PH", "VN"), ("TH", "MY"), ("IN", "BD"), ("AE", "SG"), ("CH", "SG"), ("CN", "IN"),
+               ("PL", "DE"), ("UA", "TR")]
