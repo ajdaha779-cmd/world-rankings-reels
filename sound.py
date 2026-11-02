@@ -235,11 +235,15 @@ def master(x, target_rms=0.16):
     return np.tanh(x * 1.2) * 0.95
 
 
-def ranking_track(dur, reveal, n, pause_start, top_t, end_t, seed=0):
+def bpm_for(seed):
+    return (96, 100, 104)[seed % 3]
+
+
+def ranking_track(dur, reveal, n, pause_start, top_t, end_t, seed=0, whooshes=()):
     """Полная звуковая дорожка ролика-рейтинга.
     reveal: {место: время}, pause_start..top_t — пауза перед №1."""
     root = KEYS[seed % len(KEYS)]
-    bpm = (96, 100, 104)[seed % 3]
+    bpm = bpm_for(seed)
     music, _ = beat(dur + 1, bpm, root)
     N = int(dur * SR)
     music = music[:N]
@@ -274,6 +278,8 @@ def ranking_track(dur, reveal, n, pause_start, top_t, end_t, seed=0):
     place(fx, reverb(stereo(crash), 0.35), top_t, 0.8)
     place(fx, pad([root + 12, root + 15, root + 19, root + 24], 1.4) * 2.2, top_t, 0.6)
     place(fx, bell(root + 24, 2.0), top_t + 0.05, 0.45)
+    for wt in whooshes:
+        place(fx, whoosh(0.4, up=False), wt - 0.05, 0.35, pan=0.3)
     place(fx, whoosh(0.45, up=False), end_t - 0.05, 0.4, pan=-0.3)
     place(fx, bell(root + 19), end_t + 0.25, 0.35)
     place(fx, bell(root + 24), end_t + 0.4, 0.3)

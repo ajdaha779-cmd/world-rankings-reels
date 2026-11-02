@@ -1,10 +1,11 @@
-"""Рендер ролика-рейтинга: строки открываются с последнего места к первому, перед №1 пауза."""
+"""Рендер ролика-рейтинга: строки открываются в такт музыке с последнего места к первому,
+перед №1 пауза, затем большая карточка победителя с конфетти."""
 from engine import *
 from catalog import FMT
-from sound import ranking_track
+from sound import ranking_track, bpm_for
 
 BAR, PANEL = (66, 78, 112), (27, 30, 44)
-T0, STEP, PAUSE = 0.7, 1.15, 1.1
+CARD_HOLD = 1.9  # сколько висит большая карточка №1
 
 
 def _fit(s, size, max_w, black=False):
@@ -13,41 +14,100 @@ def _fit(s, size, max_w, black=False):
     return font(size, black)
 
 
+def _living_bg(accent, seed):
+    """Фон выше кадра с мягкими цветными бликами — в кадре он медленно плывёт."""
+    hh = H + 600
+    t = np.linspace(0, 1, hh)[:, None, None]
+    arr = np.array((22, 24, 40))[None, None, :] * (1 - t) + np.array((8, 9, 16))[None, None, :] * t
+    arr = np.repeat(arr, W, axis=1).astype(np.float64)
+    y, x = np.mgrid[0:hh, 0:W]
+    rng = np.random.default_rng(seed)
+    for k in range(3):
+        cx, cy = rng.uniform(0.1, 0.9) * W, rng.uniform(0.15, 0.85) * hh
+        r = rng.uniform(380, 560)
+        glow = np.exp(-((x - cx) ** 2 + (y - cy) ** 2) / (2 * r * r))[:, :, None]
+        col = np.array(accent if k == 0 else (60, 80, 160) if k == 1 else (120, 60, 140))
+        arr += glow * col * (0.16 if k == 0 else 0.12)
+    d = np.sqrt(((x - W / 2) / W) ** 2 + ((y - hh / 2) / hh) ** 2)
+    arr *= (1 - 0.4 * np.clip(d - 0.25, 0, 1))[:, :, None]
+    return Image.fromarray(arr.clip(0, 255).astype(np.uint8))
+
+
+def _confetti(accent, seed, n=150):
+    rng = np.random.default_rng(seed + 99)
+    palette = [accent, (255, 255, 255), (255, 92, 120), (64, 196, 255), (46, 204, 113)]
+    ang = rng.uniform(-np.pi * 0.92, -np.pi * 0.08, n)  # веер вверх
+    sp = rng.uniform(900, 2100, n)
+    return dict(vx=np.cos(ang) * sp, vy=np.sin(ang) * sp, rot=rng.uniform(0, 6.3, n), vr=rng.uniform(-14, 14, n),
+                w=rng.uniform(14, 26, n), h=rng.uniform(8, 14, n), col=[palette[i % 5] for i in range(n)],
+                delay=rng.uniform(0, 0.12, n))
+
+
+def _draw_confetti(d, c, dt, ox, oy):
+    g, drag = 2300.0, 1.6
+    for i in range(len(c["vx"])):
+        tt = dt - c["delay"][i]
+        if tt <= 0:
+            continue
+        k = (1 - math.exp(-drag * tt)) / drag  # сопротивление воздуха
+        x = ox + c["vx"][i] * k
+        y = oy + c["vy"][i] * k + 0.5 * g * tt * tt * 0.55
+        if y > H + 40:
+            continue
+        a = c["rot"][i] + c["vr"][i] * tt
+        w, h = c["w"][i] / 2, c["h"][i] / 2 * abs(math.cos(a * 1.7)) + 1  # «переворачивается» в воздухе
+        ca, sa = math.cos(a), math.sin(a)
+        pts = [(x + px * ca - py * sa, y + px * sa + py * ca) for px, py in ((-w, -h), (w, -h), (w, h), (-w, h))]
+        d.polygon(pts, fill=c["col"][i])
+
+
 def render(rows, topic, group_name, accent, out_path, seed=0):
     n = len(rows)
     fmt = FMT[topic["fmt"]]
     years = sorted({r[3] for r in rows})
     yrs = str(years[0]) if len(years) == 1 else f"{years[0]}–{years[-1]}"
 
+    # тайминг в долях такта: место открывается каждые 2 доли, пауза перед №1 — 2 доли
+    beat = 60 / bpm_for(seed)
+    step, pause, t0 = 2 * beat, 2 * beat, beat
     reveal = {}
     for i, rank in enumerate(range(n, 1, -1)):
-        reveal[rank] = T0 + i * STEP
-    reveal[1] = reveal[2] + STEP + PAUSE
-    end = reveal[1] + 2.6
+        reveal[rank] = t0 + i * step
+    pause_start = reveal[2] + step
+    top_t = pause_start + pause
+    card_out = top_t + CARD_HOLD
+    end = card_out + 1.1
     dur = end + 3.2
 
     v = Video(f"r{seed}", dur, out_path)
-    bg = gradient((22, 24, 40), (8, 9, 16))
+    bg_tall = _living_bg(accent, seed)
+    conf = _confetti(accent, seed)
     row_y0 = 400
     gap = 6
     row_h = min(90, int((1790 - row_y0) / n) - gap)
     maxv = max(abs(r[2]) for r in rows) or 1
-
+    top_code, top_name, top_val, _ = rows[0]
 
     h1, h2 = topic["hook"]
     sub = f"{topic['sub']} · {group_name}"
     f_sub = _fit(sub, 36, W - 100)
     f_rank, f_q, f_src = font(int(row_h * 0.44)), font(int(row_h * 0.52)), font(26, False)
     f_val = font(int(row_h * 0.46))
+    f_guess = font(int(row_h * 0.44))
     f_h1 = _fit(h1, 84, W - 80, True)
     f_h2 = _fit(h2, 84, W - 80, True)
+    f_card_name = _fit(top_name, 96, W - 240, True)
 
     for fi in range(v.n):
         t = fi / FPS
-        im = bg.copy()
+        oy = int(300 + 260 * math.sin(t * 0.22 + seed))
+        im = bg_tall.crop((0, oy, W, oy + H))
         d = ImageDraw.Draw(im)
-        text(d, (W // 2, 160), h1, f_h1)
-        text(d, (W // 2, 255), h2, f_h2, fill=accent)
+        # лёгкий «удар» заголовка в такт
+        bp = (t % beat) / beat
+        pulse = 1 + 0.025 * math.exp(-bp * 6) if t < top_t else 1
+        text(d, (W // 2, 160), h1, _fit(h1, int(84 * pulse), W - 80, True) if pulse > 1.001 else f_h1)
+        text(d, (W // 2, 255), h2, _fit(h2, int(84 * pulse), W - 80, True) if pulse > 1.001 else f_h2, fill=accent)
         text(d, (W // 2, 340), sub, f_sub, fill=(170, 175, 200))
         text(d, (W // 2, 1850), f"Source: World Bank Open Data · {yrs}", f_src, fill=(110, 115, 140))
 
@@ -55,22 +115,32 @@ def render(rows, topic, group_name, accent, out_path, seed=0):
             rank = idx + 1
             y = row_y0 + idx * (row_h + gap)
             x0, x1 = 40, W - 40
-            rt = reveal[rank]
+            rt = reveal.get(rank, top_t)
             is_top = rank == 1
             if t < rt:
                 d.rounded_rectangle((x0, y, x1, y + row_h), 22, fill=PANEL)
                 text(d, (x0 + 55, y + row_h // 2), f"{rank}", f_rank, fill=(90, 95, 120))
-                text(d, (W // 2, y + row_h // 2), "?", f_q, fill=(70, 75, 100))
+                if is_top and t >= pause_start:
+                    pass  # в паузе на месте №1 только «...»
+                elif is_top:  # хук: зритель угадывает №1 с первого кадра
+                    gl = 0.5 + 0.5 * math.sin(t * 5)
+                    d.rounded_rectangle((x0, y, x1, y + row_h), 22, outline=mix_color(PANEL, accent, 0.4 + 0.5 * gl),
+                                        width=3)
+                    text(d, (W // 2, y + row_h // 2), "GUESS #1 ?", f_guess, fill=mix_color((90, 95, 120), accent, gl))
+                else:
+                    text(d, (W // 2, y + row_h // 2), "?", f_q, fill=(70, 75, 100))
                 continue
-            a = ease_out((t - rt) / 0.4)
+            a = ease_out((t - rt) / 0.35)
             dx = int((1 - a) * W * 0.8)
-            cnt = ease_out((t - rt - 0.1) / 0.6)
+            cnt = ease_out((t - rt - 0.08) / 0.55)
+            flash = max(0.0, 1 - (t - rt) / 0.3)
             col = accent if is_top else BAR
-            d.rounded_rectangle((x0 + dx, y, x1 + dx, y + row_h), 22, fill=PANEL)
+            d.rounded_rectangle((x0 + dx, y, x1 + dx, y + row_h), 22, fill=mix_color(PANEL, (120, 128, 175), flash))
             bw = int((x1 - x0 - 110) * (abs(val) / maxv) * cnt)
             if bw > 10:
-                d.rounded_rectangle((x0 + 110 + dx, y + 8, x0 + 110 + bw + dx, y + row_h - 8), 16, fill=col)
-            if 0 <= t - rt < STEP and not is_top:
+                d.rounded_rectangle((x0 + 110 + dx, y + 8, x0 + 110 + bw + dx, y + row_h - 8), 16,
+                                    fill=mix_color(col, (255, 255, 255), flash * 0.5))
+            if 0 <= t - rt < step and not is_top:
                 d.rounded_rectangle((x0 + dx, y, x1 + dx, y + row_h), 22, outline=(200, 205, 230), width=3)
             if is_top:
                 glow = int(4 + 3 * math.sin((t - rt) * 8))
@@ -91,9 +161,29 @@ def render(rows, topic, group_name, accent, out_path, seed=0):
             text(d, (x1 - 30 + dx, y + row_h // 2), vs, f_val, fill=dark if val_on_bar else (255, 255, 255),
                  anchor="rm")
 
-        if reveal[2] + STEP <= t < reveal[1]:
-            k = (t - reveal[2] - STEP) / PAUSE
+        if pause_start <= t < top_t:
+            k = (t - pause_start) / pause
             text(d, (W // 2, row_y0 + row_h // 2), "...", font(int(60 + 30 * k)), fill=accent)
+
+        # большая карточка победителя
+        if top_t <= t < card_out + 0.35:
+            a_in = ease_back((t - top_t) / 0.45)
+            a_out = ease_out((t - card_out) / 0.35) if t >= card_out else 0
+            im = Image.blend(im, Image.new("RGB", (W, H)), 0.62 * (1 - a_out) * ease_out((t - top_t) / 0.2))
+            d = ImageDraw.Draw(im)
+            _draw_confetti(d, conf, t - top_t, W // 2, H // 2 + 80)  # за карточкой, чтобы не закрывать флаг
+            cy = int(H + 500 - a_in * (H // 2 + 500) - a_out * (H // 2 + 600))
+            d.rounded_rectangle((80, cy - 400, W - 80, cy + 400), 50, fill=(20, 22, 34), outline=accent, width=8)
+            text(d, (W // 2, cy - 290), "#1", font(120), fill=accent)
+            fl = flag(top_code.lower(), 240, 0.08)
+            d.rounded_rectangle((W // 2 - fl.width // 2 - 10, cy - 200, W // 2 + fl.width // 2 + 10, cy + 50), 26,
+                                fill=(255, 255, 255))
+            im.paste(fl, (W // 2 - fl.width // 2, cy - 195), fl)
+            text(d, (W // 2, cy + 140), top_name, f_card_name)
+            cnt = ease_out((t - top_t - 0.15) / 0.7)
+            text(d, (W // 2, cy + 270), fmt(top_val * cnt), font(104), fill=accent)
+        if card_out + 0.35 <= t < top_t + 3.2:
+            _draw_confetti(d, conf, t - top_t, W // 2, H // 2 + 80)
 
         if t >= end:
             im = Image.blend(im, Image.new("RGB", (W, H)), 0.6 * ease_out((t - end) / 0.3))
@@ -107,5 +197,5 @@ def render(rows, topic, group_name, accent, out_path, seed=0):
             text(d, (W // 2, cy + 140), "Follow for daily rankings", font(32, False), fill=(120, 120, 135))
         v.write(im)
 
-    track = ranking_track(dur, reveal, n, reveal[2] + STEP, reveal[1], end, seed=seed)
+    track = ranking_track(dur, reveal | {1: top_t}, n, pause_start, top_t, end, seed=seed, whooshes=(card_out,))
     return v.finish(audio=track)
