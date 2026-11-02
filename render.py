@@ -185,6 +185,9 @@ def render(rows, topic, group_name, accent, out_path, seed=0):
         if card_out + 0.35 <= t < top_t + 3.2:
             _draw_confetti(d, conf, t - top_t, W // 2, H // 2 + 80)
 
+        if t < TITLE_CARD:
+            im = title_card(im, t, [(h1, 120, (255, 255, 255)), (h2, 120, accent), (group_name.upper(), 56, (175, 180, 205))],
+                            accent, flags=[r[0] for r in rows[1:6]], pill="GUESS #1 ?")
         if t >= end:
             im = Image.blend(im, Image.new("RGB", (W, H)), 0.6 * ease_out((t - end) / 0.3))
             d = ImageDraw.Draw(im)
@@ -199,3 +202,33 @@ def render(rows, topic, group_name, accent, out_path, seed=0):
 
     track = ranking_track(dur, reveal | {1: top_t}, n, pause_start, top_t, end, seed=seed, whooshes=(card_out,))
     return v.finish(audio=track)
+
+
+TITLE_CARD = 0.6  # сек: титульная карточка в начале — она же обложка в сетке профиля
+
+
+def title_card(im, t, lines, accent, flags=(), pill=None, fh=92):
+    """Крупный заголовок по центру кадра (в зоне, которую видно в сетке профиля 3:4), затем растворяется."""
+    if t >= TITLE_CARD:
+        return im
+    fade = 1 - ease_out((t - TITLE_CARD * 0.55) / (TITLE_CARD * 0.45)) if t > TITLE_CARD * 0.55 else 1.0
+    card = Image.blend(im, Image.new("RGB", (W, H), (8, 9, 18)), 0.97)
+    d = ImageDraw.Draw(card)
+    total = sum(sz for _, sz, _ in lines) + 26 * (len(lines) - 1)
+    y = 860 - total // 2
+    for s, sz, colr in lines:
+        text(d, (W // 2, y + sz // 2), s, _fit(s, sz, W - 90, True), fill=colr)
+        y += sz + 26
+    if flags:
+        fls = [flag(c.lower(), fh, 0.12) for c in flags]
+        tw = sum(f.width for f in fls) + 22 * (len(fls) - 1)
+        x = W // 2 - tw // 2
+        for f in fls:
+            card.paste(f, (x, y + 40), f)
+            x += f.width + 22
+        y += 40 + fh
+    if pill:
+        pw = font(40).getlength(pill) + 70
+        d.rounded_rectangle((W / 2 - pw / 2, y + 50, W / 2 + pw / 2, y + 122), 36, fill=accent)
+        text(d, (W // 2, y + 86), pill, font(40), fill=(20, 20, 30))
+    return Image.blend(im, card, fade) if fade < 1 else card

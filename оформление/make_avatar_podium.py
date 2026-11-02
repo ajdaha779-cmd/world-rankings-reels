@@ -72,7 +72,7 @@ def main():
         if pos == 0:
             ImageDraw.Draw(im).text((cx, y0 + B * 0.15), "1", font=f, fill=(24, 26, 64), anchor="mm")
 
-    out = os.path.join(BASE, "оформление", "аватар.png")
+    out = os.path.join(BASE, "оформление", "аватар-пьедестал.png")
     im.convert("RGB").resize((S, S), Image.LANCZOS).save(out)
     return out
 

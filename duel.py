@@ -3,7 +3,7 @@ import itertools, random
 from engine import *
 from catalog import FMT, COUNTRIES, DUEL_STATS
 from data import indicator
-from render import _fit, _living_bg, _confetti, _draw_confetti
+from render import _fit, _living_bg, _confetti, _draw_confetti, title_card, TITLE_CARD
 from sound import duel_track
 
 ROUNDS = 5
@@ -163,6 +163,10 @@ def render_duel(a, b, rounds, accent, out_path, seed=0):
                 text(d, (W // 2, cy + 140), names[winner], _fit(names[winner], 96, W - 240, True))
             text(d, (W // 2, cy + 280), f"{total[0]} : {total[1]}", font(90), fill=(255, 255, 255))
 
+        if t < TITLE_CARD:
+            im = title_card(im, t, [(names[0].upper(), 100, (255, 255, 255)), ("VS", 80, accent),
+                                    (names[1].upper(), 100, (255, 255, 255))], accent, flags=(a, b),
+                            pill="WHO WINS?", fh=150)
         if t >= card_end + 0.35:
             im = Image.blend(im, Image.new("RGB", (W, H)), 0.6)
             d = ImageDraw.Draw(im)

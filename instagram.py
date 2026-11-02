@@ -123,14 +123,13 @@ def caption(m):
     return m["caption_tiktok_instagram"].replace("#shorts", "#reels")
 
 
-def publish(c, m):
-    size = os.path.getsize(m["path"])
-    log(f"публикую {m['key']} ({size // 1024} КБ)")
+def _upload_and_publish(c, path, params, what):
+    """Контейнер → загрузка файла (resumable) → ожидание обработки → публикация. Возвращает id медиа."""
+    size = os.path.getsize(path)
     cont = http("POST", f"{c['api']}/{c['user_id']}/media",
-                {"media_type": "REELS", "upload_type": "resumable", "caption": caption(m),
-                 "share_to_feed": "true", "access_token": c["token"]})
+                {**params, "upload_type": "resumable", "access_token": c["token"]})
     cid = cont["id"]
-    with open(m["path"], "rb") as f:
+    with open(path, "rb") as f:
         http("POST", f"{RUPLOAD}/{cid}", body=f.read(), timeout=600,
              headers={"Authorization": f"OAuth {c['token']}", "offset": "0", "file_size": str(size)})
     for _ in range(60):  # Instagram обрабатывает видео — ждём до 10 минут
@@ -138,13 +137,27 @@ def publish(c, m):
         if st.get("status_code") == "FINISHED":
             break
         if st.get("status_code") in ("ERROR", "EXPIRED"):
-            raise RuntimeError(f"Instagram не принял видео: {st}")
+            raise RuntimeError(f"Instagram не принял {what}: {st}")
         time.sleep(10)
     else:
-        raise RuntimeError("Instagram слишком долго обрабатывает видео")
+        raise RuntimeError(f"Instagram слишком долго обрабатывает {what}")
     pub = http("POST", f"{c['api']}/{c['user_id']}/media_publish", {"creation_id": cid, "access_token": c["token"]})
-    log(f"опубликовано: {m['key']} → media {pub['id']}")
     return pub["id"]
+
+
+def publish(c, m):
+    log(f"публикую {m['key']} ({os.path.getsize(m['path']) // 1024} КБ)")
+    mid = _upload_and_publish(c, m["path"], {"media_type": "REELS", "caption": caption(m), "share_to_feed": "true"},
+                              "видео")
+    log(f"опубликовано: {m['key']} → media {mid}")
+    return mid
+
+
+def publish_story(c, path):
+    """Тот же ролик в Stories — дополнительный охват. Ошибка здесь не мешает Reels."""
+    mid = _upload_and_publish(c, path, {"media_type": "STORIES"}, "историю")
+    log(f"история опубликована → media {mid}")
+    return mid
 
 
 def run(mode):

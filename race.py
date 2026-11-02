@@ -2,7 +2,7 @@
 import hashlib
 from engine import *
 from catalog import FMT, COUNTRIES
-from render import _fit, _living_bg, _confetti, _draw_confetti
+from render import _fit, _living_bg, _confetti, _draw_confetti, title_card, TITLE_CARD
 from sound import race_track
 
 TOP = 10
@@ -133,6 +133,9 @@ def render_race(years, series, topic, group_name, accent, out_path, seed=0):
                  anchor="lm")
             _draw_confetti(d, conf, t - race_end, W // 2, 700)
 
+        if t < TITLE_CARD:
+            im = title_card(im, t, [(h1, 110, (255, 255, 255)), (h2, 110, (255, 255, 255)), (f"{y0} → {y1}", 110, accent)],
+                            accent, flags=ranked[:5], pill=f"WHO IS #1 IN {y1}?")
         if t >= end:
             im = Image.blend(im, Image.new("RGB", (W, H)), 0.6 * ease_out((t - end) / 0.3))
             d = ImageDraw.Draw(im)

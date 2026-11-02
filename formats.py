@@ -75,8 +75,27 @@ def _race_items(used, rng, avoid):
                    render_race(years, series, t, gname, accent, out, seed=seed))
 
 
-def _duel_items(used, rng, avoid):
+def make_duel(a, b, by=None):
+    """Ролик-дуэль для пары стран (by — ники зрителей, которые её заказали) или None, если данных мало."""
     from duel import render_duel
+    rounds = duel_rounds(a, b)
+    if not rounds:
+        return None
+    na, nb = COUNTRIES[a], COUNTRIES[b]
+    lines = "\n".join(f"• {r[0]}" for r in rounds)
+    tags = _tags(f"{na.replace(' ', '').lower()} {nb.replace(' ', '').lower()} versus battle")
+    credit = f"\nRequested by {' '.join('@' + u for u in by[:5])} 🙌\n" if by else ""
+    return dict(kind="duel", key=f"duel:{'-'.join(sorted((a, b)))}", topic="duel", slug=f"duel_{a.lower()}_{b.lower()}",
+                title=f"{na} vs {nb}: who wins? {flag_emoji(a)}⚔️{flag_emoji(b)}",
+                description=(f"{na} vs {nb} — 5 rounds of real data:\n{lines}\n{credit}"
+                             f"Source: World Bank Open Data.\n\n"
+                             f"Who should fight next? Comment below 👇\n\n{tags}"),
+                short=(f"{na} vs {nb}: who wins? {flag_emoji(a)}⚔️{flag_emoji(b)}{credit}"
+                       f" Who should fight next? 👇\n\n{tags}"),
+                render=lambda out, seed, accent: render_duel(a, b, rounds, accent, out, seed=seed))
+
+
+def _duel_items(used, rng, avoid):
     pairs = list(DUEL_PAIRS)
     rng.shuffle(pairs)
     for a, b in pairs:
@@ -85,32 +104,33 @@ def _duel_items(used, rng, avoid):
         key = f"duel:{'-'.join(sorted((a, b)))}"
         if key in used:
             continue
-        rounds = duel_rounds(a, b)
-        if not rounds:
+        item = make_duel(a, b)
+        if not item:
             used.add(key)
             continue
-        na, nb = COUNTRIES[a], COUNTRIES[b]
-        lines = "\n".join(f"• {r[0]}" for r in rounds)
-        tags = _tags(f"{na.replace(' ', '').lower()} {nb.replace(' ', '').lower()} versus battle")
-        yield dict(kind="duel", key=key, topic="duel", slug=f"duel_{a.lower()}_{b.lower()}",
-                   title=f"{na} vs {nb}: who wins? {flag_emoji(a)}⚔️{flag_emoji(b)}",
-                   description=(f"{na} vs {nb} — 5 rounds of real data:\n{lines}\n"
-                                f"Source: World Bank Open Data.\n\n"
-                                f"Who should fight next? Comment below 👇\n\n{tags}"),
-                   short=f"{na} vs {nb}: who wins? {flag_emoji(a)}⚔️{flag_emoji(b)} Who should fight next? 👇\n\n{tags}",
-                   render=lambda out, seed, accent, a=a, b=b, rounds=rounds:
-                   render_duel(a, b, rounds, accent, out, seed=seed))
+        yield item
 
 
 SOURCES = {"ranking": _ranking_items, "race": _race_items, "duel": _duel_items}
 
 
-def next_item(n_done, used, rng=None, avoid=()):
-    """Следующий ролик по ротации форматов; если формат исчерпан — берём следующий."""
+def pick_kind(n_done, weights, recent_kinds, rng):
+    """Формат следующего ролика: по весам статистики (если она есть), иначе по кругу ROTATION.
+    Один и тот же формат не идёт три раза подряд."""
+    if not weights:
+        return ROTATION[n_done % len(ROTATION)]
+    kinds = list(weights)
+    if len(recent_kinds) >= 2 and recent_kinds[-1] == recent_kinds[-2]:
+        kinds = [k for k in kinds if k != recent_kinds[-1]]
+    return rng.choices(kinds, weights=[weights[k] for k in kinds])[0]
+
+
+def next_item(n_done, used, rng=None, avoid=(), kind=None):
+    """Следующий ролик нужного формата; если формат исчерпан — берём следующий по кругу."""
     rng = rng or random.Random(n_done)
-    start = n_done % len(ROTATION)
-    for k in range(len(ROTATION)):
-        kind = ROTATION[(start + k) % len(ROTATION)]
-        for item in SOURCES[kind](used, rng, set(avoid)):
+    kind = kind or ROTATION[n_done % len(ROTATION)]
+    order = [kind] + [k for k in ROTATION if k != kind]
+    for k in dict.fromkeys(order):
+        for item in SOURCES[k](used, rng, set(avoid)):
             return item
     return None
