@@ -77,9 +77,8 @@ def conf():
 def setup():
     token = input("Вставь токен доступа Instagram и нажми Enter:\n> ").strip()
     me = http("GET", f"{API}/me", {"fields": "user_id,username,account_type", "access_token": token})
-    save(CONF, {"token": token, "user_id": me["user_id"], "username": me["username"], "refreshed": 0})
+    save(CONF, {"token": token, "user_id": me["user_id"], "username": me["username"], "refreshed": time.time()})
     print(f"Готово: @{me['username']} ({me.get('account_type')}), id {me['user_id']}")
-    conf()  # сразу обменяем на продлённый
 
 
 def queue():
