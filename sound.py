@@ -286,3 +286,69 @@ def ranking_track(dur, reveal, n, pause_start, top_t, end_t, seed=0, whooshes=()
 
     fx = reverb(fx[:N], 0.12)
     return master(music * 0.8 + fx)
+
+
+def race_track(dur, race_end, end_t, decades=(), leader_changes=(), top3_changes=(), seed=0):
+    """Дорожка гонки графиков: бит всю дорогу, «вжух» на каждое десятилетие,
+    нота при перестановках в тройке, удар при смене лидера, финальный аккорд."""
+    root = KEYS[seed % len(KEYS)]
+    music, _ = beat(dur + 1, bpm_for(seed), root)
+    N = int(dur * SR)
+    music = music[:N]
+    fl = int(0.9 * SR)
+    music[-fl:] *= np.linspace(1, 0, fl)[:, None]
+    fx = np.zeros((N + SR, 2))
+    for t in decades:
+        place(fx, whoosh(0.35), t - 0.1, 0.3, pan=0.3)
+    penta = [0, 3, 5, 7, 10]
+    last = -1.0
+    for i, t in enumerate(top3_changes):
+        if t - last < 0.25:
+            continue
+        place(fx, bell(root + 12 + penta[i % 5]), t, 0.32, pan=-0.2)
+        last = t
+    sub, crash = impact()
+    for t in leader_changes:
+        place(fx, sub, t, 0.45)
+        place(fx, bell(root + 24, 1.2), t, 0.35)
+    place(fx, sub, race_end, 0.8)
+    place(fx, reverb(stereo(crash), 0.35), race_end, 0.6)
+    place(fx, pad([root + 12, root + 15, root + 19, root + 24], 1.4) * 2.2, race_end, 0.5)
+    place(fx, whoosh(0.45, up=False), end_t - 0.05, 0.4, pan=-0.3)
+    place(fx, bell(root + 19), end_t + 0.25, 0.35)
+    place(fx, bell(root + 24), end_t + 0.4, 0.3)
+    fx = reverb(fx[:N], 0.12)
+    return master(music * 0.8 + fx)
+
+
+def duel_track(dur, slams, rounds, final_t, end_t, seed=0):
+    """Дуэль: удары на появление флагов, «вжух» на раунд, звон за очко, нарастание и удар на победителя."""
+    root = KEYS[seed % len(KEYS)]
+    music, _ = beat(dur + 1, bpm_for(seed), root)
+    N = int(dur * SR)
+    music = music[:N]
+    s, e = int((final_t - 0.9) * SR), int(final_t * SR)  # перед вердиктом музыка уходит под воду
+    seg = music[s:e]
+    k = np.linspace(0, 1, len(seg))[:, None]
+    music[s:e] = (seg * (1 - k) + lp(seg, 500) * k) * (1 - 0.6 * k)
+    music[e - int(0.15 * SR):e] = 0
+    fl = int(0.9 * SR)
+    music[-fl:] *= np.linspace(1, 0, fl)[:, None]
+    fx = np.zeros((N + SR, 2))
+    sub, crash = impact()
+    for i, t in enumerate(slams):
+        place(fx, sub, t, 0.55, pan=-0.4 if i == 0 else 0.4)
+    penta = [0, 3, 5, 7, 10]
+    for i, (ta, tw) in enumerate(rounds):
+        place(fx, whoosh(0.3), ta - 0.05, 0.35, pan=0.3)
+        place(fx, bell(root + 12 + penta[i % 5]), tw, 0.5)
+        place(fx, pluck(root + 24 + penta[i % 5], 0.4, 5000), tw + 0.05, 0.4)
+    place(fx, riser(0.75), final_t - 0.9, 0.6)
+    place(fx, sub, final_t, 0.9)
+    place(fx, reverb(stereo(crash), 0.35), final_t, 0.7)
+    place(fx, pad([root + 12, root + 15, root + 19, root + 24], 1.4) * 2.2, final_t, 0.6)
+    place(fx, whoosh(0.45, up=False), end_t - 0.05, 0.4, pan=-0.3)
+    place(fx, bell(root + 19), end_t + 0.25, 0.35)
+    place(fx, bell(root + 24), end_t + 0.4, 0.3)
+    fx = reverb(fx[:N], 0.12)
+    return master(music * 0.8 + fx)

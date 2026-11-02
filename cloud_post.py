@@ -1,14 +1,13 @@
-"""Один запуск в GitHub Actions: выбрать тему → отрендерить ролик → опубликовать Reels.
+"""Один запуск в GitHub Actions: выбрать следующий ролик (форматы чередуются) → отрендерить → опубликовать Reels.
 
-Состояние (какие темы уже вышли) хранится в data/used_cloud.json и коммитится обратно в репозиторий.
+Состояние (какие ролики уже вышли) хранится в data/used_cloud.json и коммитится обратно в репозиторий.
   python cloud_post.py            — сделать и опубликовать
   python cloud_post.py --dry-run  — только сделать ролик (проверка без публикации)
 """
 import argparse, datetime, json, os, random, sys
 
-from catalog import GROUPS, ACCENTS, BASE
-from make_batch import pick, caption
-from render import render
+from catalog import ACCENTS, BASE
+from formats import next_item
 import instagram
 
 USED = os.path.join(BASE, "data", "used_cloud.json")
@@ -22,30 +21,26 @@ def main():
 
     used = set(json.load(open(USED))) if os.path.exists(USED) else set()
     history = json.load(open(HISTORY)) if os.path.exists(HISTORY) else []
-    rng = random.Random(len(used) * 7919 + datetime.date.today().toordinal())
-    # не повторяем тему двух последних роликов
-    recent = {h["topic"] for h in history[-2:]}
-    chosen = [c for c in pick(6, used, rng) if c[0]["id"] not in recent] or pick(1, used, rng)
-    if not chosen:
-        sys.exit("Темы закончились — добавь новые в catalog.py")
-    t, g, key, rows = chosen[0]
-    gname = GROUPS[g][0]
-    out = os.path.join(BASE, "work", f"{t['id']}_{g}.mp4")
-    render(rows, t, gname, ACCENTS[len(used) % len(ACCENTS)], out, seed=len(used))
-    title, desc, short = caption(t, gname, rows)
-    print(f"ролик: {out}\n{title}")
-    # имя файла для шага загрузки артефакта
+    n = len(history)
+    rng = random.Random(n * 7919 + datetime.date.today().toordinal())
+    item = next_item(n, used, rng, avoid={h["topic"] for h in history[-2:]})
+    if not item:
+        sys.exit("Ролики закончились — добавь темы в catalog.py")
+    out = os.path.join(BASE, "work", f"{item['slug']}.mp4")
+    item["render"](out, n, ACCENTS[n % len(ACCENTS)])
+    print(f"ролик [{item['kind']}]: {out}\n{item['title']}")
     if os.environ.get("GITHUB_OUTPUT"):
         with open(os.environ["GITHUB_OUTPUT"], "a") as f:
             f.write(f"video={out}\n")
     if args.dry_run:
         return
 
-    m = {"path": out, "key": key, "title": title, "caption_tiktok_instagram": short}
+    m = {"path": out, "key": item["key"], "title": item["title"], "caption_tiktok_instagram": item["short"]}
     media_id = instagram.publish(instagram.conf(), m)
-    used.add(key)
-    history.append({"topic": t["id"], "group": g, "title": title, "description": desc,
-                    "media_id": media_id, "at": datetime.datetime.utcnow().isoformat() + "Z"})
+    used.add(item["key"])
+    history.append({"kind": item["kind"], "topic": item["topic"], "key": item["key"], "title": item["title"],
+                    "description": item["description"], "media_id": media_id,
+                    "at": datetime.datetime.utcnow().isoformat() + "Z"})
     json.dump(sorted(used), open(USED, "w"), ensure_ascii=False, indent=0)
     json.dump(history, open(HISTORY, "w"), ensure_ascii=False, indent=1)
 

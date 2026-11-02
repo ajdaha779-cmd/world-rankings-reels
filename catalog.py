@@ -119,3 +119,47 @@ TOPICS = [
 TOPICS = [dict(zip(("id", "ind", "order", "hook", "sub", "fmt", "question", "tags"), t)) for t in TOPICS]
 
 ACCENTS = [(255, 196, 46), (46, 204, 113), (64, 196, 255), (255, 92, 120), (190, 120, 255), (255, 140, 50)]
+
+# ---------- гонка графиков во времени ----------
+RACE_GROUPS = ["world", "europe", "asia", "americas", "africa", "exussr"]
+RACE_TOPICS = [
+    ("pop", "SP.POP.TOTL", ("MOST POPULATED", "COUNTRIES"), "Population", "people",
+     "Most populated countries {g}, {y0} → {y1}", "population history"),
+    ("economy", "NY.GDP.MKTP.CD", ("BIGGEST", "ECONOMIES"), "GDP (USD)", "money",
+     "Biggest economies {g}, {y0} → {y1}", "economy gdp history"),
+    ("rich", "NY.GDP.PCAP.CD", ("RICHEST", "PER PERSON"), "GDP per person (USD)", "money",
+     "Richest countries per person {g}, {y0} → {y1}", "money economy history"),
+    ("life", "SP.DYN.LE00.IN", ("LONGEST", "LIVES"), "Life expectancy (years)", "years",
+     "Where people live longest {g}, {y0} → {y1}", "health lifeexpectancy history"),
+    ("online", "IT.NET.USER.ZS", ("MOST", "ONLINE"), "Internet users (% of people)", "pct",
+     "Most online countries {g}, {y0} → {y1}", "internet tech history"),
+    ("old", "SP.POP.65UP.TO.ZS", ("OLDEST", "COUNTRIES"), "People aged 65+ (%)", "pct",
+     "Oldest countries {g}, {y0} → {y1}", "population aging history"),
+    ("co2", "EN.GHG.CO2.PC.CE.AR5", ("BIGGEST POLLUTERS", "PER PERSON"), "CO2 per person (tonnes)", "tonnes",
+     "Biggest polluters per person {g}, {y0} → {y1}", "climate environment history"),
+]
+RACE_TOPICS = [dict(zip(("id", "ind", "hook", "sub", "fmt", "question", "tags"), t)) for t in RACE_TOPICS]
+
+# ---------- дуэль двух стран ----------
+# пары-соперники без активных войн и конфликтов между ними
+DUEL_PAIRS = [("US", "CN"), ("DE", "FR"), ("GB", "FR"), ("JP", "KR"), ("BR", "AR"), ("ES", "PT"), ("IT", "ES"),
+              ("CA", "AU"), ("US", "CA"), ("IN", "CN"), ("KZ", "UZ"), ("NO", "SE"), ("NL", "BE"), ("NG", "ZA"),
+              ("ID", "PH"), ("VN", "TH"), ("SA", "AE"), ("EG", "MA"), ("PL", "CZ"), ("CH", "AT"), ("DK", "FI"),
+              ("AZ", "GE"), ("AZ", "KZ"), ("TR", "AZ"), ("US", "GB"), ("DE", "JP"), ("MX", "BR"), ("IT", "FR"),
+              ("CL", "PE"), ("CO", "VE"), ("IE", "GB"), ("NZ", "AU"), ("GR", "IT"), ("UA", "PL"), ("RU", "KZ"),
+              ("TR", "GR"), ("QA", "AE"), ("SG", "MY"), ("KR", "CN"), ("PT", "BR")]
+# индикатор, подпись, формат, побеждает большее значение?
+DUEL_STATS = [("NY.GDP.PCAP.CD", "Richer per person", "money", True),
+              ("SP.DYN.LE00.IN", "Longer lives", "years", True),
+              ("SL.UEM.TOTL.ZS", "Lower unemployment", "pct", False),
+              ("IT.NET.USER.ZS", "More online", "pct", True),
+              ("SH.MED.PHYS.ZS", "More doctors (per 1,000)", "dec1", True),
+              ("AG.LND.FRST.ZS", "Greener (forest %)", "pct", True),
+              ("EN.GHG.CO2.PC.CE.AR5", "Less CO2 per person", "tonnes", False),
+              ("SP.POP.TOTL", "Bigger population", "people", True),
+              ("NY.GDP.MKTP.CD", "Bigger economy", "money", True),
+              ("SH.XPD.CHEX.PC.CD", "More health spending", "money", True)]
+
+
+def flag_emoji(iso):
+    return "".join(chr(0x1F1E6 + ord(ch) - 65) for ch in iso)
