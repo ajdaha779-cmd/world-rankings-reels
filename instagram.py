@@ -99,8 +99,8 @@ def setup():
             pages = http("GET", f"{API_FB}/me/accounts",
                          {"fields": "instagram_business_account", "access_token": token}).get("data", [])
             ids = [p["instagram_business_account"]["id"] for p in pages if p.get("instagram_business_account")]
-        if not ids:
-            sys.exit("Токен не видит ни одного аккаунта Instagram — добавь аккаунт в объекты конфигурации")
+        if not ids:  # у системных токенов Meta часто не перечисляет объекты — спросим id из настроек портфолио
+            ids = [input("id аккаунта Instagram (Настройки портфолио → Аккаунты Instagram):\n> ").strip()]
         ig_id = ids[0]
         username = http("GET", f"{API_FB}/{ig_id}", {"fields": "username", "access_token": token})["username"]
     save(CONF, {"token": token, "user_id": ig_id, "username": username, "refreshed": time.time()})
