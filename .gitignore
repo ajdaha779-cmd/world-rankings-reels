@@ -9,3 +9,4 @@ data/used.json
 data/posted_instagram.json
 data/*.log
 .DS_Store
+data/tts/

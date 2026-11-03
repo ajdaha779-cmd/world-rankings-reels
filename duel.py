@@ -3,8 +3,9 @@ import itertools, random
 from engine import *
 from catalog import FMT, COUNTRIES, DUEL_STATS
 from data import indicator
-from render import _fit, _living_bg, _confetti, _draw_confetti, title_card, TITLE_CARD
+from render import _fit, _living_bg, _confetti, _draw_confetti, title_card, TITLE_CARD, progress
 from sound import duel_track
+import tts
 
 ROUNDS = 5
 INTRO, ROUND_LEN = 1.2, 3.2
@@ -163,6 +164,8 @@ def render_duel(a, b, rounds, accent, out_path, seed=0):
                 text(d, (W // 2, cy + 140), names[winner], _fit(names[winner], 96, W - 240, True))
             text(d, (W // 2, cy + 280), f"{total[0]} : {total[1]}", font(90), fill=(255, 255, 255))
 
+        if t < final_t:
+            progress(d, t / final_t, 560, accent)
         if t < TITLE_CARD:
             im = title_card(im, t, [(names[0].upper(), 100, (255, 255, 255)), ("VS", 80, accent),
                                     (names[1].upper(), 100, (255, 255, 255))], accent, flags=(a, b),
@@ -180,5 +183,11 @@ def render_duel(a, b, rounds, accent, out_path, seed=0):
         v.write(im)
 
     rounds_t = [(INTRO + i * ROUND_LEN, w) for i, w in enumerate(wins_at)]
-    track = duel_track(dur, (0.15, 0.45), rounds_t, final_t, card_end + 0.35, seed=seed)
+    plan = [(0.15, f"{names[0]} versus {names[1]}. Five rounds. Who wins?")]
+    plan += [(INTRO + i * ROUND_LEN + 0.15, f"Round {i + 1}. {r[0]}.") for i, r in enumerate(rounds)]
+    plan += [(final_t - 0.9, "And the winner is..."),
+             (final_t + 0.05, f"{names[winner]}!" if winner is not None else "It's a draw!"),
+             (card_end + 0.5, "Who should fight next? Comment below!")]
+    voice = tts.lines(plan, seed)
+    track = duel_track(dur, (0.15, 0.45), rounds_t, final_t, card_end + 0.35, seed=seed, voice=voice)
     return v.finish(audio=track)

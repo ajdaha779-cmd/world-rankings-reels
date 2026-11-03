@@ -2,8 +2,9 @@
 import hashlib
 from engine import *
 from catalog import FMT, COUNTRIES
-from render import _fit, _living_bg, _confetti, _draw_confetti, title_card, TITLE_CARD
+from render import _fit, _living_bg, _confetti, _draw_confetti, title_card, TITLE_CARD, progress
 from sound import race_track
+import tts
 
 TOP = 10
 BAR_COLORS = [(255, 92, 120), (64, 196, 255), (46, 204, 113), (255, 196, 46), (190, 120, 255), (255, 140, 50),
@@ -61,6 +62,16 @@ def render_race(years, series, topic, group_name, accent, out_path, seed=0):
             leader, top3 = ranked[0], tt
         frames.append((vals, yf, ranked, dict(pos)))
     decades = [t0 + (y - years[0]) * per_year for y in years if y % 10 == 0 and y > years[0]]
+
+    first = sorted((c for c in codes if series[c][0] is not None), key=lambda c: -series[c][0])
+
+    def lead_fact(c):
+        """История лидера: был ли он первым с самого начала или пришёл снизу."""
+        if first and first[0] == c:
+            return f"#1 since {years[0]} — never lost the lead" if not leader_changes else f"Also #1 back in {years[0]}"
+        if c in first:
+            return f"Was only #{first.index(c) + 1} in {years[0]}"
+        return f"Not even on the chart in {years[0]}"
 
     bg_tall = _living_bg(accent, seed + 3)
     conf = _confetti(accent, seed)
@@ -131,8 +142,11 @@ def render_race(years, series, topic, group_name, accent, out_path, seed=0):
             text(d, (160 + fl.width + 20, cy - 30), f"#1 in {y1}", font(40), fill=accent, anchor="lm")
             text(d, (160 + fl.width + 20, cy + 30), COUNTRIES[lead], _fit(COUNTRIES[lead], 56, W - 300 - fl.width, True),
                  anchor="lm")
+            text(d, (W // 2, cy + 140), lead_fact(lead), font(40), fill=(235, 238, 250))
             _draw_confetti(d, conf, t - race_end, W // 2, 700)
 
+        if t < race_end:
+            progress(d, (t - t0) / (race_end - t0), 420, accent)
         if t < TITLE_CARD:
             im = title_card(im, t, [(h1, 110, (255, 255, 255)), (h2, 110, (255, 255, 255)), (f"{y0} → {y1}", 110, accent)],
                             accent, flags=ranked[:5], pill=f"WHO IS #1 IN {y1}?")
@@ -148,6 +162,12 @@ def render_race(years, series, topic, group_name, accent, out_path, seed=0):
             text(d, (W // 2, cy + 140), "Follow for daily rankings", font(32, False), fill=(120, 120, 135))
         v.write(im)
 
+    lead = frames[-1][2][0]
+    where = f"among {group_name}" if "countries" in group_name else f"in {group_name}"
+    voice = tts.lines([(0.15, f"{topic['question'].format(g=where, y0=y0, y1=y1)}. Who is number one today?"),
+                       (race_end + 0.05, f"{COUNTRIES[lead]} is number one!"),
+                       (race_end + 1.1, lead_fact(lead).replace(" — ", ". ")),
+                       (end + 0.35, "Where is your country? Comment below!")], seed)
     track = race_track(dur, race_end, end, decades=decades, leader_changes=leader_changes,
-                       top3_changes=top3_changes, seed=seed)
+                       top3_changes=top3_changes, seed=seed, voice=voice)
     return v.finish(audio=track)

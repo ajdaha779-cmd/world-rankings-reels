@@ -2,3 +2,5 @@ pillow
 numpy
 certifi
 scipy
+kokoro-onnx
+soundfile

@@ -4,7 +4,7 @@
 """
 import random
 from catalog import TOPICS, GROUPS, RACE_TOPICS, RACE_GROUPS, DUEL_PAIRS, COUNTRIES, flag_emoji
-from data import ranking, race_frames
+from data import ranking, race_frames, indicator
 from duel import duel_rounds
 
 ROTATION = ["ranking", "race", "ranking", "duel"]
@@ -19,6 +19,27 @@ def _where(gname):
 
 def _tags(extra):
     return BASE_TAGS + " " + " ".join("#" + x for x in extra.split())
+
+
+def ranking_fact(t, g, rows):
+    """«Вау-факт» для карточки №1: сравнение с средним по региону (или с последним местом)."""
+    vals = indicator(t["ind"])
+    members = [vals[c][0] for c in GROUPS[g][1] if c in vals]
+    top = rows[0][2]
+    if not members or top <= 0 or any(r[2] <= 0 for r in rows):
+        return None
+    avg = sum(members) / len(members)
+    gname = GROUPS[g][0].replace("the ", "").replace(" countries", "")
+    if t["fmt"] in ("money", "people", "density", "tonnes", "dec1", "dec2"):
+        k = top / avg if t["order"] == "desc" else avg / top
+        if k >= 1.3:
+            return f"{k:.1f}× {'higher' if t['order'] == 'desc' else 'lower'} than the {gname} average"
+    diff = (top - avg) if t["order"] == "desc" else (avg - top)
+    if t["fmt"] == "years" and diff >= 1:
+        return f"{diff:.1f} years {'above' if t['order'] == 'desc' else 'below'} the {gname} average"
+    if t["fmt"] == "pct" and diff >= 1:
+        return f"{diff:.1f} points {'above' if t['order'] == 'desc' else 'below'} the {gname} average"
+    return None
 
 
 def _ranking_items(used, rng, avoid):
@@ -44,8 +65,8 @@ def _ranking_items(used, rng, avoid):
                                 f"Source: World Bank Open Data (latest available: {yrs}).\n\n"
                                 f"Is your country on the list? What should we compare next? Comment below 👇\n\n{tags}"),
                    short=f"{q} 🌍 Where is your country? 👇\n\n{tags}",
-                   render=lambda out, seed, accent, rows=rows, t=t, gname=gname:
-                   render(rows, t, gname, accent, out, seed=seed))
+                   render=lambda out, seed, accent, rows=rows, t=t, gname=gname, fact=ranking_fact(t, g, rows):
+                   render(rows, t, gname, accent, out, seed=seed, fact=fact))
 
 
 def _race_items(used, rng, avoid):

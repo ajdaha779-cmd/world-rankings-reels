@@ -1,0 +1,28 @@
+name: Проба озвучки
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - uses: actions/cache@v4
+        with:
+          path: data/tts
+          key: kokoro-v1.0-int8
+      - run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -r requirements.txt
+      - run: python voice_test.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: voice-test
+          path: work/voice/*.mp4
+          retention-days: 7

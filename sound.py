@@ -239,7 +239,7 @@ def bpm_for(seed):
     return (96, 100, 104)[seed % 3]
 
 
-def ranking_track(dur, reveal, n, pause_start, top_t, end_t, seed=0, whooshes=()):
+def ranking_track(dur, reveal, n, pause_start, top_t, end_t, seed=0, whooshes=(), voice=()):
     """Полная звуковая дорожка ролика-рейтинга.
     reveal: {место: время}, pause_start..top_t — пауза перед №1."""
     root = KEYS[seed % len(KEYS)]
@@ -285,10 +285,11 @@ def ranking_track(dur, reveal, n, pause_start, top_t, end_t, seed=0, whooshes=()
     place(fx, bell(root + 24), end_t + 0.4, 0.3)
 
     fx = reverb(fx[:N], 0.12)
+    music, fx = mix_voice(music, fx, voice)
     return master(music * 0.8 + fx)
 
 
-def race_track(dur, race_end, end_t, decades=(), leader_changes=(), top3_changes=(), seed=0):
+def race_track(dur, race_end, end_t, decades=(), leader_changes=(), top3_changes=(), seed=0, voice=()):
     """Дорожка гонки графиков: бит всю дорогу, «вжух» на каждое десятилетие,
     нота при перестановках в тройке, удар при смене лидера, финальный аккорд."""
     root = KEYS[seed % len(KEYS)]
@@ -318,10 +319,11 @@ def race_track(dur, race_end, end_t, decades=(), leader_changes=(), top3_changes
     place(fx, bell(root + 19), end_t + 0.25, 0.35)
     place(fx, bell(root + 24), end_t + 0.4, 0.3)
     fx = reverb(fx[:N], 0.12)
+    music, fx = mix_voice(music, fx, voice)
     return master(music * 0.8 + fx)
 
 
-def duel_track(dur, slams, rounds, final_t, end_t, seed=0):
+def duel_track(dur, slams, rounds, final_t, end_t, seed=0, voice=()):
     """Дуэль: удары на появление флагов, «вжух» на раунд, звон за очко, нарастание и удар на победителя."""
     root = KEYS[seed % len(KEYS)]
     music, _ = beat(dur + 1, bpm_for(seed), root)
@@ -351,4 +353,27 @@ def duel_track(dur, slams, rounds, final_t, end_t, seed=0):
     place(fx, bell(root + 19), end_t + 0.25, 0.35)
     place(fx, bell(root + 24), end_t + 0.4, 0.3)
     fx = reverb(fx[:N], 0.12)
+    music, fx = mix_voice(music, fx, voice)
     return master(music * 0.8 + fx)
+
+
+def mix_voice(music, fx, voice):
+    """Голос поверх: музыка «приседает» под речь (−8 дБ), голос чистый и по центру."""
+    if not voice:
+        return music, fx
+    N = len(music)
+    vtrack = np.zeros(N)
+    for t, a in voice:
+        s = int(t * SR)
+        e = min(N, s + len(a))
+        if s < N:
+            vtrack[s:e] += a[:e - s]
+    env = np.abs(vtrack)
+    k = int(0.12 * SR)  # сглаженная огибающая речи
+    env = np.convolve(env, np.ones(k) / k, mode="same")
+    duck = 1 - 0.6 * np.clip(env / (env.max() or 1) * 3, 0, 1)
+    music = music * duck[:, None]
+    v = hp(vtrack, 90) * 0.95
+    fx = fx.copy()
+    fx[:N] += np.stack([v, v], axis=1)
+    return music, fx

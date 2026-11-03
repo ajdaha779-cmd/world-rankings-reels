@@ -38,6 +38,13 @@ jobs:
         if: steps.due.outputs.due == 'true' && github.event_name != 'workflow_dispatch'
         run: sleep ${{ steps.due.outputs.sleep }}
 
+      - name: Модель озвучки (кэш, чтобы не скачивать каждый раз)
+        if: steps.due.outputs.due == 'true'
+        uses: actions/cache@v4
+        with:
+          path: data/tts
+          key: kokoro-v1.0-int8
+
       - name: Установить зависимости
         if: steps.due.outputs.due == 'true'
         run: |

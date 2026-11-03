@@ -3,6 +3,7 @@
 from engine import *
 from catalog import FMT
 from sound import ranking_track, bpm_for
+import tts
 
 BAR, PANEL = (66, 78, 112), (27, 30, 44)
 CARD_HOLD = 1.9  # сколько висит большая карточка №1
@@ -61,7 +62,7 @@ def _draw_confetti(d, c, dt, ox, oy):
         d.polygon(pts, fill=c["col"][i])
 
 
-def render(rows, topic, group_name, accent, out_path, seed=0):
+def render(rows, topic, group_name, accent, out_path, seed=0, fact=None):
     n = len(rows)
     fmt = FMT[topic["fmt"]]
     years = sorted({r[3] for r in rows})
@@ -182,9 +183,15 @@ def render(rows, topic, group_name, accent, out_path, seed=0):
             text(d, (W // 2, cy + 140), top_name, f_card_name)
             cnt = ease_out((t - top_t - 0.15) / 0.7)
             text(d, (W // 2, cy + 270), fmt(top_val * cnt), font(104), fill=accent)
+            if fact and t - top_t > 0.7:  # «вау-факт»: во сколько раз №1 отрывается от среднего
+                fa = ease_out((t - top_t - 0.7) / 0.3)
+                text(d, (W // 2, cy + 352), fact, _fit(fact, 38, W - 220, False),
+                     fill=mix_color((20, 22, 34), (235, 238, 250), fa))
         if card_out + 0.35 <= t < top_t + 3.2:
             _draw_confetti(d, conf, t - top_t, W // 2, H // 2 + 80)
 
+        if t < top_t:
+            progress(d, t / top_t, 372, accent)
         if t < TITLE_CARD:
             im = title_card(im, t, [(h1, 120, (255, 255, 255)), (h2, 120, accent), (group_name.upper(), 56, (175, 180, 205))],
                             accent, flags=[r[0] for r in rows[1:6]], pill="GUESS #1 ?")
@@ -200,7 +207,14 @@ def render(rows, topic, group_name, accent, out_path, seed=0):
             text(d, (W // 2, cy + 140), "Follow for daily rankings", font(32, False), fill=(120, 120, 135))
         v.write(im)
 
-    track = ranking_track(dur, reveal | {1: top_t}, n, pause_start, top_t, end, seed=seed, whooshes=(card_out,))
+    where = f"among {group_name}" if "countries" in group_name else f"in {group_name}"
+    voice = tts.lines([(0.15, topic["question"].format(g=where)),
+                       (pause_start, "And number one is..."),
+                       (top_t + 0.05, f"{top_name}!"),
+                       (top_t + 0.9, fact),
+                       (end + 0.35, "Where is your country? Comment below!")], seed)
+    track = ranking_track(dur, reveal | {1: top_t}, n, pause_start, top_t, end, seed=seed, whooshes=(card_out,),
+                          voice=voice)
     return v.finish(audio=track)
 
 
@@ -232,3 +246,12 @@ def title_card(im, t, lines, accent, flags=(), pill=None, fh=92):
         d.rounded_rectangle((W / 2 - pw / 2, y + 50, W / 2 + pw / 2, y + 122), 36, fill=accent)
         text(d, (W // 2, y + 86), pill, font(40), fill=(20, 20, 30))
     return Image.blend(im, card, fade) if fade < 1 else card
+
+
+def progress(d, frac, y, accent):
+    """Тонкая полоска «сколько осталось до развязки» — зритель видит, что №1 близко, и не уходит."""
+    x0, x1 = 60, W - 60
+    d.rounded_rectangle((x0, y, x1, y + 8), 4, fill=(45, 48, 70))
+    xe = x0 + int((x1 - x0) * clamp(frac))
+    if xe > x0 + 8:
+        d.rounded_rectangle((x0, y, xe, y + 8), 4, fill=accent)
