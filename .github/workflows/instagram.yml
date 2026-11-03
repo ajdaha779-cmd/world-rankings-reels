@@ -2,7 +2,7 @@ name: Instagram Reels
 
 on:
   schedule:
-    - cron: "17 * * * *"    # каждый час; публиковать или нет — решает due.py по data/schedule.json
+    - cron: "17 0-2,11-23 * * *"  # каждый час в эфирное окно (15:00–06:59 по Баку); решает due.py
   workflow_dispatch:        # ручной запуск кнопкой Run workflow
     inputs:
       dry_run:
@@ -33,6 +33,10 @@ jobs:
         id: due
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then echo "due=true" >> "$GITHUB_OUTPUT"; echo "ручной запуск"; else python due.py; fi
+
+      - name: Случайная пауза внутри часа (время публикаций «живое»)
+        if: steps.due.outputs.due == 'true' && github.event_name != 'workflow_dispatch'
+        run: sleep ${{ steps.due.outputs.sleep }}
 
       - name: Установить зависимости
         if: steps.due.outputs.due == 'true'
