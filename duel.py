@@ -8,7 +8,9 @@ from sound import duel_track
 import tts
 
 ROUNDS = 5
-INTRO, ROUND_LEN = 1.2, 3.2
+LAST = {}
+INTRO, ROUND_LEN = 1.0, 2.6
+WIN_AT = 1.25  # через сколько секунд раунда объявляется победитель раунда
 LEFT_COL, RIGHT_COL = (226, 58, 74), (44, 108, 232)
 
 
@@ -49,15 +51,19 @@ def duel_rounds(a, b, seed=0):
 def render_duel(a, b, rounds, accent, out_path, seed=0):
     names = (COUNTRIES[a], COUNTRIES[b])
     final_t = INTRO + ROUNDS * ROUND_LEN + 0.9
-    card_end = final_t + 2.6
-    dur = card_end + 3.2
+    card_end = final_t + 2.3
+    dur = card_end + 2.4
+    global LAST
+    LAST = {"dur": dur, "moments": [(0, "титул + хук"), (INTRO, "раунд 1")] +
+            [(INTRO + i * ROUND_LEN, f"раунд {i + 1}") for i in range(1, ROUNDS)] +
+            [(final_t, "вердикт"), (card_end, "призыв к комментариям")]}
     v = Video(f"duel{seed}", dur, out_path)
     bg_tall = _living_bg(accent, seed + 7)
     conf = _confetti(accent, seed)
     score = [0, 0]
     wins_at = []
     for i, r in enumerate(rounds):
-        wins_at.append(INTRO + i * ROUND_LEN + 1.6)
+        wins_at.append(INTRO + i * ROUND_LEN + WIN_AT)
     total = [sum(1 for r in rounds if r[4] == s) for s in (0, 1)]
     winner = 0 if total[0] > total[1] else 1 if total[1] > total[0] else None
     f_name = [_fit(n, 50, 380, True) for n in names]
@@ -106,12 +112,12 @@ def render_duel(a, b, rounds, accent, out_path, seed=0):
             d.rounded_rectangle((W / 2 - pw / 2, 640 + oyc, W / 2 + pw / 2, 700 + oyc), 30, fill=accent)
             text(d, (W // 2, 670 + oyc), pill, font(34), fill=(20, 20, 30))
             text(d, (W // 2, 790 + oyc), label, _fit(label, 60, W - 100, True))
-            cnt = ease_out((lt - 0.3) / 1.0)
+            cnt = ease_out((lt - 0.25) / 0.8)
             mx = max(abs(va), abs(vb)) or 1
             for side, val in ((0, va), (1, vb)):
                 col = LEFT_COL if side == 0 else RIGHT_COL
-                won = win == side and lt >= 1.6
-                lost = win is not None and win != side and lt >= 1.6
+                won = win == side and lt >= WIN_AT
+                lost = win is not None and win != side and lt >= WIN_AT
                 if lost:
                     col = mix_color(col, (40, 40, 50), 0.6)
                 bh = int(560 * abs(val) / mx * cnt)
@@ -119,10 +125,10 @@ def render_duel(a, b, rounds, accent, out_path, seed=0):
                 base = 1560 + oyc
                 d.rounded_rectangle((cx - 130, base - max(bh, 12), cx + 130, base), 26, fill=col)
                 if won:
-                    g = int(5 + 3 * math.sin((lt - 1.6) * 9))
+                    g = int(5 + 3 * math.sin((lt - WIN_AT) * 9))
                     d.rounded_rectangle((cx - 136, base - max(bh, 12) - 6, cx + 136, base + 6), 30, outline=accent,
                                         width=g)
-                    pop = ease_back((lt - 1.6) / 0.35)
+                    pop = ease_back((lt - WIN_AT) / 0.35)
                     # «+1» в центре со стрелкой к победителю раунда
                     py_, dir_ = 1250 + oyc, -1 if side == 0 else 1
                     text(d, (W // 2 + dir_ * 10, py_), "+1", font(int(76 * pop) + 1), fill=accent)
@@ -130,7 +136,7 @@ def render_duel(a, b, rounds, accent, out_path, seed=0):
                     d.polygon([(tx + dir_ * 34, py_), (tx, py_ - 26), (tx, py_ + 26)], fill=accent)
                 text(d, (cx, base - max(bh, 12) - 60), fmt(val * cnt), _fit(fmt(val), 64, 420, True),
                      fill=(255, 255, 255) if not lost else (150, 150, 165))
-            if win is None and lt >= 1.6:
+            if win is None and lt >= WIN_AT:
                 text(d, (W // 2, 1640), "DRAW", font(60), fill=(200, 200, 210))
         elif t < final_t + 0.01:
             pass

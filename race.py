@@ -7,6 +7,7 @@ from sound import race_track
 import tts
 
 TOP = 10
+LAST = {}
 BAR_COLORS = [(255, 92, 120), (64, 196, 255), (46, 204, 113), (255, 196, 46), (190, 120, 255), (255, 140, 50),
               (0, 210, 190), (255, 110, 200), (120, 160, 255), (170, 220, 60), (255, 170, 120), (90, 200, 255)]
 
@@ -18,12 +19,12 @@ def _color(iso):
 def render_race(years, series, topic, group_name, accent, out_path, seed=0):
     fmt = FMT[topic["fmt"]]
     ny = len(years)
-    per_year = max(0.28, min(0.6, 21.0 / max(1, ny - 1)))
+    per_year = max(0.2, min(0.45, 14.0 / max(1, ny - 1)))  # гонка ≈14 с
     t0 = 0.6
     race_end = t0 + (ny - 1) * per_year
-    hold = 2.2
+    hold = 1.9
     end = race_end + hold
-    dur = end + 3.2
+    dur = end + 2.4
     codes = list(series)
 
     def values_at(t):
@@ -73,6 +74,10 @@ def render_race(years, series, topic, group_name, accent, out_path, seed=0):
             return f"Was only #{first.index(c) + 1} in {years[0]}"
         return f"Not even on the chart in {years[0]}"
 
+    global LAST
+    LAST = {"dur": dur, "moments": [(0, "титул + хук"), (TITLE_CARD, f"гонка {years[0]}…"),
+                                    (t0 + (race_end - t0) / 2, f"середина гонки (~{years[ny // 2]})"),
+                                    (race_end, "финиш, №1"), (end, "призыв к комментариям")]}
     bg_tall = _living_bg(accent, seed + 3)
     conf = _confetti(accent, seed)
     h1, h2 = topic["hook"]
@@ -103,6 +108,10 @@ def render_race(years, series, topic, group_name, accent, out_path, seed=0):
         text(d, (W - 60, 1700), str(yr), f_year, fill=(60, 64, 92), anchor="rm")
 
         top_val = vals[ranked[0]] if ranked else 1
+        # при обгоне два столбика на миг совпадают — подпись оставляем тому, кто ближе к своему месту
+        shown = [c for c in pos if pos[c] <= TOP + 0.5 and c in vals]
+        hide_label = {c for c in shown for o in shown if o != c and abs(pos[c] - pos[o]) < 0.6
+                      and abs(pos[c] - round(pos[c])) > abs(pos[o] - round(pos[o]))}
         for c in sorted(pos, key=lambda c: -pos[c]):  # нижние рисуем первыми
             p = pos[c]
             if p > TOP + 0.5 or c not in vals:
@@ -123,6 +132,8 @@ def render_race(years, series, topic, group_name, accent, out_path, seed=0):
             nw = f_name.getlength(name)
             vs = fmt(val)
             vx = max(fx_ + fl.width + 14, x0 + bw + 14)
+            if c in hide_label:
+                continue
             if bw - fl.width - 44 > nw:
                 text(d, (x0 + 20, y + bar_h // 2), name, f_name, fill=(255, 255, 255), anchor="lm",
                      stroke=2, stroke_fill=mix_color(col, (0, 0, 0), 0.45))

@@ -7,7 +7,7 @@ from catalog import TOPICS, GROUPS, RACE_TOPICS, RACE_GROUPS, DUEL_PAIRS, COUNTR
 from data import ranking, race_frames, indicator
 from duel import duel_rounds
 
-ROTATION = ["ranking", "race", "ranking", "duel"]
+ROTATION = ["race", "duel", "ranking", "race", "duel"]  # по первым данным: гонки и дуэли держат лучше рейтингов
 RACE_WEIGHT = {"pop": 3, "economy": 3, "rich": 2.5, "life": 1.5, "online": 1.5, "old": 1, "co2": 1}
 GROUP_WEIGHT = {"world": 3, "europe": 2, "asia": 2, "americas": 1.5, "exussr": 1.5, "africa": 1}
 BASE_TAGS = "#shorts #countries #geography #comparison #data"
@@ -42,6 +42,13 @@ def ranking_fact(t, g, rows):
     return None
 
 
+def _teaser(fact):
+    """Короткий тизер для строки №1: «3.0× the EU average» из «3.0× higher than the EU average»."""
+    if not fact:
+        return None
+    return fact.replace(" higher than the ", " the ").replace(" lower than the ", " below the ")
+
+
 def _ranking_items(used, rng, avoid):
     from render import render
     combos = [(t, g) for t in TOPICS for g in GROUPS]
@@ -50,7 +57,7 @@ def _ranking_items(used, rng, avoid):
         key = f"{t['id']}:{g}"
         if key in used or t["id"] in avoid:
             continue
-        rows = ranking(t, g)
+        rows = ranking(t, g, top_n=10)  # 10 мест — ролик короче, досматривают чаще
         if not rows:
             used.add(key)
             continue
@@ -66,7 +73,7 @@ def _ranking_items(used, rng, avoid):
                                 f"Is your country on the list? What should we compare next? Comment below 👇\n\n{tags}"),
                    short=f"{q} 🌍 Where is your country? 👇\n\n{tags}",
                    render=lambda out, seed, accent, rows=rows, t=t, gname=gname, fact=ranking_fact(t, g, rows):
-                   render(rows, t, gname, accent, out, seed=seed, fact=fact))
+                   render(rows, t, gname, accent, out, seed=seed, fact=fact, teaser=_teaser(fact)))
 
 
 def _race_items(used, rng, avoid):

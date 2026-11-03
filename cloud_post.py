@@ -11,7 +11,8 @@ import argparse, datetime, json, os, random, sys
 
 from catalog import ACCENTS, BASE
 from formats import next_item, pick_kind, make_duel
-import instagram, insights, requests_q
+import instagram, insights, requests_q, analyze
+import render, race, duel
 
 USED = os.path.join(BASE, "data", "used_cloud.json")
 HISTORY = os.path.join(BASE, "data", "history_cloud.json")
@@ -41,7 +42,8 @@ def main():
 
     weights = None
     if conf:
-        if insights.update_stats(conf, history):
+        analyze.run(conf, history, save=False)  # разбор каждого ролика → лог и data/АНАЛИЗ.md
+        if any(h.get("stats") for h in history):
             weights = insights.kind_weights(history)
             print(f"веса форматов по статистике: {weights}")
         requests_q.collect(conf, history, queue)
@@ -59,6 +61,7 @@ def main():
 
     out = os.path.join(BASE, "work", f"{item['slug']}.mp4")
     item["render"](out, n, ACCENTS[n % len(ACCENTS)])
+    timeline = {"ranking": render, "race": race, "duel": duel}[item["kind"]].LAST
     print(f"ролик [{item['kind']}]: {out}\n{item['title']}")
     if os.environ.get("GITHUB_OUTPUT"):
         with open(os.environ["GITHUB_OUTPUT"], "a") as f:
@@ -80,10 +83,15 @@ def main():
     used.add(item["key"])
     history.append({"kind": item["kind"], "topic": item["topic"], "key": item["key"], "title": item["title"],
                     "description": item["description"], "media_id": media_id, "story_id": story_id,
-                    "requested": bool(req), "at": datetime.datetime.utcnow().isoformat() + "Z"})
+                    "requested": bool(req), "dur": timeline.get("dur"), "moments": timeline.get("moments"),
+                    "at": datetime.datetime.utcnow().isoformat() + "Z"})
     save(USED, sorted(used), indent=0)
     save(HISTORY, history)
     save(QUEUE, queue)
+    try:
+        analyze.run(conf, history, save=True)
+    except Exception as e:
+        print(f"отчёт не обновлён: {e}")
 
 
 if __name__ == "__main__":

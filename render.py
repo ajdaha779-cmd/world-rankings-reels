@@ -6,7 +6,8 @@ from sound import ranking_track, bpm_for
 import tts
 
 BAR, PANEL = (66, 78, 112), (27, 30, 44)
-CARD_HOLD = 1.9  # сколько висит большая карточка №1
+CARD_HOLD = 1.7  # сколько висит большая карточка №1
+FAST_UNTIL = 5   # места ниже 5-го открываются быстро (каждую долю), 5→2 — медленнее (2 доли): интрига в конце
 
 
 def _fit(s, size, max_w, black=False):
@@ -62,30 +63,36 @@ def _draw_confetti(d, c, dt, ox, oy):
         d.polygon(pts, fill=c["col"][i])
 
 
-def render(rows, topic, group_name, accent, out_path, seed=0, fact=None):
+def render(rows, topic, group_name, accent, out_path, seed=0, fact=None, teaser=None):
     n = len(rows)
     fmt = FMT[topic["fmt"]]
     years = sorted({r[3] for r in rows})
     yrs = str(years[0]) if len(years) == 1 else f"{years[0]}–{years[-1]}"
 
-    # тайминг в долях такта: место открывается каждые 2 доли, пауза перед №1 — 2 доли
+    # тайминг в долях такта: нижние места — каждую долю (быстрый старт, зритель не скучает),
+    # 5→2 — каждые 2 доли, пауза перед №1 — 2 доли
     beat = 60 / bpm_for(seed)
-    step, pause, t0 = 2 * beat, 2 * beat, beat
+    step, pause, t = beat, 2 * beat, beat
     reveal = {}
-    for i, rank in enumerate(range(n, 1, -1)):
-        reveal[rank] = t0 + i * step
-    pause_start = reveal[2] + step
+    for rank in range(n, 1, -1):
+        reveal[rank] = t
+        t += beat if rank > FAST_UNTIL else 2 * beat
+    pause_start = t
     top_t = pause_start + pause
     card_out = top_t + CARD_HOLD
-    end = card_out + 1.1
-    dur = end + 3.2
+    end = card_out + 0.8
+    dur = end + 2.4
 
+    global LAST
+    LAST = {"dur": dur, "moments": [(0, "титул + хук"), (TITLE_CARD, f"места {n}→6 быстро"),
+                                    (reveal.get(5, pause_start), "места 5→2"), (pause_start, "пауза перед №1"),
+                                    (top_t, "развязка №1"), (end, "призыв к комментариям")]}
     v = Video(f"r{seed}", dur, out_path)
     bg_tall = _living_bg(accent, seed)
     conf = _confetti(accent, seed)
     row_y0 = 400
     gap = 6
-    row_h = min(90, int((1790 - row_y0) / n) - gap)
+    row_h = min(120, int((1690 - row_y0) / n) - gap)
     maxv = max(abs(r[2]) for r in rows) or 1
     top_code, top_name, top_val, _ = rows[0]
 
@@ -127,7 +134,9 @@ def render(rows, topic, group_name, accent, out_path, seed=0, fact=None):
                     gl = 0.5 + 0.5 * math.sin(t * 5)
                     d.rounded_rectangle((x0, y, x1, y + row_h), 22, outline=mix_color(PANEL, accent, 0.4 + 0.5 * gl),
                                         width=3)
-                    text(d, (W // 2, y + row_h // 2), "GUESS #1 ?", f_guess, fill=mix_color((90, 95, 120), accent, gl))
+                    gs = f"GUESS #1 · {teaser}" if teaser else "GUESS #1 ?"
+                    text(d, ((x0 + 100 + x1) // 2, y + row_h // 2), gs, _fit(gs, int(row_h * 0.38), x1 - x0 - 150, True),
+                         fill=mix_color((120, 125, 150), accent, gl))
                 else:
                     text(d, (W // 2, y + row_h // 2), "?", f_q, fill=(70, 75, 100))
                 continue
@@ -209,16 +218,19 @@ def render(rows, topic, group_name, accent, out_path, seed=0, fact=None):
         v.write(im)
 
     where = f"among {group_name}" if "countries" in group_name else f"in {group_name}"
-    voice = tts.lines([(0.15, topic["question"].format(g=where)),
+    hook = topic["question"].format(g=where)
+    if fact:  # тизер развязки прямо в хуке — повод досмотреть
+        hook += f" Number one is {fact}. Guess who!"
+    voice = tts.lines([(0.15, hook),
                        (pause_start, "And number one is..."),
                        (top_t + 0.05, f"{top_name}!"),
-                       (top_t + 0.9, fact),
-                       (end + 0.35, "Where is your country? Comment below!")], seed)
+                       (end + 0.3, "Where is your country? Comment below!")], seed)
     track = ranking_track(dur, reveal | {1: top_t}, n, pause_start, top_t, end, seed=seed, whooshes=(card_out,),
                           voice=voice)
     return v.finish(audio=track)
 
 
+LAST = {}
 TITLE_CARD = 0.6  # сек: титульная карточка в начале — она же обложка в сетке профиля
 
 
