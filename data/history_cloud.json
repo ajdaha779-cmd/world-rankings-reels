@@ -7,15 +7,15 @@
   "media_id": "17906642328351970",
   "at": "2026-11-02T19:30:08.541326Z",
   "stats": {
-   "views": 221,
-   "reach": 184,
+   "views": 223,
+   "reach": 186,
    "saved": 0,
    "shares": 0,
    "likes": 4,
    "comments": 0,
    "total_interactions": 4
   },
-  "stats_at": "2026-11-03T02:52:56.060645Z"
+  "stats_at": "2026-11-03T06:37:27.530554Z"
  },
  {
   "kind": "race",
@@ -28,15 +28,15 @@
   "requested": false,
   "at": "2026-11-03T00:56:20.274815Z",
   "stats": {
-   "views": 260,
-   "reach": 217,
+   "views": 269,
+   "reach": 224,
    "saved": 0,
    "shares": 0,
    "likes": 0,
    "comments": 1,
    "total_interactions": 1
   },
-  "stats_at": "2026-11-03T02:52:57.482055Z"
+  "stats_at": "2026-11-03T06:37:28.014359Z"
  },
  {
   "kind": "ranking",
@@ -47,6 +47,27 @@
   "media_id": "18128500147875589",
   "story_id": "18123273208941884",
   "requested": false,
-  "at": "2026-11-03T02:54:42.896884Z"
+  "at": "2026-11-03T02:54:42.896884Z",
+  "stats": {
+   "views": 159,
+   "reach": 143,
+   "saved": 0,
+   "shares": 0,
+   "likes": 0,
+   "comments": 1,
+   "total_interactions": 1
+  },
+  "stats_at": "2026-11-03T06:37:28.610723Z"
+ },
+ {
+  "kind": "duel",
+  "topic": "duel",
+  "key": "duel:ES-IT",
+  "title": "Italy vs Spain: who wins? 🇮🇹⚔️🇪🇸",
+  "description": "Italy vs Spain — 5 rounds of real data:\n• More online\n• Lower unemployment\n• More doctors (per 1,000)\n• Bigger population\n• Bigger economy\nSource: World Bank Open Data.\n\nWho should fight next? Comment below 👇\n\n#shorts #countries #geography #comparison #data #italy #spain #versus #battle",
+  "media_id": "18096887453395104",
+  "story_id": "18135636613667722",
+  "requested": false,
+  "at": "2026-11-03T06:38:58.535026Z"
  }
 ]
