@@ -15,7 +15,7 @@
    "comments": 0,
    "total_interactions": 4
   },
-  "stats_at": "2026-11-03T06:37:27.530554Z"
+  "stats_at": "2026-11-03T10:44:55.598599Z"
  },
  {
   "kind": "race",
@@ -28,15 +28,15 @@
   "requested": false,
   "at": "2026-11-03T00:56:20.274815Z",
   "stats": {
-   "views": 269,
-   "reach": 224,
+   "views": 274,
+   "reach": 227,
    "saved": 0,
    "shares": 0,
    "likes": 0,
    "comments": 1,
    "total_interactions": 1
   },
-  "stats_at": "2026-11-03T06:37:28.014359Z"
+  "stats_at": "2026-11-03T10:44:56.192388Z"
  },
  {
   "kind": "ranking",
@@ -49,15 +49,15 @@
   "requested": false,
   "at": "2026-11-03T02:54:42.896884Z",
   "stats": {
-   "views": 159,
-   "reach": 143,
+   "views": 182,
+   "reach": 168,
    "saved": 0,
    "shares": 0,
    "likes": 0,
    "comments": 1,
    "total_interactions": 1
   },
-  "stats_at": "2026-11-03T06:37:28.610723Z"
+  "stats_at": "2026-11-03T10:44:56.792566Z"
  },
  {
   "kind": "duel",
@@ -68,6 +68,27 @@
   "media_id": "18096887453395104",
   "story_id": "18135636613667722",
   "requested": false,
-  "at": "2026-11-03T06:38:58.535026Z"
+  "at": "2026-11-03T06:38:58.535026Z",
+  "stats": {
+   "views": 179,
+   "reach": 166,
+   "saved": 0,
+   "shares": 0,
+   "likes": 0,
+   "comments": 1,
+   "total_interactions": 1
+  },
+  "stats_at": "2026-11-03T10:44:57.300663Z"
+ },
+ {
+  "kind": "ranking",
+  "topic": "rich",
+  "key": "rich:eu",
+  "title": "Which countries are the richest per person in the EU? 🌍",
+  "description": "GDP per person (USD) — top 15 in the EU.\nSource: World Bank Open Data (latest available: 2025).\n\nIs your country on the list? What should we compare next? Comment below 👇\n\n#shorts #countries #geography #comparison #data #money #economy #gdp #ranking",
+  "media_id": "17913801309508104",
+  "story_id": "17927282658202923",
+  "requested": false,
+  "at": "2026-11-03T10:46:46.779930Z"
  }
 ]
