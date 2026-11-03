@@ -1,13 +1,8 @@
 name: Instagram Reels
 
 on:
-  schedule:                 # 6 роликов в день (время по Баку = UTC+4)
-    - cron: "7 3 * * *"     # 07:07 Баку — утро Европы
-    - cron: "7 12 * * *"    # 16:07 Баку — день Европы, утро США
-    - cron: "7 15 * * *"    # 19:07 Баку — вечер Европы, обед США
-    - cron: "7 18 * * *"    # 22:07 Баку — день США
-    - cron: "7 21 * * *"    # 01:07 Баку — вечер США (восток)
-    - cron: "7 0 * * *"     # 04:07 Баку — вечер США (запад)
+  schedule:
+    - cron: "17 * * * *"    # каждый час; публиковать или нет — решает due.py по data/schedule.json
   workflow_dispatch:        # ручной запуск кнопкой Run workflow
     inputs:
       dry_run:
@@ -34,12 +29,19 @@ jobs:
           python-version: "3.12"
           cache: pip
 
+      - name: Пора ли публиковать?
+        id: due
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then echo "due=true" >> "$GITHUB_OUTPUT"; echo "ручной запуск"; else python due.py; fi
+
       - name: Установить зависимости
+        if: steps.due.outputs.due == 'true'
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
           pip install -r requirements.txt
 
       - name: Сделать и опубликовать ролик
+        if: steps.due.outputs.due == 'true'
         id: post
         env:
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
@@ -55,7 +57,7 @@ jobs:
           retention-days: 14
 
       - name: Запомнить, какие темы уже вышли
-        if: success() && !inputs.dry_run
+        if: success() && steps.due.outputs.due == 'true' && !inputs.dry_run
         run: |
           git config user.name "reels-bot"
           git config user.email "reels-bot@users.noreply.github.com"
