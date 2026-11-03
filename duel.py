@@ -77,10 +77,10 @@ def render_duel(a, b, rounds, accent, out_path, seed=0):
             cx = 270 if side == 0 else W - 270
             punch = 1 + 0.18 * (1 - ease_out((t - (0.15 if side == 0 else 0.45)) / 0.35))
             fh = int(170 * punch)
-            fl = flag((a, b)[side].lower(), fh, 0.08)
-            d.rounded_rectangle((cx - fl.width // 2 - 10, 200 - fh // 2 - 10, cx + fl.width // 2 + 10, 200 + fh // 2 + 10),
-                                24, fill=(255, 255, 255))
-            im.paste(fl, (cx - fl.width // 2, 200 - fh // 2), fl)
+            fl = flag_box((a, b)[side].lower(), int(300 * punch), fh, 0.08)
+            d.rounded_rectangle((cx - fl.width // 2 - 10, 200 - fl.height // 2 - 10, cx + fl.width // 2 + 10,
+                                 200 + fl.height // 2 + 10), 24, fill=(255, 255, 255))
+            im.paste(fl, (cx - fl.width // 2, 200 - fl.height // 2), fl)
             text(d, (cx, 350), names[side], f_name[side])
             bump = max((1 - (t - w) / 0.4 for i, w in enumerate(wins_at) if rounds[i][4] == side and 0 <= t - w < 0.4),
                        default=0)
@@ -152,15 +152,16 @@ def render_duel(a, b, rounds, accent, out_path, seed=0):
                 text(d, (W // 2, cy - 250), "IT'S A", font(70), fill=(200, 200, 215))
                 text(d, (W // 2, cy - 140), "DRAW!", font(120), fill=accent)
                 for side in (0, 1):
-                    fl = flag((a, b)[side].lower(), 170, 0.08)
+                    fl = flag_box((a, b)[side].lower(), 300, 170, 0.08)
                     cx = W // 2 - 190 if side == 0 else W // 2 + 190
-                    im.paste(fl, (cx - fl.width // 2, cy + 20), fl)
+                    im.paste(fl, (cx - fl.width // 2, cy + 105 - fl.height // 2), fl)
             else:
                 text(d, (W // 2, cy - 280), "WINNER", font(80), fill=accent)
                 fl = flag((a, b)[winner].lower(), 240, 0.08)
-                d.rounded_rectangle((W // 2 - fl.width // 2 - 10, cy - 200, W // 2 + fl.width // 2 + 10, cy + 50), 26,
-                                    fill=(255, 255, 255))
-                im.paste(fl, (W // 2 - fl.width // 2, cy - 195), fl)
+                fy = cy - 75 - fl.height // 2
+                d.rounded_rectangle((W // 2 - fl.width // 2 - 10, fy - 10, W // 2 + fl.width // 2 + 10,
+                                     fy + fl.height + 10), 26, fill=(255, 255, 255))
+                im.paste(fl, (W // 2 - fl.width // 2, fy), fl)
                 text(d, (W // 2, cy + 140), names[winner], _fit(names[winner], 96, W - 240, True))
             text(d, (W // 2, cy + 280), f"{total[0]} : {total[1]}", font(90), fill=(255, 255, 255))
 

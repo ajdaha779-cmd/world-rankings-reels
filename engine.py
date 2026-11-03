@@ -23,11 +23,18 @@ def font(size, black=True):
     return _fonts[key]
 
 
+MAX_FLAG_RATIO = 2.0  # шире 2:1 не бывает — вытянутые флаги (Катар 28:11) становятся ниже, а не шире
+
+
 def flag(code, h, radius=0.12):
+    """Флаг высотой до h. Очень вытянутые флаги вписываются по ширине h·2 и получаются ниже —
+    поэтому центрировать нужно по fl.height, а не по h."""
     key = (code, h)
     if key not in _flags:
         im = Image.open(os.path.join(BASE, "assets", "flags", f"{code}.png")).convert("RGBA")
-        w = max(1, round(im.width * h / im.height))
+        ratio = im.width / im.height
+        w = max(1, round(h * min(ratio, MAX_FLAG_RATIO)))
+        h = max(1, round(w / ratio)) if ratio > MAX_FLAG_RATIO else h
         im = im.resize((w, h), Image.LANCZOS)
         mask = Image.new("L", (w, h), 0)
         ImageDraw.Draw(mask).rounded_rectangle((0, 0, w - 1, h - 1), int(h * radius), fill=255)
@@ -237,3 +244,15 @@ class Video:
         os.remove(self.tmp)
         os.remove(wav)
         return final
+
+
+_ratios = {}
+
+
+def flag_box(code, max_w, max_h, radius=0.12):
+    """Флаг, вписанный в рамку max_w×max_h — два флага рядом (дуэль) выглядят одного размера."""
+    if code not in _ratios:
+        with Image.open(os.path.join(BASE, "assets", "flags", f"{code}.png")) as im:
+            _ratios[code] = im.width / im.height
+    r = min(_ratios[code], MAX_FLAG_RATIO)
+    return flag(code, max(1, int(min(max_h, max_w / r))), radius)

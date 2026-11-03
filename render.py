@@ -149,7 +149,7 @@ def render(rows, topic, group_name, accent, out_path, seed=0, fact=None):
             text(d, (x0 + 55 + dx, y + row_h // 2), f"{rank}", f_rank)
             fh = int(row_h * 0.6)
             fl = flag(code.lower(), fh)
-            im.paste(fl, (x0 + 125 + dx, y + (row_h - fh) // 2), fl)
+            im.paste(fl, (x0 + 125 + dx, y + (row_h - fl.height) // 2), fl)
             vs = fmt(val * cnt)
             val_w = f_val.getlength(fmt(val)) + 40
             name_x = x0 + 140 + fl.width
@@ -177,9 +177,10 @@ def render(rows, topic, group_name, accent, out_path, seed=0, fact=None):
             d.rounded_rectangle((80, cy - 400, W - 80, cy + 400), 50, fill=(20, 22, 34), outline=accent, width=8)
             text(d, (W // 2, cy - 290), "#1", font(120), fill=accent)
             fl = flag(top_code.lower(), 240, 0.08)
-            d.rounded_rectangle((W // 2 - fl.width // 2 - 10, cy - 200, W // 2 + fl.width // 2 + 10, cy + 50), 26,
-                                fill=(255, 255, 255))
-            im.paste(fl, (W // 2 - fl.width // 2, cy - 195), fl)
+            fy = cy - 75 - fl.height // 2  # центр флага всегда в одной точке, какой бы формы он ни был
+            d.rounded_rectangle((W // 2 - fl.width // 2 - 10, fy - 10, W // 2 + fl.width // 2 + 10, fy + fl.height + 10),
+                                26, fill=(255, 255, 255))
+            im.paste(fl, (W // 2 - fl.width // 2, fy), fl)
             text(d, (W // 2, cy + 140), top_name, f_card_name)
             cnt = ease_out((t - top_t - 0.15) / 0.7)
             text(d, (W // 2, cy + 270), fmt(top_val * cnt), font(104), fill=accent)
@@ -234,11 +235,11 @@ def title_card(im, t, lines, accent, flags=(), pill=None, fh=92):
         text(d, (W // 2, y + sz // 2), s, _fit(s, sz, W - 90, True), fill=colr)
         y += sz + 26
     if flags:
-        fls = [flag(c.lower(), fh, 0.12) for c in flags]
+        fls = [flag_box(c.lower(), int(fh * 1.75), fh, 0.12) for c in flags]
         tw = sum(f.width for f in fls) + 22 * (len(fls) - 1)
         x = W // 2 - tw // 2
         for f in fls:
-            card.paste(f, (x, y + 40), f)
+            card.paste(f, (x, y + 40 + (fh - f.height) // 2), f)
             x += f.width + 22
         y += 40 + fh
     if pill:

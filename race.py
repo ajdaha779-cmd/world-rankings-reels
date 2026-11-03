@@ -118,7 +118,7 @@ def render_race(years, series, topic, group_name, accent, out_path, seed=0):
                 d.rounded_rectangle((x0 - 5, y - 5, x0 + bw + 5, y + bar_h + 5), 24, outline=(255, 255, 255), width=glow)
             fl = flag(c.lower(), 56)
             fx_ = x0 + bw - fl.width - 14 if bw > fl.width + 28 else x0 + bw + 12
-            im.paste(fl, (fx_, y + (bar_h - 56) // 2), fl)
+            im.paste(fl, (fx_, y + (bar_h - fl.height) // 2), fl)
             name = COUNTRIES[c]
             nw = f_name.getlength(name)
             vs = fmt(val)
@@ -138,7 +138,7 @@ def render_race(years, series, topic, group_name, accent, out_path, seed=0):
             cy = int(1440 + (1 - a) * 700)
             d.rounded_rectangle((90, cy - 95, W - 90, cy + 95), 40, fill=(20, 22, 34), outline=accent, width=6)
             fl = flag(lead.lower(), 96, 0.1)
-            im.paste(fl, (140, cy - 48), fl)
+            im.paste(fl, (140, cy - fl.height // 2), fl)
             text(d, (160 + fl.width + 20, cy - 30), f"#1 in {y1}", font(40), fill=accent, anchor="lm")
             text(d, (160 + fl.width + 20, cy + 30), COUNTRIES[lead], _fit(COUNTRIES[lead], 56, W - 300 - fl.width, True),
                  anchor="lm")
