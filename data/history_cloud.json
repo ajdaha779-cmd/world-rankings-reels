@@ -7,15 +7,15 @@
   "media_id": "17906642328351970",
   "at": "2026-11-02T19:30:08.541326Z",
   "stats": {
-   "views": 215,
-   "reach": 179,
+   "views": 221,
+   "reach": 184,
    "saved": 0,
    "shares": 0,
    "likes": 4,
    "comments": 0,
    "total_interactions": 4
   },
-  "stats_at": "2026-11-03T00:54:31.113829Z"
+  "stats_at": "2026-11-03T02:52:56.060645Z"
  },
  {
   "kind": "race",
@@ -26,6 +26,27 @@
   "media_id": "18105633185360997",
   "story_id": "18357795760173036",
   "requested": false,
-  "at": "2026-11-03T00:56:20.274815Z"
+  "at": "2026-11-03T00:56:20.274815Z",
+  "stats": {
+   "views": 260,
+   "reach": 217,
+   "saved": 0,
+   "shares": 0,
+   "likes": 0,
+   "comments": 1,
+   "total_interactions": 1
+  },
+  "stats_at": "2026-11-03T02:52:57.482055Z"
+ },
+ {
+  "kind": "ranking",
+  "topic": "ppp",
+  "key": "ppp:exussr",
+  "title": "Where does money go the furthest among ex-USSR countries? 🌍",
+  "description": "Income per person, adjusted for prices ($) — top 15 among ex-USSR countries.\nSource: World Bank Open Data (latest available: 2025).\n\nIs your country on the list? What should we compare next? Comment below 👇\n\n#shorts #countries #geography #comparison #data #money #income #ranking",
+  "media_id": "18128500147875589",
+  "story_id": "18123273208941884",
+  "requested": false,
+  "at": "2026-11-03T02:54:42.896884Z"
  }
 ]
