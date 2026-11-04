@@ -7,7 +7,7 @@ from catalog import TOPICS, GROUPS, RACE_TOPICS, RACE_GROUPS, DUEL_PAIRS, COUNTR
 from data import ranking, race_frames, indicator
 from duel import duel_rounds
 
-ROTATION = ["race", "duel", "ranking", "race", "duel"]  # по первым данным: гонки и дуэли держат лучше рейтингов
+ROTATION = ["race", "duel", "race", "ranking", "race"]  # 04.11: гонка после правок — 45% пролистываний и 47% досмотра, лучший формат
 RACE_WEIGHT = {"pop": 3, "economy": 3, "rich": 2.5, "life": 1.5, "online": 1.5, "old": 1, "co2": 1}
 GROUP_WEIGHT = {"world": 3, "europe": 2, "asia": 2, "americas": 1.5, "exussr": 1.5, "africa": 1}
 BASE_TAGS = "#shorts #countries #geography #comparison #data"
@@ -123,9 +123,14 @@ def make_duel(a, b, by=None):
                 render=lambda out, seed, accent: render_duel(a, b, rounds, accent, out, seed=seed))
 
 
+# страны, про которые спорит весь мир: дуэль малоизвестных пар (Болгария–Румыния) держит хуже — 60% пролистываний
+FAMOUS = set("US CN IN BR DE FR GB JP RU IT ES MX KR TR AR CA AU SA AE PT NL".split())
+
+
 def _duel_items(used, rng, avoid):
     pairs = list(DUEL_PAIRS)
     rng.shuffle(pairs)
+    pairs.sort(key=lambda p: -((p[0] in FAMOUS) + (p[1] in FAMOUS)))  # сначала пары из двух «громких» стран
     for a, b in pairs:
         if rng.random() < 0.5:
             a, b = b, a

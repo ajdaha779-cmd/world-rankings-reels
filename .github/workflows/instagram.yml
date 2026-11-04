@@ -5,6 +5,10 @@ on:
     - cron: "17 0-2,11-23 * * *"  # каждый час в эфирное окно (15:00–06:59 по Баку); решает due.py
   workflow_dispatch:        # ручной запуск кнопкой Run workflow
     inputs:
+      force:
+        description: "Опубликовать сразу, не глядя на расписание"
+        type: boolean
+        default: false
       dry_run:
         description: "Только сделать ролик, не публиковать"
         type: boolean
@@ -32,10 +36,10 @@ jobs:
       - name: Пора ли публиковать?
         id: due
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then echo "due=true" >> "$GITHUB_OUTPUT"; echo "ручной запуск"; else python due.py; fi
+          if [ "${{ inputs.force }}" = "true" ] || [ "${{ inputs.dry_run }}" = "true" ]; then echo "due=true" >> "$GITHUB_OUTPUT"; echo "sleep=0" >> "$GITHUB_OUTPUT"; echo "ручной запуск"; else python due.py; fi
 
       - name: Случайная пауза внутри часа (время публикаций «живое»)
-        if: steps.due.outputs.due == 'true' && github.event_name != 'workflow_dispatch'
+        if: steps.due.outputs.due == 'true'
         run: sleep ${{ steps.due.outputs.sleep }}
 
       - name: Модель озвучки (кэш, чтобы не скачивать каждый раз)
