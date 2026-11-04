@@ -102,3 +102,14 @@ def race_frames(ind, group, top_n=10, min_countries=12):
         ranked = sorted((c for c in series if series[c][i] is not None), key=lambda c: -series[c][i])
         ever.update(ranked[:top_n + 2])
     return years, {c: series[c] for c in ever}
+
+
+def leader_changes(years, series):
+    """Сколько раз сменился лидер гонки. Гонка без смены #1 скучная (Америки по ВВП: 72% пролистали)."""
+    lead, n = None, 0
+    for i in range(len(years)):
+        cur = max((c for c in series if series[c][i] is not None), key=lambda c: series[c][i], default=None)
+        if cur != lead:
+            n += lead is not None
+            lead = cur
+    return n

@@ -4,7 +4,7 @@
 """
 import random
 from catalog import TOPICS, GROUPS, RACE_TOPICS, RACE_GROUPS, DUEL_PAIRS, COUNTRIES, flag_emoji
-from data import ranking, race_frames, indicator
+from data import ranking, race_frames, indicator, leader_changes
 from duel import duel_rounds
 
 ROTATION = ["race", "duel", "race", "ranking", "race"]  # 04.11: гонка после правок — 45% пролистываний и 47% досмотра, лучший формат
@@ -90,6 +90,8 @@ def _race_items(used, rng, avoid):
             used.add(key)
             continue
         years, series = rf
+        if leader_changes(years, series) == 0:  # лидер не меняется — интриги нет
+            continue
         gname = GROUPS[g][0]
         q = t["question"].format(g=_where(gname), y0=years[0], y1=years[-1])
         tags = _tags(t["tags"] + " barchartrace")
