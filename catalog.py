@@ -3,6 +3,10 @@ import json, os
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 
+# призыв в конце ролика (подпись, голос): в Instagram бот отвечает каждому, на YouTube — нет
+CTA = (("Where does it rank?", "Comment your flag below!") if os.environ.get("REELS_PLATFORM") == "youtube"
+       else ("We'll reply with its rank!", "Comment your flag. We'll reply with your rank!"))
+
 # территории и спорные образования — не берём, чтобы не было претензий «это не страна»
 EXCLUDE = set("AS AW BM VG KY CW FO PF GI GL GU HK IM MO MF NC MP PR SX TC VI JG XK PS KP".split())
 

@@ -4,13 +4,13 @@
 Запуск:  .venv/bin/python make_batch.py            — 14 роликов (2 в день на неделю)
          .venv/bin/python make_batch.py --count 3  — пробная пачка
 """
-import argparse, datetime, json, os, random, subprocess, sys, time
+import argparse, datetime, json, os, random, shutil, subprocess, sys, time
 from zoneinfo import ZoneInfo
 
 from catalog import ACCENTS, BASE
 from formats import next_item
 
-USED = os.path.join(BASE, "data", "used.json")
+USED = os.path.join(BASE, "data", "used_youtube.json")  # своя очередь тем: YouTube не зависит от Instagram
 OUTBOX = os.path.join(BASE, "к-публикации")
 LOCAL = ZoneInfo("Asia/Baku")
 AUDIENCE = ZoneInfo("America/New_York")
@@ -18,6 +18,8 @@ POST_TIMES = ["13:00", "19:00"]  # по времени США (восток) —
 
 
 def notify(msg):
+    if not shutil.which("osascript"):  # не Mac (GitHub Actions)
+        return
     subprocess.run(["osascript", "-e", f'display notification "{msg}" with title "Рейтинги"'], check=False)
 
 

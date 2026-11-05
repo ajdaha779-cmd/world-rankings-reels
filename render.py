@@ -1,7 +1,7 @@
 """Рендер ролика-рейтинга: строки открываются в такт музыке с последнего места к первому,
 перед №1 пауза, затем большая карточка победителя с конфетти."""
 from engine import *
-from catalog import FMT
+from catalog import FMT, CTA
 from sound import ranking_track, bpm_for
 import tts
 
@@ -213,7 +213,7 @@ def render(rows, topic, group_name, accent, out_path, seed=0, fact=None, teaser=
             d.rounded_rectangle((60, cy - 200, W - 60, cy + 200), 40, fill=(255, 255, 255))
             text(d, (W // 2, cy - 95), "Comment YOUR", font(66), fill=(15, 15, 25))
             text(d, (W // 2, cy - 15), "country's flag", font(66), fill=(15, 15, 25))
-            text(d, (W // 2, cy + 75), "We'll reply with its rank!", font(44, False), fill=mix_color(accent, (0, 0, 0), 0.25))
+            text(d, (W // 2, cy + 75), CTA[0], font(44, False), fill=mix_color(accent, (0, 0, 0), 0.25))
             text(d, (W // 2, cy + 140), "Follow for daily rankings", font(32, False), fill=(120, 120, 135))
         v.write(im)
 
@@ -224,7 +224,7 @@ def render(rows, topic, group_name, accent, out_path, seed=0, fact=None, teaser=
     voice = tts.lines([(0.15, hook),
                        (pause_start, "And number one is..."),
                        (top_t + 0.05, f"{top_name}!"),
-                       (end + 0.3, "Comment your flag. We'll reply with your rank!")], seed)
+                       (end + 0.3, CTA[1])], seed)
     track = ranking_track(dur, reveal | {1: top_t}, n, pause_start, top_t, end, seed=seed, whooshes=(card_out,),
                           voice=voice)
     return v.finish(audio=track)

@@ -1,7 +1,7 @@
 """Формат «гонка графиков»: топ-10 стран год за годом, столбики обгоняют друг друга."""
 import hashlib
 from engine import *
-from catalog import FMT, COUNTRIES
+from catalog import FMT, COUNTRIES, CTA
 from render import _fit, _living_bg, _confetti, _draw_confetti, title_card, TITLE_CARD, progress
 from sound import race_track
 import tts
@@ -169,7 +169,7 @@ def render_race(years, series, topic, group_name, accent, out_path, seed=0):
             d.rounded_rectangle((60, cy - 200, W - 60, cy + 200), 40, fill=(255, 255, 255))
             text(d, (W // 2, cy - 95), "Comment YOUR", font(66), fill=(15, 15, 25))
             text(d, (W // 2, cy - 15), "country's flag", font(66), fill=(15, 15, 25))
-            text(d, (W // 2, cy + 75), "We'll reply with its rank!", font(44, False), fill=mix_color(accent, (0, 0, 0), 0.25))
+            text(d, (W // 2, cy + 75), CTA[0], font(44, False), fill=mix_color(accent, (0, 0, 0), 0.25))
             text(d, (W // 2, cy + 140), "Follow for daily rankings", font(32, False), fill=(120, 120, 135))
         v.write(im)
 
@@ -178,7 +178,7 @@ def render_race(years, series, topic, group_name, accent, out_path, seed=0):
     voice = tts.lines([(0.15, f"{topic['question'].format(g=where, y0=y0, y1=y1)}. Who is number one today?"),
                        (race_end + 0.05, f"{COUNTRIES[lead]} is number one!"),
                        (race_end + 1.1, lead_fact(lead).replace(" — ", ". ")),
-                       (end + 0.35, "Comment your flag. We'll reply with your rank!")], seed)
+                       (end + 0.35, CTA[1])], seed)
     track = race_track(dur, race_end, end, decades=decades, leader_changes=leader_changes,
                        top3_changes=top3_changes, seed=seed, voice=voice)
     return v.finish(audio=track)
