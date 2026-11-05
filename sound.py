@@ -223,6 +223,8 @@ def beat(dur, bpm, root):
     shape = 1 - 0.55 * np.exp(-tk / 0.09)
     for kt in kicks:
         s = int(kt * SR)
+        if s >= n:  # бочка за концом трека (последний такт)
+            continue
         e = min(n, s + len(shape))
         duck[s:e] = np.minimum(duck[s:e], shape[:e - s])
     music = feedback_delay(music, 3 * b / 4, 0.3, 0.25) * duck[:, None]
