@@ -24,7 +24,7 @@ def render_race(years, series, topic, group_name, accent, out_path, seed=0):
     race_end = t0 + (ny - 1) * per_year
     hold = 1.9
     end = race_end + hold
-    dur = end + 2.4
+    dur = end + 3.0
     codes = list(series)
 
     def values_at(t):
@@ -167,9 +167,9 @@ def render_race(years, series, topic, group_name, accent, out_path, seed=0):
             a = ease_back((t - end) / 0.45)
             cy = int(H + 200 - a * (H // 2 + 200))
             d.rounded_rectangle((60, cy - 200, W - 60, cy + 200), 40, fill=(255, 255, 255))
-            text(d, (W // 2, cy - 95), "Where is YOUR", font(66), fill=(15, 15, 25))
-            text(d, (W // 2, cy - 15), "country?", font(66), fill=(15, 15, 25))
-            text(d, (W // 2, cy + 75), "Comment below", font(44, False), fill=mix_color(accent, (0, 0, 0), 0.25))
+            text(d, (W // 2, cy - 95), "Comment YOUR", font(66), fill=(15, 15, 25))
+            text(d, (W // 2, cy - 15), "country's flag", font(66), fill=(15, 15, 25))
+            text(d, (W // 2, cy + 75), "We'll reply with its rank!", font(44, False), fill=mix_color(accent, (0, 0, 0), 0.25))
             text(d, (W // 2, cy + 140), "Follow for daily rankings", font(32, False), fill=(120, 120, 135))
         v.write(im)
 
@@ -178,7 +178,7 @@ def render_race(years, series, topic, group_name, accent, out_path, seed=0):
     voice = tts.lines([(0.15, f"{topic['question'].format(g=where, y0=y0, y1=y1)}. Who is number one today?"),
                        (race_end + 0.05, f"{COUNTRIES[lead]} is number one!"),
                        (race_end + 1.1, lead_fact(lead).replace(" — ", ". ")),
-                       (end + 0.35, "Where is your country? Comment below!")], seed)
+                       (end + 0.35, "Comment your flag. We'll reply with your rank!")], seed)
     track = race_track(dur, race_end, end, decades=decades, leader_changes=leader_changes,
                        top3_changes=top3_changes, seed=seed, voice=voice)
     return v.finish(audio=track)

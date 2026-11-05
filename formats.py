@@ -71,7 +71,7 @@ def _ranking_items(used, rng, avoid):
                    description=(f"{t['sub']} — top {len(rows)} {_where(gname)}.\n"
                                 f"Source: World Bank Open Data (latest available: {yrs}).\n\n"
                                 f"Is your country on the list? What should we compare next? Comment below 👇\n\n{tags}"),
-                   short=f"{q} 🌍 Where is your country? 👇\n\n{tags}",
+                   short=f"{q} 🌍 Comment your country's flag — we'll reply with its rank 👇\n\n{tags}",
                    render=lambda out, seed, accent, rows=rows, t=t, gname=gname, fact=ranking_fact(t, g, rows):
                    render(rows, t, gname, accent, out, seed=seed, fact=fact, teaser=_teaser(fact)))
 
@@ -100,7 +100,7 @@ def _race_items(used, rng, avoid):
                    description=(f"{t['sub']} {_where(gname)}, every year from {years[0]} to {years[-1]}.\n"
                                 f"Source: World Bank Open Data.\n\n"
                                 f"Did you expect this #1? What should we race next? Comment below 👇\n\n{tags}"),
-                   short=f"{q} 📈 Who did you expect to win? 👇\n\n{tags}",
+                   short=f"{q} 📈 Comment your country's flag — we'll reply with its rank 👇\n\n{tags}",
                    render=lambda out, seed, accent, years=years, series=series, t=t, gname=gname:
                    render_race(years, series, t, gname, accent, out, seed=seed))
 

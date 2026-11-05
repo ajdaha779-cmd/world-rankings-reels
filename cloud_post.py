@@ -11,13 +11,14 @@ import argparse, datetime, json, os, random, sys
 
 from catalog import ACCENTS, BASE
 from formats import next_item, pick_kind, make_duel
-import instagram, insights, requests_q, analyze
+import instagram, insights, requests_q, analyze, replies
 import render, race, duel
 
 USED = os.path.join(BASE, "data", "used_cloud.json")
 HISTORY = os.path.join(BASE, "data", "history_cloud.json")
 QUEUE = os.path.join(BASE, "data", "requests.json")
-FIRST_COMMENT = "Which countries should we compare next? Comment below 👇🌍"
+FIRST_COMMENT = {"duel": "Which 2 countries should battle next? Comment below ⚔️👇",
+                 "default": "Drop your country's flag 👇 We reply to everyone with its rank! 🌍"}
 
 
 def load(path, default):
@@ -76,7 +77,7 @@ def main():
         story_id = instagram.publish_story(conf, out)
     except Exception as e:  # история — бонус, Reels уже вышел
         print(f"история не опубликована: {str(e)[:200]}")
-    requests_q.first_comment(conf, media_id, FIRST_COMMENT)
+    requests_q.first_comment(conf, media_id, FIRST_COMMENT.get(item["kind"], FIRST_COMMENT["default"]))
     if req:
         requests_q.reply_all(conf, req, "Your battle is out! Check our latest reel 🔥⚔️")
 
@@ -88,6 +89,10 @@ def main():
     save(USED, sorted(used), indent=0)
     save(HISTORY, history)
     save(QUEUE, queue)
+    try:
+        replies.run(conf, history, queue)
+    except Exception as e:
+        print(f"ответы на комментарии не отправлены: {e}")
     try:
         analyze.run(conf, history, save=True)
     except Exception as e:

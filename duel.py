@@ -52,7 +52,7 @@ def render_duel(a, b, rounds, accent, out_path, seed=0):
     names = (COUNTRIES[a], COUNTRIES[b])
     final_t = INTRO + ROUNDS * ROUND_LEN + 0.9
     card_end = final_t + 2.3
-    dur = card_end + 2.4
+    dur = card_end + 3.0
     global LAST
     LAST = {"dur": dur, "moments": [(0, "титул + хук"), (INTRO, "раунд 1")] +
             [(INTRO + i * ROUND_LEN, f"раунд {i + 1}") for i in range(1, ROUNDS)] +
@@ -185,7 +185,7 @@ def render_duel(a, b, rounds, accent, out_path, seed=0):
             d.rounded_rectangle((60, cy - 200, W - 60, cy + 200), 40, fill=(255, 255, 255))
             text(d, (W // 2, cy - 95), "Who should", font(66), fill=(15, 15, 25))
             text(d, (W // 2, cy - 15), "fight next?", font(66), fill=(15, 15, 25))
-            text(d, (W // 2, cy + 75), "Comment below", font(44, False), fill=mix_color(accent, (0, 0, 0), 0.25))
+            text(d, (W // 2, cy + 75), "Comment 2 countries", font(44, False), fill=mix_color(accent, (0, 0, 0), 0.25))
             text(d, (W // 2, cy + 140), "Follow for daily battles", font(32, False), fill=(120, 120, 135))
         v.write(im)
 
@@ -194,7 +194,7 @@ def render_duel(a, b, rounds, accent, out_path, seed=0):
     plan += [(INTRO + i * ROUND_LEN + 0.15, f"Round {i + 1}. {r[0]}.") for i, r in enumerate(rounds)]
     plan += [(final_t - 0.9, "And the winner is..."),
              (final_t + 0.05, f"{names[winner]}!" if winner is not None else "It's a draw!"),
-             (card_end + 0.5, "Who should fight next? Comment below!")]
+             (card_end + 0.5, "Comment two countries. We battle them next!")]
     voice = tts.lines(plan, seed)
     track = duel_track(dur, (0.15, 0.45), rounds_t, final_t, card_end + 0.35, seed=seed, voice=voice)
     return v.finish(audio=track)
