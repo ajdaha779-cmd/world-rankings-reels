@@ -10,6 +10,12 @@ from duel import duel_rounds
 ROTATION = ["race", "duel", "race", "ranking", "race"]  # 04.11: гонка после правок — 45% пролистываний и 47% досмотра, лучший формат
 RACE_WEIGHT = {"pop": 3, "economy": 3, "rich": 2.5, "life": 1.5, "online": 1.5, "old": 1, "co2": 1}
 GROUP_WEIGHT = {"world": 3, "europe": 2, "asia": 2, "americas": 1.5, "exussr": 1.5, "africa": 1}
+# рейтинги: темы про людей и крупные группы держат лучше (07.11: «most people in Asia» 51%, G20 52% пролистываний;
+# EU/ex-USSR и безработица в Европе — 66–77%)
+RANK_WEIGHT = {"pop": 3, "boom": 2.5, "shrink": 2, "economy": 2, "rich": 2, "life": 2, "young": 1.5, "old": 1.5,
+               "babies": 1.5, "crowded": 1.5}
+RANK_GROUP_WEIGHT = {"world": 3, "g20": 3, "asia": 2.5, "europe": 1.5, "americas": 1.5, "mideast": 1, "africa": 1,
+                     "exussr": 0.7, "eu": 0.7}
 BASE_TAGS = "#shorts #countries #geography #comparison #data"
 
 
@@ -51,8 +57,8 @@ def _teaser(fact):
 
 def _ranking_items(used, rng, avoid):
     from render import render
-    combos = [(t, g) for t in TOPICS for g in GROUPS]
-    rng.shuffle(combos)
+    combos = sorted(((t, g) for t in TOPICS for g in GROUPS),
+                    key=lambda tg: -rng.random() ** (1 / (RANK_WEIGHT.get(tg[0]["id"], 1) * RANK_GROUP_WEIGHT.get(tg[1], 1)) ** 2))
     for t, g in combos:
         key = f"{t['id']}:{g}"
         if key in used or t["id"] in avoid:
