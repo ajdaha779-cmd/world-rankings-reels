@@ -2,7 +2,7 @@
 
 Нужно разрешение instagram_manage_comments; без него всё молча пропускается.
 """
-import re
+import difflib, re
 import instagram
 from catalog import COUNTRIES, EXCLUDE
 
@@ -38,6 +38,11 @@ def countries_in(text):
     for m in re.finditer(r"[\U0001F1E6-\U0001F1FF]{2}", text):
         iso = "".join(chr(ord(ch) - 0x1F1E6 + 65) for ch in m.group(0))
         found.append((m.start(), iso))
+    if not found:  # опечатки: «Jordain» → Jordan, «Azerbajan» → Azerbaijan (только латиница, слова от 5 букв)
+        for m in re.finditer(r"[a-z]{5,}", low):
+            close = difflib.get_close_matches(m.group(0), [n for n in NAMES if " " not in n and len(n) >= 5], 1, 0.8)
+            if close:
+                found.append((m.start(), NAMES[close[0]]))
     out = []
     for _, c in sorted(found):
         if c in COUNTRIES and c not in EXCLUDE and c not in out:
