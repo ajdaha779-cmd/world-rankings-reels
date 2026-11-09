@@ -14,7 +14,7 @@ USED = os.path.join(BASE, "data", "used_youtube.json")  # своя очеред�
 OUTBOX = os.path.join(BASE, "к-публикации")
 LOCAL = ZoneInfo("Asia/Baku")
 AUDIENCE = ZoneInfo("America/New_York")
-POST_TIMES = ["13:00", "19:00"]  # по времени США (восток) — пик просмотров Shorts
+POST_TIMES = ["09:00", "13:00", "19:00"]  # по времени США (восток) — пик просмотров Shorts
 
 
 def notify(msg):
@@ -37,13 +37,14 @@ def slots(count, start_date):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--count", type=int, default=14)
+    ap.add_argument("--count", type=int, default=21)
+    ap.add_argument("--start", help="первый день публикаций, ГГГГ-ММ-ДД (по умолчанию завтра)")
     args = ap.parse_args()
 
     used = set(json.load(open(USED))) if os.path.exists(USED) else set()
     today = datetime.date.today()
     rng = random.Random(today.toordinal())
-    start = today + datetime.timedelta(days=1)
+    start = datetime.date.fromisoformat(args.start) if args.start else today + datetime.timedelta(days=1)
     folder = os.path.join(OUTBOX, f"{today:%Y-%m-%d}")
     os.makedirs(folder, exist_ok=True)
     plan, meta, recent = [], [], []
