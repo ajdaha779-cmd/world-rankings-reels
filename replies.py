@@ -131,8 +131,8 @@ def run(c=None, history=None, queue=None):
     me = me.get("username")
     sent = 0
     for h in reversed(history[-20:]):
-        if not h.get("media_id") or sent >= MAX_PER_RUN:
-            continue
+        if not h.get("media_id") or sent >= MAX_PER_RUN or h.get("key", "").startswith("neutral:"):
+            continue  # под роликами о парах с конфликтом бот молчит — не подливаем масла
         try:
             r = instagram.http("GET", f"{c['api']}/{h['media_id']}/comments",
                                {"fields": "id,text,username", "limit": 100, "access_token": c["token"]})

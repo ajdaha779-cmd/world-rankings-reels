@@ -10,7 +10,7 @@
 import argparse, datetime, json, os, random, sys
 
 from catalog import ACCENTS, BASE
-from formats import next_item, pick_kind, make_duel
+from formats import next_item, pick_kind, make_duel, next_neutral
 import instagram, insights, requests_q, analyze, replies
 import render, race, duel
 
@@ -56,6 +56,8 @@ def main():
         if req:
             item = make_duel(req["a"], req["b"], by=req["users"])
             print(f"дуэль по заказу зрителей ({req['votes']} голосов)")
+    if kind == "duel" and not item and rng.random() < 0.5:
+        item = next_neutral(used, history)  # редко и нейтрально: пары с идущим конфликтом
     item = item or next_item(n, used, rng, avoid={h["topic"] for h in history[-2:]}, kind=kind)
     if not item:
         sys.exit("Ролики закончились — добавь темы в catalog.py")
@@ -77,7 +79,10 @@ def main():
         story_id = instagram.publish_story(conf, out)
     except Exception as e:  # история — бонус, Reels уже вышел
         print(f"история не опубликована: {str(e)[:200]}")
-    requests_q.first_comment(conf, media_id, FIRST_COMMENT.get(item["kind"], FIRST_COMMENT["default"]))
+    if item.get("neutral"):
+        requests_q.first_comment(conf, media_id, "Data only — no winners here. Please keep it respectful 🙏")
+    else:
+        requests_q.first_comment(conf, media_id, FIRST_COMMENT.get(item["kind"], FIRST_COMMENT["default"]))
     if req:
         requests_q.reply_all(conf, req, "Your battle is out! Check our latest reel 🔥⚔️")
 

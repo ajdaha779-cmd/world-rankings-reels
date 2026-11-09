@@ -115,6 +115,41 @@ def _race_items(used, rng, avoid):
 RIVALS = [("US", "CN"), ("US", "RU"), ("CN", "JP"), ("JP", "KR"), ("GB", "FR"), ("DE", "FR"), ("TR", "GR"),
           ("GB", "AR"), ("RU", "GB"), ("US", "MX"), ("SA", "QA"), ("EG", "ET"), ("IN", "CN"), ("BR", "AR")]
 RIVAL_SET = {frozenset(p) for p in RIVALS}
+# пары с идущим конфликтом: только нейтрально («X и Y в цифрах»), не чаще раза в NEUTRAL_EVERY дней
+CONFLICTS = [("RU", "UA"), ("IN", "PK"), ("IL", "IR")]
+NEUTRAL_EVERY = 10
+
+
+def make_neutral(a, b):
+    from duel import render_duel, neutral_rounds
+    rounds = neutral_rounds(a, b)
+    if not rounds:
+        return None
+    na, nb = COUNTRIES[a], COUNTRIES[b]
+    lines = "\n".join(f"• {r[0]}" for r in rounds)
+    tags = _tags(f"{na.replace(' ', '').lower()} {nb.replace(' ', '').lower()} statistics")
+    title = f"{na} and {nb} in numbers {flag_emoji(a)} {flag_emoji(b)}"
+    note = "Data only, no winners. Please keep comments respectful 🙏"
+    return dict(kind="duel", key=f"neutral:{'-'.join(sorted((a, b)))}", topic="neutral", slug=f"facts_{a.lower()}_{b.lower()}",
+                title=title, neutral=True,
+                description=f"{na} and {nb} — 5 facts from World Bank Open Data:\n{lines}\n\n{note}\n\n{tags}",
+                short=f"{title}\n{note}\n\n{tags}",
+                render=lambda out, seed, accent: render_duel(a, b, rounds, accent, out, seed=seed, pill="IN NUMBERS",
+                                                             neutral=True))
+
+
+def next_neutral(used, history):
+    """Нейтральная пара, если с прошлой прошло NEUTRAL_EVERY дней; иначе None."""
+    import datetime
+    last = [h["at"] for h in history if h.get("key", "").startswith("neutral:")]
+    if last:
+        days = (datetime.datetime.utcnow() - datetime.datetime.fromisoformat(max(last).rstrip("Z"))).days
+        if days < NEUTRAL_EVERY:
+            return None
+    for a, b in CONFLICTS:
+        if f"neutral:{'-'.join(sorted((a, b)))}" not in used:
+            return make_neutral(a, b)
+    return None
 
 
 def make_duel(a, b, by=None):
