@@ -111,6 +111,12 @@ def _race_items(used, rng, avoid):
                    render_race(years, series, t, gname, accent, out, seed=seed))
 
 
+# соперники, про которых спорят все (без идущих войн — см. requests_q.BLOCKED): выходят первыми, с пометкой RIVALS
+RIVALS = [("US", "CN"), ("US", "RU"), ("CN", "JP"), ("JP", "KR"), ("GB", "FR"), ("DE", "FR"), ("TR", "GR"),
+          ("GB", "AR"), ("RU", "GB"), ("US", "MX"), ("SA", "QA"), ("EG", "ET"), ("IN", "CN"), ("BR", "AR")]
+RIVAL_SET = {frozenset(p) for p in RIVALS}
+
+
 def make_duel(a, b, by=None):
     """Ролик-дуэль для пары стран (by — ники зрителей, которые её заказали) или None, если данных мало."""
     from duel import render_duel
@@ -119,16 +125,19 @@ def make_duel(a, b, by=None):
         return None
     na, nb = COUNTRIES[a], COUNTRIES[b]
     lines = "\n".join(f"• {r[0]}" for r in rounds)
-    tags = _tags(f"{na.replace(' ', '').lower()} {nb.replace(' ', '').lower()} versus battle")
+    rival = frozenset((a, b)) in RIVAL_SET
+    tags = _tags(f"{na.replace(' ', '').lower()} {nb.replace(' ', '').lower()} versus battle" + (" rivals" if rival else ""))
+    fl = f"{flag_emoji(a)}⚔️{flag_emoji(b)}"
+    head = f"Rivals: {na} vs {nb} — who really wins? {fl}" if rival else f"{na} vs {nb}: who wins? {fl}"
+    ask = "Who are you rooting for? Comment your side 👇" if rival else "Who should fight next? Comment below 👇"
     credit = f"\nRequested by {' '.join('@' + u for u in by[:5])} 🙌\n" if by else ""
     return dict(kind="duel", key=f"duel:{'-'.join(sorted((a, b)))}", topic="duel", slug=f"duel_{a.lower()}_{b.lower()}",
-                title=f"{na} vs {nb}: who wins? {flag_emoji(a)}⚔️{flag_emoji(b)}",
+                title=head,
                 description=(f"{na} vs {nb} — 5 rounds of real data:\n{lines}\n{credit}"
-                             f"Source: World Bank Open Data.\n\n"
-                             f"Who should fight next? Comment below 👇\n\n{tags}"),
-                short=(f"{na} vs {nb}: who wins? {flag_emoji(a)}⚔️{flag_emoji(b)}{credit}"
-                       f" Who should fight next? 👇\n\n{tags}"),
-                render=lambda out, seed, accent: render_duel(a, b, rounds, accent, out, seed=seed))
+                             f"Source: World Bank Open Data.\n\n{ask}\n\n{tags}"),
+                short=f"{head}{credit} {ask}\n\n{tags}",
+                render=lambda out, seed, accent: render_duel(a, b, rounds, accent, out, seed=seed,
+                                                             pill="RIVALS · WHO WINS?" if rival else "WHO WINS?"))
 
 
 # страны, про которые спорит весь мир: дуэль малоизвестных пар (Болгария–Румыния) держит хуже — 60% пролистываний
@@ -139,6 +148,9 @@ def _duel_items(used, rng, avoid):
     pairs = list(DUEL_PAIRS)
     rng.shuffle(pairs)
     pairs.sort(key=lambda p: -((p[0] in FAMOUS) + (p[1] in FAMOUS)))  # сначала пары из двух «громких» стран
+    rivals = list(RIVALS)
+    rng.shuffle(rivals)
+    pairs = rivals + pairs  # а ещё раньше — соперники
     for a, b in pairs:
         if rng.random() < 0.5:
             a, b = b, a

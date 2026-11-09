@@ -48,7 +48,7 @@ def duel_rounds(a, b, seed=0):
     return out[:1] + draws + out[1:]
 
 
-def render_duel(a, b, rounds, accent, out_path, seed=0):
+def render_duel(a, b, rounds, accent, out_path, seed=0, pill="WHO WINS?"):
     names = (COUNTRIES[a], COUNTRIES[b])
     final_t = INTRO + ROUNDS * ROUND_LEN + 0.9
     card_end = final_t + 2.3
@@ -176,7 +176,7 @@ def render_duel(a, b, rounds, accent, out_path, seed=0):
         if t < TITLE_CARD:
             im = title_card(im, t, [(names[0].upper(), 100, (255, 255, 255)), ("VS", 80, accent),
                                     (names[1].upper(), 100, (255, 255, 255))], accent, flags=(a, b),
-                            pill="WHO WINS?", fh=150)
+                            pill=pill, fh=150)
         if t >= card_end + 0.35:
             im = Image.blend(im, Image.new("RGB", (W, H)), 0.6)
             d = ImageDraw.Draw(im)
