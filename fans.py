@@ -42,7 +42,9 @@ def collect(c, st, history, me=None):
     import instagram
     counted = set(st["counted"])
     start = datetime.date.fromisocalendar(*map(int, st["season"].replace("W", "").split("-")), 1)
-    for h in history[-15:]:
+    hist = history[-80:]
+    for idx, h in enumerate(hist):  # по порядку публикации — «первым» считается самый ранний комментарий
+        n_back = len(hist) - 1 - idx
         if not h.get("media_id"):
             continue
         try:
@@ -51,10 +53,19 @@ def collect(c, st, history, me=None):
         except Exception as e:
             print(f"фанаты: комментарии недоступны: {str(e)[:160]}")
             break
-        for cm in r.get("data", []):
+        for cm in sorted(r.get("data", []), key=lambda x: x.get("timestamp", "")):
             u = cm.get("username")
-            if not u or u == me or (cm.get("timestamp") or "9")[:10] < start.isoformat():
+            if not u or u == me:
                 continue
+            for iso in requests_q.countries_in(cm.get("text", ""))[:2]:  # карта: все комментарии за всё время
+                e = st["lit"].setdefault(iso, {"by": u, "at": (cm.get("timestamp") or "")[:10], "fans": [], "cids": {}})
+                e.setdefault("fans", [e["by"]] if e.get("by") else [])
+                e.setdefault("cids", {})
+                if u not in e["fans"]:
+                    e["fans"].append(u)
+                    e["cids"][u] = cm["id"]
+            if n_back >= 15 or (cm.get("timestamp") or "9")[:10] < start.isoformat():
+                continue  # очки Fan Table — только за эту неделю и под последними роликами
             for iso in requests_q.countries_in(cm.get("text", ""))[:2]:
                 key = f"{h['media_id']}:{u}:{iso}"
                 if key in counted:
@@ -62,8 +73,6 @@ def collect(c, st, history, me=None):
                 counted.add(key)
                 st["counted"].append(key)
                 st["points"][iso] = st["points"].get(iso, 0) + 1
-                if iso not in st["lit"]:  # «Light Up the World»: первый, кто назвал страну, зажигает её навсегда
-                    st["lit"][iso] = {"by": u, "at": (cm.get("timestamp") or "")[:10]}
                 st["fans"].setdefault(iso, {})[u] = st["fans"].get(iso, {}).get(u, 0) + 1
                 if [u, iso] not in st["recent"]:
                     st["recent"].append([u, iso])
@@ -206,9 +215,15 @@ def render_table(rows, shouts, season, accent, out_path, seed=0):
 
 
 # ---------- «Light Up the World»: карта, которая загорается от комментариев ----------
+def _unseen(st):
+    """Страны с людьми, которых ещё не показывали на карте (новая страна или новый фанат старой)."""
+    shown = st.setdefault("fans_shown", [])
+    return [c for c, e in st["lit"].items() if c not in st["lit_shown"] or any(f"{c}:{u}" not in shown for u in e.get("fans", []))]
+
+
 def map_due(st, now=None):
     now = now or datetime.datetime.utcnow()
-    new = [c for c in st["lit"] if c not in st["lit_shown"]]
+    new = _unseen(st)
     la = st.get("map_at")
     return bool(new) and (not la or (now - datetime.datetime.fromisoformat(la.rstrip("Z"))).total_seconds() >= EVERY_H * 3600)
 
@@ -216,23 +231,46 @@ def map_due(st, now=None):
 def make_map_item(st):
     from worldmap import render_lightup, shapes, GOAL
     geo = shapes()
-    new_all = [c for c in st["lit"] if c not in st["lit_shown"]]
-    anim = [c for c in new_all if c in geo][:8]
+    new_all = _unseen(st)
+    anim = [c for c in new_all if c in geo][:16]
     total = len(st["lit"])
     before = [c for c in st["lit"] if c not in anim and c in geo]
-    by = {c: st["lit"][c]["by"] for c in st["lit"]}
-    names = ", ".join(f"{flag_emoji(c)} {COUNTRIES[c]} (by @{by[c]})" for c in new_all[:10])
+    by = {c: st["lit"][c].get("fans") or [st["lit"][c]["by"]] for c in st["lit"]}
+    names = ", ".join(f"{flag_emoji(c)} {COUNTRIES[c]}" for c in new_all[:16])
+    shown = set(st.get("fans_shown", []))
+    tagged = [(c, u) for c in anim for u in by[c] if f"{c}:{u}" not in shown]
+    mentions = " ".join(dict.fromkeys("@" + u for _, u in tagged[:20]))
     head = f"Light Up the World 🌍 {total}/{GOAL} countries lit — is yours? Comment your flag 👇"
     tags = "#shorts #countries #worldmap #geography #challenge"
     return dict(kind="map", key=f"map:{datetime.date.today()}", topic="map", slug=f"map_{datetime.date.today():%m%d}",
-                title=head, lit_now=list(st["lit"]),
+                title=head, lit_now=list(st["lit"]), tagged=tagged,
                 first_comment="Is your country still dark? 🌑 Comment its flag 👇 The first to light it gets their name on it forever!",
-                description=f"Every comment lights up a country. Newly lit: {names}.\n\n"
+                description=f"Every comment lights up a country. Newly lit: {names}.\nYou're on the map: {mentions} 🌍\n\n"
                             f"Is YOUR country dark? Comment its flag — your name stays on it forever 🌍\n\n{tags}",
-                short=f"{head}\nNewly lit: {names}\n\n{tags}",
+                short=f"{head}\nNewly lit: {names}\nYou're on the map: {mentions} 🌍\n\n{tags}",
                 render=lambda out, seed, accent: render_lightup(before, anim, by, total, accent, out, seed=seed))
 
 
-def map_posted(st, lit_now, at):
+def map_posted(st, lit_now, tagged, at):
     st["lit_shown"] = list(lit_now)
+    st.setdefault("fans_shown", []).extend(f"{c}:{u}" for c, u in tagged)
     st["map_at"] = at
+
+
+def notify(c, st, tagged):
+    """Ответ на старый комментарий каждого, кто попал на карту, — Instagram пришлёт ему уведомление."""
+    import instagram, random
+    done = set(st.setdefault("notified", []))
+    for iso, u in tagged:
+        cid = st["lit"].get(iso, {}).get("cids", {}).get(u)
+        if not cid or f"{iso}:{u}" in done:
+            continue
+        msg = random.choice([f"🌍 You're on our world map! Your name is now on {COUNTRIES[iso]} {flag_emoji(iso)} — check our new video!",
+                             f"@{u} you made it onto our world map 🌍 {COUNTRIES[iso]} {flag_emoji(iso)} is lit with your name! See the new video",
+                             f"Your name is now on {COUNTRIES[iso]} {flag_emoji(iso)} on our world map 🌍 Go check the latest video!"])
+        try:
+            instagram.http("POST", f"{c['api']}/{cid}/replies", {"message": msg, "access_token": c["token"]})
+            done.add(f"{iso}:{u}")
+            st["notified"].append(f"{iso}:{u}")
+        except Exception as e:
+            print(f"уведомление не отправлено: {str(e)[:120]}")

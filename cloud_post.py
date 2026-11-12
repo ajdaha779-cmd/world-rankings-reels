@@ -113,7 +113,8 @@ def main():
     if item["kind"] == "fans":
         fans.posted(fan, datetime.datetime.utcnow().isoformat() + "Z")
     if item["kind"] == "map":
-        fans.map_posted(fan, item["lit_now"], datetime.datetime.utcnow().isoformat() + "Z")
+        fans.map_posted(fan, item["lit_now"], item["tagged"], datetime.datetime.utcnow().isoformat() + "Z")
+        fans.notify(conf, fan, item["tagged"])
     fans.save(fan)
     used.add(item["key"])
     history.append({"kind": item["kind"], "topic": item["topic"], "key": item["key"], "title": item["title"],

@@ -122,13 +122,36 @@ LINES = ["{nick} just put {country} on the map!", "{country} is lit, thanks to {
          "And here's {country}, lit by {nick}!"]
 
 
+def _who(nicks):
+    """«@a, @b +2» — кто зажёг страну."""
+    return ", ".join("@" + n for n in nicks[:2]) + (f" +{len(nicks) - 2}" if len(nicks) > 2 else "")
+
+
+def _say_who(nicks):
+    names = [_speakable(n) for n in nicks[:2]]
+    return " and ".join(names) + (f" and {len(nicks) - 2} more" if len(nicks) > 2 else "")
+
+
+def _tag(im, d, x, y, label, size, hot=False):
+    """Ник на стране: тёмная плашка с белым текстом, по центру точки (x, y)."""
+    f = font(size)
+    w = f.getlength(label) + size
+    h = size * 1.5
+    x = min(max(x, w / 2 + 6), W - w / 2 - 6)
+    d.rounded_rectangle((x - w / 2, y - h / 2, x + w / 2, y + h / 2), int(h / 2), fill=(12, 14, 26),
+                        outline=LIT if hot else (255, 255, 255), width=3 if hot else 2)
+    text(d, (int(x), int(y)), label, f, fill=LIT if hot else (255, 255, 255))
+
+
 def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
-    """before — страны, горевшие раньше; new — [iso] загораются в этом ролике (по порядку); lit_by — {iso: ник};
+    """before — страны, горевшие раньше; new — [iso] загораются в этом ролике (по порядку); lit_by — {iso: [ники]};
     total — сколько стран горит после ролика. Диктор объясняет правила и называет каждого, кто зажёг страну;
     картинка подстраивается под длину реплик."""
     import random
     geo = shapes()
-    new = [c for c in new if c in geo][:8]  # больше 8 — ролик слишком длинный; остальные войдут в следующий
+    new = [c for c in new if c in geo][:16]  # больше — ролик слишком длинный; остальные войдут в следующий
+    lit_by = {c: ([v] if isinstance(v, str) else list(v)) for c, v in lit_by.items()}
+    short = len(new) > 8  # много стран (первый ролик) — короткие реплики, чтобы ролик не затянулся
     n_before = total - len(new)
     rnd = random.Random(seed)
     voice_on = tts.available()
@@ -149,9 +172,15 @@ def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
     t = S0
     for i, iso in enumerate(new):
         by = lit_by.get(iso)
-        txt = rnd.choice(LINES).format(nick=_speakable(by), country=COUNTRIES.get(iso, iso)) if by else f"{COUNTRIES.get(iso, iso)} is lit!"
+        cn = COUNTRIES.get(iso, iso)
+        if not by:
+            txt = f"{cn} is lit!"
+        elif short:
+            txt = f"{cn}, {_say_who(by)}!"
+        else:
+            txt = rnd.choice(LINES).format(nick=_say_who(by), country=cn)
         a = clip(txt)
-        L = max(1.6, 0.45 + length(a, 1.2) + 0.25)
+        L = max(1.2 if short else 1.6, 0.45 + length(a, 1.0) + 0.2)
         seg.append((t, L))
         lines.append((t + 0.45, a))
         t += L
@@ -207,6 +236,17 @@ def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
         view, box = _cam_view(stages[k], cx, cy, s)
         im.paste(view, (0, VIEW_Y0))
         d = ImageDraw.Draw(im)
+        # ники прямо на странах: кто её зажёг
+        tsize = 22 if s < 0.6 else 30 if s < 1.5 else 36
+        cur = new[i] if i is not None and t >= S0 else None
+        for iso in list(before) + new[:k]:
+            if iso not in geo or not lit_by.get(iso):
+                continue
+            lx, ly = geo[iso]["label"]
+            px = (lx - box[0]) / (box[2] - box[0]) * W
+            py = VIEW_Y0 + (ly - box[1]) / (box[3] - box[1]) * VIEW_H
+            if 0 <= px <= W and VIEW_Y0 + 20 <= py <= VIEW_Y0 + VIEW_H - 20:
+                _tag(im, d, px, py, _who(lit_by[iso]) if iso == cur else "@" + lit_by[iso][0], tsize, iso == cur)
         lit_now = n_before + k
         text(d, (W // 2, 140), "LIGHT UP", font(96))
         text(d, (W // 2, 240), "THE WORLD", font(96), fill=LIT)
@@ -236,7 +276,7 @@ def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
             text(d, (290, cy_ - 25), f"{nm} is lit!", _fit(f"{nm} is lit!", int(52 * a) + 1, W - 400, True), anchor="lm")
             by = lit_by.get(iso)
             if by:
-                text(d, (290, cy_ + 32), f"by @{by}", _fit(f"by @{by}", 40, W - 400), fill=LIT, anchor="lm")
+                text(d, (290, cy_ + 32), f"by {_who(by)}", _fit(f"by {_who(by)}", 40, W - 400), fill=LIT, anchor="lm")
             if lt < 0.75:  # вспышка на стране
                 lx, ly = geo[iso]["label"]
                 px = (lx - box[0]) / (box[2] - box[0]) * W
