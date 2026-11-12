@@ -12,7 +12,7 @@ import argparse, datetime, json, os, random, sys
 from catalog import ACCENTS, BASE
 from formats import next_item, pick_kind, make_duel, next_neutral
 import instagram, insights, requests_q, analyze, replies
-import render, race, duel, twists
+import render, race, duel, twists, tournament
 
 USED = os.path.join(BASE, "data", "used_cloud.json")
 HISTORY = os.path.join(BASE, "data", "history_cloud.json")
@@ -51,7 +51,16 @@ def main():
 
     kind = pick_kind(n, weights, [h.get("kind") for h in history[-2:]], rng)
     item, req = None, None
-    if kind == "duel":
+    cup = tournament.load()
+    if conf:  # турнир: итоги голосования под прошлым матчем и, если пора, следующий матч — вне очереди
+        try:
+            tournament.tally(conf, cup)
+            m = tournament.next_match(cup)
+            item = tournament.make_item(cup, m) if m else None
+        except Exception as e:
+            print(f"турнир пропущен: {str(e)[:200]}")
+            item = None
+    if kind == "duel" and not item:
         req = requests_q.top_request(queue, used)
         if req:
             item = make_duel(req["a"], req["b"], by=req["users"])
@@ -86,6 +95,9 @@ def main():
     if req:
         requests_q.reply_all(conf, req, "Your battle is out! Check our latest reel 🔥⚔️")
 
+    if item.get("cup_match"):
+        tournament.posted(cup, item["cup_match"], media_id, datetime.datetime.utcnow().isoformat() + "Z")
+    tournament.save(cup)
     used.add(item["key"])
     history.append({"kind": item["kind"], "topic": item["topic"], "key": item["key"], "title": item["title"],
                     "description": item["description"], "media_id": media_id, "story_id": story_id,

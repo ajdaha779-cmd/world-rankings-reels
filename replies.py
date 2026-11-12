@@ -109,6 +109,9 @@ def reply_text(h, cs, user=None, salt=0):
     rnd = random.Random(f"{cs}{salt}")
     if len(cs) >= 2 and frozenset(cs[:2]) in requests_q.BLOCKED:
         return None  # пары с конфликтами не обсуждаем
+    if h.get("key", "").startswith("cup:"):  # матч турнира: «голос засчитан»
+        import tournament
+        return tournament.vote_reply(h, cs, user, salt)
     if h.get("kind") == "duel" or len(cs) >= 2:
         if len(cs) >= 2:
             a, b = COUNTRIES[cs[0]], COUNTRIES[cs[1]]

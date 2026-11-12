@@ -218,7 +218,7 @@ def _duel_items(used, rng, avoid):
     rng.shuffle(rivals)
     pairs = rivals + pairs  # а ещё раньше — соперники
     flips = [p for p in FLIPS if f"flip:{'-'.join(sorted(p))}" not in used]
-    if flips and rng.random() < 0.5:  # 12.11: «plot twist» — каждая вторая дуэль, пока не кончатся пары
+    if flips and rng.random() < 0:  # 12.11: «plot twist» выключен — пользователю не зашли новые форматы
         a, b = flips[0]
         item = make_flip(a, b)
         if item:
