@@ -130,6 +130,8 @@ def run(c=None, history=None, queue=None):
     history = history if history is not None else json.load(open(HISTORY))
     queue = queue if queue is not None else (json.load(open(QUEUE)) if os.path.exists(QUEUE) else {})
     replied = set(queue.get("replied", []))
+    import fans
+    fans_lit = fans.load().get("lit", {})
     me = instagram.http("GET", f"{c['api']}/{c['user_id']}", {"fields": "username", "access_token": c["token"]})
     me = me.get("username")
     sent = 0
@@ -148,8 +150,12 @@ def run(c=None, history=None, queue=None):
             replied.add(cm["id"])
             cs = requests_q.countries_in(cm.get("text", ""))
             text = reply_text(h, cs, cm.get("username"), cm["id"]) if cs else None
-            if text and len(cs) == 1 and h.get("kind") != "duel" and random.Random(cm["id"]).random() < 0.6:
-                text += f" +1 point for {COUNTRIES[cs[0]]} on our Fan Table 🏆"
+            if text and len(cs) == 1 and h.get("kind") != "duel":  # карта мира: кто первый — зажигает страну
+                lit = fans_lit.get(cs[0])
+                if not lit or lit.get("by") == cm.get("username"):
+                    text += f" 🌍 You just lit up {COUNTRIES[cs[0]]} on our world map — your name goes on it in the next video!"
+                else:
+                    text += f" +1 point for {COUNTRIES[cs[0]]} 🏆 (lit by @{lit['by']})"
             if not text:
                 continue
             try:
@@ -165,4 +171,14 @@ def run(c=None, history=None, queue=None):
 
 
 if __name__ == "__main__":
-    run()
+    import fans  # каждый час: сначала зажигаем страны и начисляем очки, чтобы ответ совпадал с картой
+    c = instagram.conf()
+    hist = json.load(open(HISTORY))
+    st = fans.load()
+    try:
+        me = instagram.http("GET", f"{c['api']}/{c['user_id']}", {"fields": "username", "access_token": c["token"]})
+        fans.collect(c, st, hist, me.get("username"))
+        fans.save(st)
+    except Exception as e:
+        print(f"фанаты пропущены: {str(e)[:160]}")
+    run(c, hist)

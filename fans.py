@@ -21,7 +21,7 @@ def _season(d=None):
 def load():
     st = json.load(open(STATE)) if os.path.exists(STATE) else {}
     st.setdefault("season", _season())
-    for k, v in (("points", {}), ("fans", {}), ("counted", []), ("recent", []), ("past", [])):
+    for k, v in (("points", {}), ("fans", {}), ("counted", []), ("recent", []), ("past", []), ("lit", {}), ("lit_shown", [])):
         st.setdefault(k, v)
     if st["season"] != _season():  # новая неделя: чемпион прошлой и сброс
         if st["points"]:
@@ -62,6 +62,8 @@ def collect(c, st, history, me=None):
                 counted.add(key)
                 st["counted"].append(key)
                 st["points"][iso] = st["points"].get(iso, 0) + 1
+                if iso not in st["lit"]:  # «Light Up the World»: первый, кто назвал страну, зажигает её навсегда
+                    st["lit"][iso] = {"by": u, "at": (cm.get("timestamp") or "")[:10]}
                 st["fans"].setdefault(iso, {})[u] = st["fans"].get(iso, {}).get(u, 0) + 1
                 if [u, iso] not in st["recent"]:
                     st["recent"].append([u, iso])
@@ -201,3 +203,36 @@ def render_table(rows, shouts, season, accent, out_path, seed=0):
     track = duel_track(dur, (0.15, 0.45), [(reveal.get(i, top_t), reveal.get(i, top_t) + 0.1) for i in range(1, n)],
                        top_t, end, seed=seed, voice=voice)
     return v.finish(audio=track)
+
+
+# ---------- «Light Up the World»: карта, которая загорается от комментариев ----------
+def map_due(st, now=None):
+    now = now or datetime.datetime.utcnow()
+    new = [c for c in st["lit"] if c not in st["lit_shown"]]
+    la = st.get("map_at")
+    return bool(new) and (not la or (now - datetime.datetime.fromisoformat(la.rstrip("Z"))).total_seconds() >= EVERY_H * 3600)
+
+
+def make_map_item(st):
+    from worldmap import render_lightup, shapes, GOAL
+    geo = shapes()
+    new_all = [c for c in st["lit"] if c not in st["lit_shown"]]
+    anim = [c for c in new_all if c in geo][:6]
+    total = len(st["lit"])
+    before = [c for c in st["lit"] if c not in anim and c in geo]
+    by = {c: st["lit"][c]["by"] for c in st["lit"]}
+    names = ", ".join(f"{flag_emoji(c)} {COUNTRIES[c]} (by @{by[c]})" for c in new_all[:10])
+    head = f"Light Up the World 🌍 {total}/{GOAL} countries lit — is yours? Comment your flag 👇"
+    tags = "#shorts #countries #worldmap #geography #challenge"
+    return dict(kind="map", key=f"map:{datetime.date.today()}", topic="map", slug=f"map_{datetime.date.today():%m%d}",
+                title=head, lit_now=list(st["lit"]),
+                first_comment="Is your country still dark? 🌑 Comment its flag 👇 The first to light it gets their name on it forever!",
+                description=f"Every comment lights up a country. Newly lit: {names}.\n\n"
+                            f"Is YOUR country dark? Comment its flag — your name stays on it forever 🌍\n\n{tags}",
+                short=f"{head}\nNewly lit: {names}\n\n{tags}",
+                render=lambda out, seed, accent: render_lightup(before, anim, by, total, accent, out, seed=seed))
+
+
+def map_posted(st, lit_now, at):
+    st["lit_shown"] = list(lit_now)
+    st["map_at"] = at
