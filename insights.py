@@ -60,4 +60,4 @@ def kind_weights(history):
     if len(measured) < 2:
         return None
     avg = sum(measured.values()) / len(measured)
-    return {k: max(0.4, min(3.0, measured.get(k, avg) / (avg or 1))) for k in ("ranking", "race", "duel", "twist")}
+    return {k: max(0.4, min(3.0, measured.get(k, avg) / (avg or 1))) for k in ("ranking", "race", "duel")}

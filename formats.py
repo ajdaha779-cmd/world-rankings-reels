@@ -8,7 +8,7 @@ from catalog import TOPICS, GROUPS, RACE_TOPICS, RACE_GROUPS, DUEL_PAIRS, COUNTR
 from data import ranking, race_frames, indicator, leader_changes
 from duel import duel_rounds, flip_rounds, FLIPS
 
-ROTATION = ["race", "twist", "duel", "race", "ranking", "twist"]  # 12.11: + твисты  # 04.11: гонка после правок — 45% пролистываний и 47% досмотра, лучший формат
+ROTATION = ["race", "duel", "race", "ranking", "race"]  # 12.11: твисты пользователю не понравились — выключены  # 04.11: гонка после правок — 45% пролистываний и 47% досмотра, лучший формат
 YOUTUBE = os.environ.get("REELS_PLATFORM") == "youtube"
 # 11.11: на YouTube гонки про богатство в топе (461), в Instagram богатство пролистывают (77%)
 RACE_WEIGHT = {"pop": 3, "economy": 3, "army": 3, "rich": 2.5 if YOUTUBE else 1, "life": 1.5, "online": 1.5, "old": 1, "co2": 1}
