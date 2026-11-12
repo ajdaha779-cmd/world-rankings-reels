@@ -31,7 +31,8 @@ def indicator(ind):
     out = {}
     for row in raw[1] or []:
         iso, val = row["country"]["id"], row["value"]
-        if iso in COUNTRIES and val is not None and int(row["date"]) >= min_year:
+        # API иногда отдаёт все годы, а не только последний — берём самый свежий (12.11: была безработица за 2020 г.)
+        if iso in COUNTRIES and val is not None and int(row["date"]) >= min_year and int(row["date"]) > out.get(iso, (0, 0))[1]:
             out[iso] = (float(val), int(row["date"]))
     return out
 

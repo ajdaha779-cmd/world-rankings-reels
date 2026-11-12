@@ -189,7 +189,28 @@ _MORE = [
     ("shrink", "SP.POP.GROW", "asc", ("SHRINKING", "COUNTRIES"), "Population growth (yearly %)", "pct",
      "Which countries are shrinking the fastest {g}?", "population decline"),
 ]
+# 11.11: острые темы — каждый ищет свою страну и спорит в комментариях (данные World Bank)
+_MORE += [
+    ("danger", "VC.IHR.PSRC.P5", "desc", ("MOST DANGEROUS", "COUNTRIES"), "Murders per 100,000 people", "dec1",
+     "Which countries are the most dangerous {g}?", "safety crime travel"),
+    ("safe", "VC.IHR.PSRC.P5", "asc", ("SAFEST", "COUNTRIES"), "Murders per 100,000 people", "dec1",
+     "Which countries are the safest {g}?", "safety crime travel"),
+    ("army", "MS.MIL.XPND.CD", "desc", ("BIGGEST", "MILITARY BUDGETS"), "Military spending (USD)", "money",
+     "Who spends the most on the military {g}?", "military army defense"),
+    ("soldiers", "MS.MIL.TOTL.P1", "desc", ("BIGGEST", "ARMIES"), "Armed forces personnel", "people",
+     "Which countries have the biggest armies {g}?", "military army"),
+    ("fat", "SH.STA.OWAD.ZS", "desc", ("MOST OVERWEIGHT", "COUNTRIES"), "Overweight adults (%)", "pct",
+     "Which countries are the most overweight {g}?", "health obesity"),
+    ("unequal", "SI.POV.GINI", "desc", ("MOST UNEQUAL", "COUNTRIES"), "Inequality (Gini index)", "dec1",
+     "Where is the gap between rich and poor the biggest {g}?", "inequality money"),
+    ("shortlife", "SP.DYN.LE00.IN", "asc", ("SHORTEST", "LIVES"), "Life expectancy at birth", "years",
+     "Where do people die the youngest {g}?", "health lifeexpectancy"),
+]
 TOPICS += [dict(zip(("id", "ind", "order", "hook", "sub", "fmt", "question", "tags"), t)) for t in _MORE]
+RACE_TOPICS += [dict(zip(("id", "ind", "hook", "sub", "fmt", "question", "tags"), t)) for t in [
+    ("army", "MS.MIL.XPND.CD", ("BIGGEST", "MILITARY BUDGETS"), "Military spending (USD)", "money",
+     "Biggest military budgets {g}, {y0} → {y1}", "military army history"),
+]]
 
 DUEL_PAIRS += [("US", "RU"), ("JP", "CN"), ("FR", "ES"), ("SE", "FI"), ("BR", "PT"), ("AR", "CL"), ("MX", "ES"),
                ("ID", "MY"), ("EG", "SA"), ("NG", "GH"), ("KE", "TZ"), ("ZA", "AU"), ("NL", "DE"), ("BE", "FR"),

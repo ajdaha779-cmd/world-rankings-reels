@@ -204,7 +204,7 @@ def render(rows, topic, group_name, accent, out_path, seed=0, fact=None, teaser=
             progress(d, t / top_t, 372, accent)
         if t < TITLE_CARD:
             im = title_card(im, t, [(h1, 120, (255, 255, 255)), (h2, 120, accent), (group_name.upper(), 56, (175, 180, 205))],
-                            accent, flags=[r[0] for r in rows[1:6]], pill="GUESS #1 ?")
+                            accent, flags=[r[0] for r in rows[1:6]], pill="IS YOUR COUNTRY HERE?")
         if t >= end:
             im = Image.blend(im, Image.new("RGB", (W, H)), 0.6 * ease_out((t - end) / 0.3))
             d = ImageDraw.Draw(im)

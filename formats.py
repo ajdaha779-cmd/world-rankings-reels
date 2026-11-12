@@ -2,18 +2,23 @@
 
 Форматы чередуются по кругу ROTATION — канал не однообразный, но остаётся «миром в цифрах».
 """
+import os
 import random
 from catalog import TOPICS, GROUPS, RACE_TOPICS, RACE_GROUPS, DUEL_PAIRS, COUNTRIES, flag_emoji
 from data import ranking, race_frames, indicator, leader_changes
 from duel import duel_rounds
 
 ROTATION = ["race", "duel", "race", "ranking", "race"]  # 04.11: гонка после правок — 45% пролистываний и 47% досмотра, лучший формат
-RACE_WEIGHT = {"pop": 3, "economy": 3, "rich": 2.5, "life": 1.5, "online": 1.5, "old": 1, "co2": 1}
+YOUTUBE = os.environ.get("REELS_PLATFORM") == "youtube"
+# 11.11: на YouTube гонки про богатство в топе (461), в Instagram богатство пролистывают (77%)
+RACE_WEIGHT = {"pop": 3, "economy": 3, "army": 3, "rich": 2.5 if YOUTUBE else 1, "life": 1.5, "online": 1.5, "old": 1, "co2": 1}
 GROUP_WEIGHT = {"world": 3, "europe": 2, "asia": 2, "americas": 1.5, "exussr": 1.5, "africa": 1}
 # рейтинги: темы про людей и крупные группы держат лучше (07.11: «most people in Asia» 51%, G20 52% пролистываний;
 # EU/ex-USSR и безработица в Европе — 66–77%)
-RANK_WEIGHT = {"pop": 3, "boom": 2.5, "shrink": 2, "economy": 2, "rich": 2, "life": 2, "young": 1.5, "old": 1.5,
-               "babies": 1.5, "crowded": 1.5}
+RANK_WEIGHT = {"pop": 3, "boom": 2.5, "shrink": 2, "economy": 2, "rich": 2 if YOUTUBE else 0.7, "life": 2,
+               "young": 1.5, "old": 1.5, "babies": 1.5, "crowded": 1.5, "ppp": 1 if YOUTUBE else 0.5,
+               # острые темы (11.11) — повод найти свою страну и поспорить
+               "danger": 3, "safe": 2.5, "army": 3, "soldiers": 2.5, "fat": 2.5, "unequal": 2, "shortlife": 2}
 RANK_GROUP_WEIGHT = {"world": 3, "g20": 3, "asia": 2.5, "europe": 1.5, "americas": 1.5, "mideast": 1, "africa": 1,
                      "exussr": 0.7, "eu": 0.7}
 BASE_TAGS = "#shorts #countries #geography #comparison #data"
@@ -63,6 +68,8 @@ def _ranking_items(used, rng, avoid):
         key = f"{t['id']}:{g}"
         if key in used or t["id"] in avoid:
             continue
+        if t["id"] in ("army", "soldiers") and g in ("exussr", "europe", "mideast"):  # без войн: там цифры — про конфликты
+            continue
         rows = ranking(t, g, top_n=10)  # 10 мест — ролик короче, досматривают чаще
         if not rows:
             used.add(key)
@@ -73,7 +80,7 @@ def _ranking_items(used, rng, avoid):
         q = t["question"].format(g=_where(gname))
         tags = _tags(t["tags"] + " ranking")
         yield dict(kind="ranking", key=key, topic=t["id"], slug=f"{t['id']}_{g}",
-                   title=f"{q} 🌍",
+                   title=f"{q} Is yours in the top 10? 🌍",
                    description=(f"{t['sub']} — top {len(rows)} {_where(gname)}.\n"
                                 f"Source: World Bank Open Data (latest available: {yrs}).\n\n"
                                 f"Is your country on the list? What should we compare next? Comment below 👇\n\n{tags}"),
@@ -90,6 +97,8 @@ def _race_items(used, rng, avoid):
     for t, g in combos:
         key = f"race:{t['id']}:{g}"
         if key in used or f"race-{t['id']}" in avoid:
+            continue
+        if t["id"] == "army" and g in ("exussr", "europe", "asia"):  # без войн: в Азии — Израиль, Иран, Индия-Пакистан
             continue
         rf = race_frames(t["ind"], g)
         if not rf:

@@ -7,7 +7,7 @@ from render import _fit, _living_bg, _confetti, _draw_confetti, title_card, TITL
 from sound import duel_track
 import tts
 
-ROUNDS = 5
+ROUNDS = 3  # 10.11: на 5 раундах уходили уже на 2-м
 LAST = {}
 INTRO, ROUND_LEN = 1.0, 2.6
 WIN_AT = 1.25  # через сколько секунд раунда объявляется победитель раунда
