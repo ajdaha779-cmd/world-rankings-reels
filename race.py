@@ -2,7 +2,7 @@
 import hashlib
 from engine import *
 from catalog import FMT, COUNTRIES, CTA
-from render import _fit, _living_bg, _confetti, _draw_confetti, title_card, TITLE_CARD, progress
+from render import shout_strip, _fit, _living_bg, _confetti, _draw_confetti, title_card, TITLE_CARD, progress
 from sound import race_track
 import tts
 
@@ -171,6 +171,7 @@ def render_race(years, series, topic, group_name, accent, out_path, seed=0):
             text(d, (W // 2, cy - 15), "country's flag", font(66), fill=(15, 15, 25))
             text(d, (W // 2, cy + 75), CTA[0], font(44, False), fill=mix_color(accent, (0, 0, 0), 0.25))
             text(d, (W // 2, cy + 140), "Follow for daily rankings", font(32, False), fill=(120, 120, 135))
+            shout_strip(im, cy, accent)
         v.write(im)
 
     lead = frames[-1][2][0]

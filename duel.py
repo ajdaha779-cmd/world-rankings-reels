@@ -3,7 +3,7 @@ import itertools, random
 from engine import *
 from catalog import FMT, COUNTRIES, DUEL_STATS
 from data import indicator, history
-from render import _fit, _living_bg, _confetti, _draw_confetti, title_card, TITLE_CARD, progress
+from render import shout_strip, _fit, _living_bg, _confetti, _draw_confetti, title_card, TITLE_CARD, progress
 from sound import duel_track
 import tts
 
@@ -289,6 +289,8 @@ def render_duel(a, b, rounds, accent, out_path, seed=0, pill="WHO WINS?", neutra
             text(d, (W // 2, cy + 75), "Please keep comments respectful" if neutral else "Comment 2 countries",
                  font(40 if neutral else 44, False), fill=mix_color(accent, (0, 0, 0), 0.25))
             text(d, (W // 2, cy + 140), "Follow for daily battles", font(32, False), fill=(120, 120, 135))
+            if not neutral:
+                shout_strip(im, cy, accent)
         v.write(im)
 
     rounds_t = [(INTRO + i * ROUND_LEN, w) for i, w in enumerate(wins_at)]

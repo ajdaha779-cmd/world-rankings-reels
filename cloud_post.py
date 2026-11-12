@@ -12,13 +12,13 @@ import argparse, datetime, json, os, random, sys
 from catalog import ACCENTS, BASE
 from formats import next_item, pick_kind, make_duel, next_neutral
 import instagram, insights, requests_q, analyze, replies
-import render, race, duel, twists, tournament
+import render, race, duel, twists, tournament, fans
 
 USED = os.path.join(BASE, "data", "used_cloud.json")
 HISTORY = os.path.join(BASE, "data", "history_cloud.json")
 QUEUE = os.path.join(BASE, "data", "requests.json")
 FIRST_COMMENT = {"duel": "Which 2 countries should battle next? Comment below ⚔️👇",
-                 "default": "Drop your country's flag 👇 We reply to everyone with its rank! 🌍"}
+                 "default": "Drop your country's flag 👇 Every comment = +1 point for your country on our Fan Table 🏆 Top fans appear in the next video!"}
 
 
 def load(path, default):
@@ -60,6 +60,16 @@ def main():
         except Exception as e:
             print(f"турнир пропущен: {str(e)[:200]}")
             item = None
+    fan = fans.load()
+    if conf:  # очки стран за комментарии и ники для строки «Thanks for commenting»
+        try:
+            me = instagram.http("GET", f"{conf['api']}/{conf['user_id']}", {"fields": "username", "access_token": conf["token"]})
+            fans.collect(conf, fan, history, me.get("username"))
+            render.SHOUTS = fans.shoutouts(fan, 4)
+            if not item and fans.due(fan):
+                item = fans.make_item(fan)
+        except Exception as e:
+            print(f"фанаты пропущены: {str(e)[:200]}")
     if kind == "duel" and not item:
         req = requests_q.top_request(queue, used)
         if req:
@@ -73,7 +83,7 @@ def main():
 
     out = os.path.join(BASE, "work", f"{item['slug']}.mp4")
     item["render"](out, n, ACCENTS[n % len(ACCENTS)])
-    timeline = {"ranking": render, "race": race, "duel": duel, "twist": twists}[item["kind"]].LAST
+    timeline = {"ranking": render, "race": race, "duel": duel, "twist": twists, "fans": fans}[item["kind"]].LAST
     print(f"ролик [{item['kind']}]: {out}\n{item['title']}")
     if os.environ.get("GITHUB_OUTPUT"):
         with open(os.environ["GITHUB_OUTPUT"], "a") as f:
@@ -98,6 +108,9 @@ def main():
     if item.get("cup_match"):
         tournament.posted(cup, item["cup_match"], media_id, datetime.datetime.utcnow().isoformat() + "Z")
     tournament.save(cup)
+    if item["kind"] == "fans":
+        fans.posted(fan, datetime.datetime.utcnow().isoformat() + "Z")
+    fans.save(fan)
     used.add(item["key"])
     history.append({"kind": item["kind"], "topic": item["topic"], "key": item["key"], "title": item["title"],
                     "description": item["description"], "media_id": media_id, "story_id": story_id,

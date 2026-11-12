@@ -215,6 +215,7 @@ def render(rows, topic, group_name, accent, out_path, seed=0, fact=None, teaser=
             text(d, (W // 2, cy - 15), "country's flag", font(66), fill=(15, 15, 25))
             text(d, (W // 2, cy + 75), CTA[0], font(44, False), fill=mix_color(accent, (0, 0, 0), 0.25))
             text(d, (W // 2, cy + 140), "Follow for daily rankings", font(32, False), fill=(120, 120, 135))
+            shout_strip(im, cy, accent)
         v.write(im)
 
     where = f"among {group_name}" if "countries" in group_name else f"in {group_name}"
@@ -259,6 +260,30 @@ def title_card(im, t, lines, accent, flags=(), pill=None, fh=92):
         d.rounded_rectangle((W / 2 - pw / 2, y + 50, W / 2 + pw / 2, y + 122), 36, fill=accent)
         text(d, (W // 2, y + 86), pill, font(40), fill=(20, 20, 30))
     return Image.blend(im, card, fade) if fade < 1 else card
+
+
+SHOUTS = []  # [(ник, страна)] — последние комментаторы; cloud_post заполняет перед рендером (fans.shoutouts)
+
+
+def shout_strip(im, cy, accent):
+    """Под финальной карточкой: «Thanks for commenting» и ники с флагами — зритель видит себя в ролике."""
+    if not SHOUTS:
+        return
+    d = ImageDraw.Draw(im)
+    d.rounded_rectangle((60, cy + 225, W - 60, cy + 380), 30, fill=(20, 22, 34), outline=accent, width=3)
+    text(d, (W // 2, cy + 265), "THANKS FOR COMMENTING", font(32), fill=accent)
+    f = font(38)
+    items = []
+    for u, iso in SHOUTS[:4]:
+        fl = flag_box(iso.lower(), 66, 44, 0.12)
+        items.append((fl, "@" + u, fl.width + 12 + f.getlength("@" + u)))
+    while items and sum(w for *_, w in items) + 40 * (len(items) - 1) > W - 100:
+        items.pop()
+    x = W // 2 - (sum(w for *_, w in items) + 40 * (len(items) - 1)) / 2
+    for fl, nick, w in items:
+        im.paste(fl, (int(x), cy + 330 - fl.height // 2), fl)
+        text(d, (int(x + fl.width + 12), cy + 330), nick, f, anchor="lm")
+        x += w + 40
 
 
 def progress(d, frac, y, accent):

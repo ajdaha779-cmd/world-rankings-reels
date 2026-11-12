@@ -148,6 +148,8 @@ def run(c=None, history=None, queue=None):
             replied.add(cm["id"])
             cs = requests_q.countries_in(cm.get("text", ""))
             text = reply_text(h, cs, cm.get("username"), cm["id"]) if cs else None
+            if text and len(cs) == 1 and h.get("kind") != "duel" and random.Random(cm["id"]).random() < 0.6:
+                text += f" +1 point for {COUNTRIES[cs[0]]} on our Fan Table 🏆"
             if not text:
                 continue
             try:

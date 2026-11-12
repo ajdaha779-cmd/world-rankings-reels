@@ -14,7 +14,7 @@ import instagram
 BASE = os.path.dirname(os.path.abspath(__file__))
 HISTORY = os.path.join(BASE, "data", "history_cloud.json")
 REPORT = os.path.join(BASE, "data", "АНАЛИЗ.md")
-KIND_RU = {"ranking": "рейтинг", "race": "гонка", "duel": "дуэль", "twist": "твист"}
+KIND_RU = {"ranking": "рейтинг", "race": "гонка", "duel": "дуэль", "twist": "твист", "fans": "фанаты"}
 
 
 def fetch(c, h):
