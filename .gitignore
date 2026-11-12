@@ -10,3 +10,4 @@ data/posted_instagram.json
 data/*.log
 .DS_Store
 data/tts/
+data/youtube_key.txt
