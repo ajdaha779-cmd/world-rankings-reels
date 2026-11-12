@@ -1,8 +1,179 @@
 {
  "season": "2026-W46",
- "points": {},
- "fans": {},
- "counted": [],
- "recent": [],
- "past": []
+ "points": {
+  "ZW": 1,
+  "AZ": 3,
+  "IN": 1,
+  "JO": 1,
+  "RU": 1,
+  "MA": 1,
+  "IR": 2,
+  "FR": 1,
+  "GB": 1,
+  "AR": 1,
+  "MN": 1,
+  "KR": 1
+ },
+ "fans": {
+  "ZW": {
+   "uzanenkosi16": 1
+  },
+  "AZ": {
+   "sardvr": 3
+  },
+  "IN": {
+   "anurag.kairi": 1
+  },
+  "JO": {
+   "omarhammad2016": 1
+  },
+  "RU": {
+   "sardvr": 1
+  },
+  "MA": {
+   "mgh_md13": 1
+  },
+  "IR": {
+   "saro0onh18": 1,
+   "ay_han8136": 1
+  },
+  "FR": {
+   "saro0onh18": 1
+  },
+  "GB": {
+   "ay_han8136": 1
+  },
+  "AR": {
+   "ay_han8136": 1
+  },
+  "MN": {
+   "sumya__bn910": 1
+  },
+  "KR": {
+   "sumya__bn910": 1
+  }
+ },
+ "counted": [
+  "18101156651430566:uzanenkosi16:ZW",
+  "18494812555106128:sardvr:AZ",
+  "18101730164453084:anurag.kairi:IN",
+  "18126724136286257:omarhammad2016:JO",
+  "18648744610052927:sardvr:AZ",
+  "18648744610052927:sardvr:RU",
+  "18108938693621782:sardvr:AZ",
+  "18085103570710939:mgh_md13:MA",
+  "18119051309084100:saro0onh18:IR",
+  "18119051309084100:saro0onh18:FR",
+  "18200103571386706:ay_han8136:IR",
+  "18200103571386706:ay_han8136:GB",
+  "18200103571386706:ay_han8136:AR",
+  "18200103571386706:sumya__bn910:MN",
+  "18200103571386706:sumya__bn910:KR"
+ ],
+ "recent": [
+  [
+   "uzanenkosi16",
+   "ZW"
+  ],
+  [
+   "sardvr",
+   "AZ"
+  ],
+  [
+   "anurag.kairi",
+   "IN"
+  ],
+  [
+   "omarhammad2016",
+   "JO"
+  ],
+  [
+   "sardvr",
+   "RU"
+  ],
+  [
+   "mgh_md13",
+   "MA"
+  ],
+  [
+   "saro0onh18",
+   "IR"
+  ],
+  [
+   "saro0onh18",
+   "FR"
+  ],
+  [
+   "ay_han8136",
+   "IR"
+  ],
+  [
+   "ay_han8136",
+   "GB"
+  ],
+  [
+   "ay_han8136",
+   "AR"
+  ],
+  [
+   "sumya__bn910",
+   "MN"
+  ],
+  [
+   "sumya__bn910",
+   "KR"
+  ]
+ ],
+ "past": [],
+ "lit": {
+  "ZW": {
+   "by": "uzanenkosi16",
+   "at": "2026-11-09"
+  },
+  "AZ": {
+   "by": "sardvr",
+   "at": "2026-11-10"
+  },
+  "IN": {
+   "by": "anurag.kairi",
+   "at": "2026-11-10"
+  },
+  "JO": {
+   "by": "omarhammad2016",
+   "at": "2026-11-11"
+  },
+  "RU": {
+   "by": "sardvr",
+   "at": "2026-11-10"
+  },
+  "MA": {
+   "by": "mgh_md13",
+   "at": "2026-11-11"
+  },
+  "IR": {
+   "by": "saro0onh18",
+   "at": "2026-11-11"
+  },
+  "FR": {
+   "by": "saro0onh18",
+   "at": "2026-11-11"
+  },
+  "GB": {
+   "by": "ay_han8136",
+   "at": "2026-11-12"
+  },
+  "AR": {
+   "by": "ay_han8136",
+   "at": "2026-11-12"
+  },
+  "MN": {
+   "by": "sumya__bn910",
+   "at": "2026-11-12"
+  },
+  "KR": {
+   "by": "sumya__bn910",
+   "at": "2026-11-12"
+  }
+ },
+ "lit_shown": []
 }
