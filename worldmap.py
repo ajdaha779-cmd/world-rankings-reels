@@ -40,13 +40,24 @@ def shapes():
             polys = [[_xy(lon, lat) for lon, lat in r] for r in rings]
             xs = [x for pl in polys for x, _ in pl]
             ys = [y for pl in polys for _, y in pl]
+            main = max(polys, key=lambda pl: (max(x for x, _ in pl) - min(x for x, _ in pl)) *
+                       (max(y for _, y in pl) - min(y for _, y in pl)))  # для камеры: без Чукотки за краем карты и т. п.
             _GEO[iso] = {"polys": polys, "label": _xy(p["LABEL_X"], p["LABEL_Y"]),
-                         "bbox": (min(xs), min(ys), max(xs), max(ys))}
+                         "bbox": (min(xs), min(ys), max(xs), max(ys)),
+                         "main": (min(x for x, _ in main), min(y for _, y in main), max(x for x, _ in main), max(y for _, y in main))}
     return _GEO
 
 
+def _flag_fill(iso, w, h):
+    """Флаг, растянутый на прямоугольник страны: все полосы видны и у вытянутых стран (Россия, Чили)."""
+    path = os.path.join(BASE, "assets", "flags", f"{iso.lower()}.png")
+    if not os.path.exists(path):
+        return Image.new("RGB", (w, h), LIT)
+    return Image.open(path).convert("RGB").resize((w, h), Image.LANCZOS)
+
+
 def _map(lit):
-    """Карта (RGB, MW×MH) с подсвеченными странами lit."""
+    """Карта (RGB, MW×MH): зажжённые страны залиты своим флагом, вокруг — мягкое свечение."""
     im = Image.new("RGB", (MW, MH), OCEAN)
     d = ImageDraw.Draw(im)
     for gy in range(0, MH, 54):  # точечная сетка океана
@@ -54,19 +65,34 @@ def _map(lit):
             d.point((gx, gy), fill=(28, 34, 60))
     glow = Image.new("L", (MW, MH), 0)
     gd = ImageDraw.Draw(glow)
-    for iso, s in shapes().items():
-        on = iso in lit
-        for pl in s["polys"]:
-            d.polygon(pl, fill=LIT if on else LAND, outline=LIT_EDGE if on else BORDER)
-            if on:
+    geo = shapes()
+    for iso, s_ in geo.items():
+        for pl in s_["polys"]:
+            d.polygon(pl, fill=LAND, outline=BORDER)
+            if iso in lit:
                 gd.polygon(pl, fill=255)
     if lit:
-        halo = glow.filter(ImageFilter.GaussianBlur(18))
-        im = Image.composite(Image.new("RGB", (MW, MH), (255, 170, 40)), im, halo.point(lambda v: int(v * 0.55)))
+        halo = glow.filter(ImageFilter.GaussianBlur(14))
+        im = Image.composite(Image.new("RGB", (MW, MH), (255, 255, 255)), im, halo.point(lambda v: int(v * 0.45)))
         d = ImageDraw.Draw(im)
-        for iso in lit:
-            for pl in shapes().get(iso, {}).get("polys", []):
-                d.polygon(pl, fill=LIT, outline=LIT_EDGE)
+    for iso in lit:
+        g = geo.get(iso)
+        if not g:
+            continue
+        x0, y0, x1, y1 = (int(v) for v in g["bbox"])
+        x1, y1 = x1 + 2, y1 + 2
+        w, h = max(1, x1 - x0), max(1, y1 - y0)
+        mask = Image.new("L", (w, h), 0)
+        md = ImageDraw.Draw(mask)
+        for pl in g["polys"]:
+            md.polygon([(x - x0, y - y0) for x, y in pl], fill=255)
+        mx0, my0, mx1, my1 = (int(v) for v in g["main"])  # флаг ложится на основную часть страны,
+        main_fl = _flag_fill(iso, max(1, mx1 - mx0 + 2), max(1, my1 - my0 + 2))  # острова — средним цветом флага
+        fill = Image.new("RGB", (w, h), main_fl.resize((1, 1), Image.BOX).getpixel((0, 0)))
+        fill.paste(main_fl, (mx0 - x0, my0 - y0))
+        im.paste(fill, (x0, y0), mask)
+        for pl in g["polys"]:
+            d.line(pl + [pl[0]], fill=(255, 255, 255), width=3)
     return im
 
 
@@ -87,9 +113,9 @@ def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
     """before — страны, горевшие вчера; new — [iso] загораются в этом ролике (по порядку); lit_by — {iso: ник};
     total — сколько стран горит после ролика (могут быть и мелкие, которых нет на карте 1:110m)."""
     geo = shapes()
-    new = [c for c in new if c in geo][:6]
-    S0 = 2.2  # до этого — вчерашняя карта целиком
-    PER = 1.6
+    new = [c for c in new if c in geo][:12]
+    S0 = 2.2 if before else 1.2  # до этого — вчерашняя карта целиком (в первый день карта тёмная)
+    PER = 1.6 if len(new) <= 6 else max(0.9, 9.6 / len(new))  # много новых стран — быстрее, ролик ≤ ~20 с
     S1 = S0 + PER * len(new)
     final_t = S1 + 0.9
     end = final_t + 2.6
@@ -116,10 +142,10 @@ def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
         return tuple(prev[j] + (tg[j] - prev[j]) * k for j in range(3))
 
     def _target(iso):
-        x0, y0, x1, y1 = geo[iso]["bbox"]
+        x0, y0, x1, y1 = geo[iso]["main"]
         lx, ly = geo[iso]["label"]
         span = max(x1 - x0, (y1 - y0) * W / VIEW_H, 140)
-        return lx, ly, min(W / (span * 2.4), 3.2)
+        return lx, ly, min(W / (span * 1.5), 3.2)
 
     v = Video(f"map{seed}", dur, out_path)
     bg = _living_bg(accent, seed + 31)
@@ -141,7 +167,7 @@ def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
         pulse = 1 + 0.25 * max(0, 1 - ((t - S0) % PER) / 0.4) if S0 <= t < S1 else 1
         text(d, (W // 2, 350), cnt + " countries lit", _fit(cnt + " countries lit", int(54 * pulse), W - 100, True))
         if t < S0:
-            text(d, (W // 2, VIEW_Y0 + VIEW_H + 70), "YESTERDAY", font(54), fill=(170, 175, 200))
+            text(d, (W // 2, VIEW_Y0 + VIEW_H + 70), "YESTERDAY" if before else "DAY 1 · ALL DARK", font(54), fill=(170, 175, 200))
         elif t < S1 and new:  # подпись новой страны: флаг + кто зажёг
             i = min(int((t - S0) / PER), len(new) - 1)
             lt = (t - S0) - i * PER
@@ -182,7 +208,8 @@ def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
             text(d, (W // 2, cy_ + 55), "Your name stays on it forever", font(44, False), fill=mix_color(accent, (0, 0, 0), 0.25))
             text(d, (W // 2, cy_ + 130), "First to light it wins the spot", font(34, False), fill=(120, 120, 135))
         v.write(im)
-    plan = [(0.15, f"Every comment lights up a country. Yesterday, {n_before} countries were lit.")]
+    plan = [(0.15, f"Every comment lights up a country. Yesterday, {n_before} countries were lit." if before else
+             "Every comment lights up a country on this map. Here is who lit it first.")]
     for i, iso in enumerate(new):
         by = lit_by.get(iso)
         plan.append((S0 + i * PER + 0.45, f"{COUNTRIES.get(iso, iso)}!" if i else
