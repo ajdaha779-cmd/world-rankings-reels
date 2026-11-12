@@ -36,7 +36,7 @@ jobs:
       - name: Пора ли публиковать?
         id: due
         run: |
-          if [ "${{ inputs.force }}" = "true" ] || [ "${{ inputs.dry_run }}" = "true" ]; then echo "due=true" >> "$GITHUB_OUTPUT"; echo "sleep=0" >> "$GITHUB_OUTPUT"; echo "ручной запуск"; else python due.py; fi
+          if [ "${{ inputs.force }}" = "true" ] || [ "${{ inputs.dry_run }}" = "true" ]; then echo "due=true" >> "$GITHUB_OUTPUT"; echo "sleep=0" >> "$GITHUB_OUTPUT"; echo "mode=main" >> "$GITHUB_OUTPUT"; echo "ручной запуск"; else python due.py; fi
 
       - name: Ответить зрителям (каждый час, даже без нового ролика)
         if: steps.due.outputs.due != 'true'
@@ -76,7 +76,7 @@ jobs:
         env:
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
-        run: python cloud_post.py ${{ inputs.dry_run && '--dry-run' || '' }}
+        run: python cloud_post.py ${{ inputs.dry_run && '--dry-run' || '' }} --mode ${{ steps.due.outputs.mode || 'main' }}
 
       - name: Сохранить ролик (можно скачать для YouTube/TikTok, хранится 14 дней)
         if: always() && steps.post.outputs.video

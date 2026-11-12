@@ -12,6 +12,7 @@ MIN_GAP = 85          # минут между роликами, не меньш�
 DAY_START_UTC = 11    # «эфирные сутки» начинаются в 11:00 UTC (15:00 по Баку)
 WINDOW = 16           # часов в эфирном окне: 15:00–06:59 по Баку — день Европы и США
 MAX_SLEEP = 8 * 60    # случайная задержка внутри часа, секунд
+MAP_HOUR = 6          # ролик-карта — раз в сутки СВЕРХ основных, с 17:00 UTC (21:00 по Баку) и позже
 
 
 def day_start(now):
@@ -29,6 +30,21 @@ def plan(start, per_day):
     return [start + datetime.timedelta(hours=h, minutes=17) for h in hours]
 
 
+def map_due(now, start, hist, times):
+    """Карта: раз в сутки, после MAP_HOUR, если есть люди, которых ещё не показывали (data/fans.json)."""
+    if now < start + datetime.timedelta(hours=MAP_HOUR):
+        return False
+    if any(h.get("kind") == "map" and datetime.datetime.fromisoformat(h["at"].rstrip("Z")) >= start for h in hist if h.get("at")):
+        return False
+    if times and (now - max(times)).total_seconds() < MIN_GAP * 60:
+        return False
+    path = os.path.join(BASE, "data", "fans.json")
+    st = json.load(open(path)) if os.path.exists(path) else {}
+    shown, lit_shown = set(st.get("fans_shown", [])), set(st.get("lit_shown", []))
+    return any(c not in lit_shown or any(f"{c}:{u}" not in shown for u in e.get("fans", []))
+               for c, e in st.get("lit", {}).items())
+
+
 def is_due(now=None):
     now = now or datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
     sched = json.load(open(os.path.join(BASE, "data", "schedule.json")))
@@ -41,19 +57,22 @@ def is_due(now=None):
     hist_path = os.path.join(BASE, "data", "history_cloud.json")
     hist = json.load(open(hist_path)) if os.path.exists(hist_path) else []
     times = [datetime.datetime.fromisoformat(h["at"].rstrip("Z")) for h in hist if h.get("at")]
-    today = [t for t in times if t >= start]
+    today = [datetime.datetime.fromisoformat(h["at"].rstrip("Z")) for h in hist
+             if h.get("at") and h.get("kind") != "map" and datetime.datetime.fromisoformat(h["at"].rstrip("Z")) >= start]
     nice = ", ".join(f"{(s + datetime.timedelta(hours=4)):%H:%M}" for s in slots)
     if len(today) >= len(passed):
+        if map_due(now, start, hist, times):
+            return True, "ролик-карта (сверх основных)", random.randint(0, MAX_SLEEP), "map"
         return False, f"сегодня {len(today)} из {per_day}; план по Баку ≈ {nice}", 0
     if times and (now - max(times)).total_seconds() < MIN_GAP * 60:
         return False, "с прошлого ролика прошло слишком мало времени", 0
-    return True, f"публикуем ({len(today) + 1} из {per_day}); план по Баку ≈ {nice}", random.randint(0, MAX_SLEEP)
+    return True, f"публикуем ({len(today) + 1} из {per_day}); план по Баку ≈ {nice}", random.randint(0, MAX_SLEEP), "main"
 
 
 if __name__ == "__main__":
-    due, why, sleep = is_due()
+    due, why, sleep, *mode = is_due()
     print(why + (f"; ждём ещё {sleep // 60} мин {sleep % 60} с" if due else ""))
     if os.environ.get("GITHUB_OUTPUT"):
         with open(os.environ["GITHUB_OUTPUT"], "a") as f:
-            f.write(f"due={'true' if due else 'false'}\nsleep={sleep}\n")
+            f.write(f"due={'true' if due else 'false'}\nsleep={sleep}\nmode={mode[0] if mode else 'main'}\n")
     sys.exit(0)

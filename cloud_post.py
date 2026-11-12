@@ -32,6 +32,7 @@ def save(path, obj, indent=1):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--mode", default="main", help="main — основной ролик; map — ролик-карта сверх основных")
     args = ap.parse_args()
 
     used = set(load(USED, []))
@@ -52,7 +53,7 @@ def main():
     kind = pick_kind(n, weights, [h.get("kind") for h in history[-2:]], rng)
     item, req = None, None
     cup = tournament.load()
-    if conf:  # турнир: итоги голосования под прошлым матчем и, если пора, следующий матч — вне очереди
+    if conf and args.mode != "map":  # турнир: итоги голосования под прошлым матчем и, если пора, следующий матч — вне очереди
         try:
             tournament.tally(conf, cup)
             m = tournament.next_match(cup)
@@ -66,10 +67,10 @@ def main():
             me = instagram.http("GET", f"{conf['api']}/{conf['user_id']}", {"fields": "username", "access_token": conf["token"]})
             fans.collect(conf, fan, history, me.get("username"))
             render.SHOUTS = fans.shoutouts(fan, 4)
-            if not item and fans.map_due(fan):  # карта мира — главный ежедневный ролик вовлечения
-                item = fans.make_map_item(fan)
-            elif not item and fans.due(fan):
-                item = fans.make_item(fan)
+            if args.mode == "map":  # карта — отдельный запуск раз в сутки, сверх основных (due.py)
+                item = fans.make_map_item(fan) if fans.map_due(fan) else None
+                if not item:
+                    sys.exit("карта: нет новых людей или уже выходила сегодня")
         except Exception as e:
             print(f"фанаты пропущены: {str(e)[:200]}")
     if kind == "duel" and not item:
