@@ -12,7 +12,7 @@ import argparse, datetime, json, os, random, sys
 from catalog import ACCENTS, BASE
 from formats import next_item, pick_kind, make_duel, next_neutral
 import instagram, insights, requests_q, analyze, replies
-import render, race, duel
+import render, race, duel, twists
 
 USED = os.path.join(BASE, "data", "used_cloud.json")
 HISTORY = os.path.join(BASE, "data", "history_cloud.json")
@@ -64,7 +64,7 @@ def main():
 
     out = os.path.join(BASE, "work", f"{item['slug']}.mp4")
     item["render"](out, n, ACCENTS[n % len(ACCENTS)])
-    timeline = {"ranking": render, "race": race, "duel": duel}[item["kind"]].LAST
+    timeline = {"ranking": render, "race": race, "duel": duel, "twist": twists}[item["kind"]].LAST
     print(f"ролик [{item['kind']}]: {out}\n{item['title']}")
     if os.environ.get("GITHUB_OUTPUT"):
         with open(os.environ["GITHUB_OUTPUT"], "a") as f:
@@ -82,7 +82,7 @@ def main():
     if item.get("neutral"):
         requests_q.first_comment(conf, media_id, "Data only — no winners here. Please keep it respectful 🙏")
     else:
-        requests_q.first_comment(conf, media_id, FIRST_COMMENT.get(item["kind"], FIRST_COMMENT["default"]))
+        requests_q.first_comment(conf, media_id, item.get("first_comment") or FIRST_COMMENT.get(item["kind"], FIRST_COMMENT["default"]))
     if req:
         requests_q.reply_all(conf, req, "Your battle is out! Check our latest reel 🔥⚔️")
 

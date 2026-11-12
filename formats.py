@@ -8,7 +8,7 @@ from catalog import TOPICS, GROUPS, RACE_TOPICS, RACE_GROUPS, DUEL_PAIRS, COUNTR
 from data import ranking, race_frames, indicator, leader_changes
 from duel import duel_rounds, flip_rounds, FLIPS
 
-ROTATION = ["race", "duel", "race", "ranking", "race"]  # 04.11: гонка после правок — 45% пролистываний и 47% досмотра, лучший формат
+ROTATION = ["race", "twist", "duel", "race", "ranking", "twist"]  # 12.11: + твисты  # 04.11: гонка после правок — 45% пролистываний и 47% досмотра, лучший формат
 YOUTUBE = os.environ.get("REELS_PLATFORM") == "youtube"
 # 11.11: на YouTube гонки про богатство в топе (461), в Instagram богатство пролистывают (77%)
 RACE_WEIGHT = {"pop": 3, "economy": 3, "army": 3, "rich": 2.5 if YOUTUBE else 1, "life": 1.5, "online": 1.5, "old": 1, "co2": 1}
@@ -261,3 +261,152 @@ def next_item(n_done, used, rng=None, avoid=(), kind=None):
         for item in SOURCES[k](used, rng, set(avoid)):
             return item
     return None
+
+
+# ---------- твисты (12.11): страна против континента, «кто кого обогнал», «угадай страну» ----------
+TWIST_COUNTRIES = sorted(FAMOUS | set("ID NG PK BD EG PH VN ET".split()))
+BIGGER_STATS = [("SP.POP.TOTL", "people", "more people", "Population"),
+                ("NY.GDP.MKTP.CD", "money", "a bigger economy", "Economy (GDP)")]
+OVERTAKE_STATS = [("SP.POP.TOTL", "people", "Population", "pop"), ("NY.GDP.MKTP.CD", "money", "Economy (GDP)", "gdp"),
+                  ("NY.GDP.PCAP.CD", "money", "GDP per person", "rich")]
+GUESS_COUNTRIES = TWIST_COUNTRIES + "SE NO CH GR PL TH MY EG KE MA CO PE CL NZ IE".split()
+
+
+def _no_conflict(a, b):
+    return frozenset((a, b)) not in {frozenset(p) for p in CONFLICTS}
+
+
+def _human(v, kind):
+    """Число для голоса: «1.4 billion people», «12,300 dollars»."""
+    if kind == "people":
+        return f"{v / 1e9:.1f} billion" if v >= 1e9 else f"{v / 1e6:.0f} million" if v >= 1e6 else f"{v:,.0f}"
+    if kind == "money":
+        return f"{v / 1e12:.1f} trillion dollars" if v >= 1e12 else f"{round(v, -2):,.0f} dollars"
+    return f"{v:.0f}"
+
+
+def _bigger_items(used, rng):
+    from twists import render_bigger
+    cands = []
+    for ind, fmt_id, noun, label in BIGGER_STATS:
+        vals = indicator(ind)
+        for c in TWIST_COUNTRIES:
+            for g in ("europe", "africa", "americas", "asia", "eu", "mideast", "exussr"):
+                mem = [m for m in GROUPS[g][1] if m in vals]
+                if c not in vals or c in mem or len(mem) < 8:
+                    continue
+                r = sum(vals[m][0] for m in mem) / vals[c][0]
+                if 0.5 <= r <= 2.0:
+                    cands.append((abs(r - 1) + rng.random() * 0.5, c, g, ind, fmt_id, noun, label))
+    for _, c, g, ind, fmt_id, noun, label in sorted(cands):
+        key = f"bigger:{c}:{g}:{ind}"
+        if key in used:
+            continue
+        name, gname = COUNTRIES[c], GROUPS[g][0].replace("the ", "")
+        head = f"{name} vs ALL of {gname}: who has {noun}? {flag_emoji(c)}🌍"
+        ask = "Which country should we test next? Comment below 👇"
+        tags = _tags(f"{name.replace(' ', '').lower()} {gname.replace(' ', '').lower()} comparison")
+        yield dict(kind="twist", key=key, topic="bigger", slug=f"bigger_{c.lower()}_{g}",
+                   title=head, first_comment="Guess before the end: who wins? 👇",
+                   description=f"{label}: {name} vs all of {gname} combined.\nSource: World Bank Open Data.\n\n{ask}\n\n{tags}",
+                   short=f"{head} {ask}\n\n{tags}",
+                   render=lambda out, seed, accent, c=c, g=g, ind=ind, fmt_id=fmt_id, noun=noun:
+                   render_bigger(c, g, ind, fmt_id, noun, accent, out, seed=seed))
+
+
+def _overtakes():
+    """[(слава, a, b, год, ind, fmt, подпись, id)]: b долго был позади a и обогнал (колебания ≤ 6 лет)."""
+    from data import history
+    out = []
+    for ind, fmt_id, label, sid in OVERTAKE_STATS:
+        h = history(ind)
+        for a in TWIST_COUNTRIES:
+            for b in TWIST_COUNTRIES:
+                if a == b or a not in h or b not in h or not _no_conflict(a, b):
+                    continue
+                ys = [y for y in range(1960, 2030) if y in h[a] and y in h[b]]
+                if len(ys) < 30:
+                    continue
+                ahead = [h[b][y] > h[a][y] for y in ys]
+                sw = [i for i in range(1, len(ys)) if ahead[i] != ahead[i - 1]]
+                if not sw or ahead[0] or not ahead[-1] or ys[sw[-1]] - ys[sw[0]] > 6 or sw[0] < 10 or ys[sw[-1]] < 1985:
+                    continue
+                if h[b][ys[-1]] < h[a][ys[-1]] * 1.02:
+                    continue
+                fame = (a in FAMOUS) + (b in FAMOUS) + ys[sw[-1]] / 2000
+                out.append((fame, a, b, ys[sw[-1]], ind, fmt_id, label, sid))
+    return sorted(out, reverse=True)
+
+
+def _overtake_items(used, rng):
+    from twists import render_overtake
+    from data import history
+    cands = _overtakes()
+    rng.shuffle(cands)
+    cands.sort(key=lambda x: -x[0] // 1)  # сначала пары из двух громких стран, внутри — случайно
+    for fame, a, b, year, ind, fmt_id, label, sid in cands:
+        key = f"overtake:{a}-{b}:{sid}"
+        if key in used:
+            continue
+        h = history(ind)
+        years = [y for y in range(1960, 2030) if y in h[a] and y in h[b]]
+        sa, sb = [h[a][y] for y in years], [h[b][y] for y in years]
+        na, nb = COUNTRIES[a], COUNTRIES[b]
+        head = f"The year {nb} overtook {na} 📈 {flag_emoji(b)}{flag_emoji(a)} Guess it?"
+        ask = "Who will overtake who next? Comment 2 countries 👇"
+        tags = _tags(f"{na.replace(' ', '').lower()} {nb.replace(' ', '').lower()} history")
+        yield dict(kind="twist", key=key, topic="overtake", slug=f"overtake_{a.lower()}_{b.lower()}_{sid}",
+                   title=head, first_comment="Did you guess the year? 👇",
+                   description=f"{label}: {nb} vs {na}, {years[0]}–{years[-1]}.\nSource: World Bank Open Data.\n\n{ask}\n\n{tags}",
+                   short=f"{head} {ask}\n\n{tags}",
+                   render=lambda out, seed, accent, a=a, b=b, years=years, sa=sa, sb=sb, fmt_id=fmt_id, label=label,
+                   year=year: render_overtake(a, b, years, sa, sb, fmt_id, label, year, accent, out, seed=seed))
+
+
+def guess_clues(c):
+    """4 подсказки от трудной к лёгкой или None."""
+    life, gdp, pop = (indicator(i).get(c) for i in ("SP.DYN.LE00.IN", "NY.GDP.PCAP.CD", "SP.POP.TOTL"))
+    region = next((GROUPS[g][0].replace("the ", "") for g in ("europe", "africa", "americas", "asia") if c in GROUPS[g][1]),
+                  "Oceania")
+    if not (life and gdp and pop):
+        return None
+    return [("Life expectancy", f"{life[0]:.0f} years", f"{life[0]:.0f} years"),
+            ("GDP per person", f"${round(gdp[0], -2):,.0f}", _human(gdp[0], "money")),
+            ("Population", _compact_people(pop[0]), _human(pop[0], "people") + " people"),
+            ("Continent", region, region)]
+
+
+def _compact_people(v):
+    return f"{v / 1e9:.2f}B" if v >= 1e9 else f"{v / 1e6:.0f}M" if v >= 1e7 else f"{v / 1e6:.1f}M"
+
+
+def _guess_items(used, rng):
+    from twists import render_guess
+    cs = list(GUESS_COUNTRIES)
+    rng.shuffle(cs)
+    for c in cs:
+        key = f"guess:{c}"
+        clues = guess_clues(c) if key not in used else None
+        if not clues:
+            continue
+        head = "Guess the country in 4 clues 🤔 How fast did you get it?"
+        tags = _tags("guessthecountry quiz geography")
+        yield dict(kind="twist", key=key, topic="guess", slug=f"guess_{c.lower()}",
+                   title=head, first_comment="Comment your guess BEFORE the reveal 👀 How many clues did you need?",
+                   description=f"Guess the country from 4 real-data clues.\nSource: World Bank Open Data.\n\n"
+                               f"Comment your guess 👇\n\n{tags}",
+                   short=f"{head} Comment your guess 👇\n\n{tags}",
+                   render=lambda out, seed, accent, c=c, clues=clues: render_guess(c, clues, accent, out, seed=seed))
+
+
+TWIST_SOURCES = {"bigger": _bigger_items, "overtake": _overtake_items, "guess": _guess_items}
+
+
+def _twist_items(used, rng, avoid):
+    subs = [s for s in TWIST_SOURCES if s not in avoid] or list(TWIST_SOURCES)
+    rng.shuffle(subs)
+    for s in subs:
+        yield from TWIST_SOURCES[s](used, rng)
+
+
+SOURCES["twist"] = _twist_items
