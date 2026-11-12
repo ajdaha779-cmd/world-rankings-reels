@@ -128,51 +128,105 @@
  "lit": {
   "ZW": {
    "by": "uzanenkosi16",
-   "at": "2026-11-09"
+   "at": "2026-11-09",
+   "fans": [
+    "uzanenkosi16"
+   ],
+   "cids": {}
   },
   "AZ": {
    "by": "sardvr",
-   "at": "2026-11-10"
+   "at": "2026-11-10",
+   "fans": [
+    "sardvr"
+   ],
+   "cids": {}
   },
   "IN": {
    "by": "anurag.kairi",
-   "at": "2026-11-10"
+   "at": "2026-11-10",
+   "fans": [
+    "anurag.kairi"
+   ],
+   "cids": {}
   },
   "JO": {
    "by": "omarhammad2016",
-   "at": "2026-11-11"
+   "at": "2026-11-11",
+   "fans": [
+    "omarhammad2016"
+   ],
+   "cids": {}
   },
   "RU": {
    "by": "sardvr",
-   "at": "2026-11-10"
+   "at": "2026-11-10",
+   "fans": [
+    "sardvr",
+    "zoktay_16_"
+   ],
+   "cids": {
+    "zoktay_16_": "18138488986635017"
+   }
   },
   "MA": {
    "by": "mgh_md13",
-   "at": "2026-11-11"
+   "at": "2026-11-11",
+   "fans": [
+    "mgh_md13"
+   ],
+   "cids": {}
   },
   "IR": {
    "by": "saro0onh18",
-   "at": "2026-11-11"
+   "at": "2026-11-11",
+   "fans": [
+    "saro0onh18",
+    "ay_han8136"
+   ],
+   "cids": {
+    "ay_han8136": "18095233871695835"
+   }
   },
   "FR": {
    "by": "saro0onh18",
-   "at": "2026-11-11"
+   "at": "2026-11-11",
+   "fans": [
+    "saro0onh18"
+   ],
+   "cids": {}
   },
   "GB": {
    "by": "ay_han8136",
-   "at": "2026-11-12"
+   "at": "2026-11-12",
+   "fans": [
+    "ay_han8136"
+   ],
+   "cids": {}
   },
   "AR": {
    "by": "ay_han8136",
-   "at": "2026-11-12"
+   "at": "2026-11-12",
+   "fans": [
+    "ay_han8136"
+   ],
+   "cids": {}
   },
   "MN": {
    "by": "sumya__bn910",
-   "at": "2026-11-12"
+   "at": "2026-11-12",
+   "fans": [
+    "sumya__bn910"
+   ],
+   "cids": {}
   },
   "KR": {
    "by": "sumya__bn910",
-   "at": "2026-11-12"
+   "at": "2026-11-12",
+   "fans": [
+    "sumya__bn910"
+   ],
+   "cids": {}
   }
  },
  "lit_shown": []
