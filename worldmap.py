@@ -194,7 +194,7 @@ def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
     LAST = {"dur": dur, "moments": [(0, "титул + правила"), (S0, "новые страны"), (final_t, "вся карта"), (end, "призыв")]}
     stages = [_map(set(before) | set(new[:k])) for k in range(len(new) + 1)]
     fit = W / MW
-    world = (MW / 2, MH / 2 + 60, fit)
+    world = (MW / 2, (VIEW_H / 2 - 30) / fit, fit)  # общий план: карта у верхнего края, ниже — список участников
 
     def _target(iso):
         x0, y0, x1, y1 = geo[iso]["main"]
@@ -239,7 +239,7 @@ def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
         # ники прямо на странах: кто её зажёг
         tsize = 22 if s < 0.6 else 30 if s < 1.5 else 36
         cur = new[i] if i is not None and t >= S0 else None
-        for iso in list(before) + new[:k]:
+        for iso in (list(before) + new[:k]) if s >= 0.6 else []:  # в общем плане ники — списком ниже, не на карте
             if iso not in geo or not lit_by.get(iso):
                 continue
             lx, ly = geo[iso]["label"]
@@ -285,6 +285,23 @@ def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
                 d.ellipse((px - r, py - r, px + r, py + r), outline=(255, 255, 255), width=6)
         elif t >= S1:
             text(d, (W // 2, VIEW_Y0 + VIEW_H + 70), f"TODAY · +{len(new)} new", font(54), fill=LIT)
+            # «ON THE MAP»: флаг + ник каждого, кто попал на карту в этом ролике
+            roll = [(c, u) for c in new for u in lit_by.get(c, [])[:3]][:18]
+            if roll:
+                a = ease_out((t - S1 - 0.5) / 0.5)
+                y0 = VIEW_Y0 + 590
+                text(d, (W // 2, y0), "ON THE MAP", font(44), fill=mix_color((10, 14, 30), LIT, a))
+                cols = 2 if len(roll) <= 10 else 3
+                cw = (W - 80) // cols
+                rh = min(78, (VIEW_H - 650) // ((len(roll) + cols - 1) // cols))
+                for j, (c, u) in enumerate(roll):
+                    if t < S1 + 0.5 + j * 0.06:
+                        continue
+                    x = 40 + (j % cols) * cw
+                    y = y0 + 50 + (j // cols) * rh
+                    fl = flag_box(c.lower(), 60, 40, 0.1)
+                    im.paste(fl, (x + 8, y + (rh - fl.height) // 2), fl)
+                    text(d, (x + 80, y + rh // 2), "@" + u, _fit("@" + u, 32 if cols == 2 else 26, cw - 95, True), anchor="lm")
         if final_t <= t < end:
             _draw_confetti(d, conf, t - final_t, W // 2, VIEW_Y0 + VIEW_H // 2)
         if t < TITLE_CARD:
