@@ -217,7 +217,7 @@ def make_map_item(st):
     from worldmap import render_lightup, shapes, GOAL
     geo = shapes()
     new_all = [c for c in st["lit"] if c not in st["lit_shown"]]
-    anim = [c for c in new_all if c in geo][:12]
+    anim = [c for c in new_all if c in geo][:8]
     total = len(st["lit"])
     before = [c for c in st["lit"] if c not in anim and c in geo]
     by = {c: st["lit"][c]["by"] for c in st["lit"]}

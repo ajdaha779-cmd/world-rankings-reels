@@ -1,0 +1,29 @@
+name: Preview
+
+# Пример нового формата с голосом — чтобы показать пользователю до запуска (на старом Mac голоса нет).
+on:
+  workflow_dispatch:
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - uses: actions/cache@v4
+        with:
+          path: data/tts
+          key: kokoro-v1.0-int8
+      - run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -r requirements.txt
+      - run: python tools/preview_map.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: preview
+          path: preview/
+          retention-days: 7
