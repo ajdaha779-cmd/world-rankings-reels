@@ -11,3 +11,4 @@ data/*.log
 .DS_Store
 data/tts/
 data/youtube_key.txt
+data/youtube_oauth.json
