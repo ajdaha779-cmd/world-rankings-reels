@@ -6,7 +6,7 @@ import os
 import random
 from catalog import TOPICS, GROUPS, RACE_TOPICS, RACE_GROUPS, DUEL_PAIRS, COUNTRIES, flag_emoji
 from data import ranking, race_frames, indicator, leader_changes
-from duel import duel_rounds
+from duel import duel_rounds, flip_rounds, FLIPS
 
 ROTATION = ["race", "duel", "race", "ranking", "race"]  # 04.11: гонка после правок — 45% пролистываний и 47% досмотра, лучший формат
 YOUTUBE = os.environ.get("REELS_PLATFORM") == "youtube"
@@ -177,11 +177,33 @@ def make_duel(a, b, by=None):
     credit = f"\nRequested by {' '.join('@' + u for u in by[:5])} 🙌\n" if by else ""
     return dict(kind="duel", key=f"duel:{'-'.join(sorted((a, b)))}", topic="duel", slug=f"duel_{a.lower()}_{b.lower()}",
                 title=head,
-                description=(f"{na} vs {nb} — 5 rounds of real data:\n{lines}\n{credit}"
+                description=(f"{na} vs {nb} — {len(rounds)} rounds of real data:\n{lines}\n{credit}"
                              f"Source: World Bank Open Data.\n\n{ask}\n\n{tags}"),
                 short=f"{head}{credit} {ask}\n\n{tags}",
                 render=lambda out, seed, accent: render_duel(a, b, rounds, accent, out, seed=seed,
                                                              pill="RIVALS · WHO WINS?" if rival else "WHO WINS?"))
+
+
+def make_flip(a, b):
+    """«Plot twist»: A был богаче B, а теперь B богаче в разы. None — если данных нет или твиста нет."""
+    from duel import render_duel
+    rounds = flip_rounds(a, b)
+    if not rounds:
+        return None
+    early, late = (a, b) if rounds[0][4] == 0 else (b, a)
+    ne, nl = COUNTRIES[early], COUNTRIES[late]
+    y0, y1 = rounds[0][0][3:], rounds[-1][0][3:]
+    fl = f"{flag_emoji(early)}➡️{flag_emoji(late)}"
+    head = f"{ne} was richer than {nl} in {y0}. Then this happened 😳 {fl}"
+    ask = "Which 2 countries should we compare next? Comment below 👇"
+    tags = _tags(f"{ne.replace(' ', '').lower()} {nl.replace(' ', '').lower()} history economy plottwist")
+    return dict(kind="duel", key=f"flip:{'-'.join(sorted((a, b)))}", topic="flip", slug=f"flip_{a.lower()}_{b.lower()}",
+                title=head,
+                description=(f"GDP per person: {ne} vs {nl} in {y0}, 1990 and {y1}.\n"
+                             f"Source: World Bank Open Data (current US$).\n\n{ask}\n\n{tags}"),
+                short=f"{head} {ask}\n\n{tags}",
+                render=lambda out, seed, accent: render_duel(a, b, rounds, accent, out, seed=seed,
+                                                             pill="PLOT TWIST", flip=True))
 
 
 # страны, про которые спорит весь мир: дуэль малоизвестных пар (Болгария–Румыния) держит хуже — 60% пролистываний
@@ -195,6 +217,14 @@ def _duel_items(used, rng, avoid):
     rivals = list(RIVALS)
     rng.shuffle(rivals)
     pairs = rivals + pairs  # а ещё раньше — соперники
+    flips = [p for p in FLIPS if f"flip:{'-'.join(sorted(p))}" not in used]
+    if flips and rng.random() < 0.5:  # 12.11: «plot twist» — каждая вторая дуэль, пока не кончатся пары
+        a, b = flips[0]
+        item = make_flip(a, b)
+        if item:
+            yield item
+        else:
+            used.add(f"flip:{'-'.join(sorted((a, b)))}")
     for a, b in pairs:
         if rng.random() < 0.5:
             a, b = b, a

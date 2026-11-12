@@ -1,8 +1,8 @@
-"""Формат «дуэль»: две страны, 5 раундов по реальным показателям, счёт и победитель."""
+"""Формат «дуэль»: две страны, 3 раунда по реальным показателям, счёт и победитель."""
 import itertools, random
 from engine import *
 from catalog import FMT, COUNTRIES, DUEL_STATS
-from data import indicator
+from data import indicator, history
 from render import _fit, _living_bg, _confetti, _draw_confetti, title_card, TITLE_CARD, progress
 from sound import duel_track
 import tts
@@ -64,8 +64,28 @@ def neutral_rounds(a, b):
     return rows[:ROUNDS] if len(rows) >= ROUNDS else None
 
 
-def render_duel(a, b, rounds, accent, out_path, seed=0, pill="WHO WINS?", neutral=False):
-    """neutral — пары с идущим конфликтом: «X и Y в цифрах», без счёта, победителя и мечей."""
+# «Plot twist» (12.11): пары, которые за 60 лет поменялись местами по богатству — раньше A богаче B, теперь наоборот
+FLIPS = [("VE", "KR"), ("PH", "KR"), ("VE", "ES"), ("GH", "CN"), ("ZA", "KR"), ("BR", "KR"), ("VE", "CN"),
+         ("ZA", "ES"), ("VE", "JP"), ("NG", "ID"), ("EG", "CN"), ("CO", "KR"), ("VE", "SA"), ("ZA", "PT"),
+         ("VE", "MX"), ("VE", "AR"), ("PH", "CN"), ("IR", "KR")]
+
+
+def flip_rounds(a, b, mid=1990):
+    """[(подпись, формат, A, B, кто богаче)] за первый год, mid и последний — или None, если твиста нет."""
+    h = history("NY.GDP.PCAP.CD")
+    ha, hb = h.get(a, {}), h.get(b, {})
+    ys = sorted(y for y in ha if y in hb)
+    if not ys or ys[0] > 1970 or mid not in ys:
+        return None
+    rows = [(f"In {y}", "money", ha[y], hb[y], 0 if ha[y] > hb[y] else 1) for y in (ys[0], mid, ys[-1])]
+    if rows[0][4] == rows[-1][4]:
+        return None
+    return rows
+
+
+def render_duel(a, b, rounds, accent, out_path, seed=0, pill="WHO WINS?", neutral=False, flip=False):
+    """neutral — пары с идущим конфликтом: «X и Y в цифрах», без счёта, победителя и мечей.
+    flip — «plot twist»: кто был богаче тогда и кто сейчас (раунды — годы, без счёта)."""
     names = (COUNTRIES[a], COUNTRIES[b])
     final_t = INTRO + ROUNDS * ROUND_LEN + 0.9
     card_end = final_t + 2.3
@@ -83,6 +103,10 @@ def render_duel(a, b, rounds, accent, out_path, seed=0, pill="WHO WINS?", neutra
         wins_at.append(INTRO + i * ROUND_LEN + WIN_AT)
     total = [sum(1 for r in rounds if r[4] == s) for s in (0, 1)]
     winner = 0 if total[0] > total[1] else 1 if total[1] > total[0] else None
+    if flip:
+        winner = rounds[-1][4]
+        k0 = max(rounds[0][2], rounds[0][3]) / max(min(rounds[0][2], rounds[0][3]), 1)
+        k1 = max(rounds[-1][2], rounds[-1][3]) / max(min(rounds[-1][2], rounds[-1][3]), 1)
     f_name = [_fit(n, 50, 380, True) for n in names]
     f_lbl = font(60)
     f_val = font(64)
@@ -107,20 +131,21 @@ def render_duel(a, b, rounds, accent, out_path, seed=0, pill="WHO WINS?", neutra
             text(d, (cx, 350), names[side], f_name[side])
             bump = max((1 - (t - w) / 0.4 for i, w in enumerate(wins_at) if rounds[i][4] == side and 0 <= t - w < 0.4),
                        default=0)
-            if not neutral:
+            if not neutral and not flip:
                 text(d, (cx, 480), str(score[side]), font(int(110 * (1 + 0.35 * bump))),
                      fill=mix_color((255, 255, 255), accent, bump))
         d.ellipse((W // 2 - 70, 130, W // 2 + 70, 270), fill=(15, 15, 22), outline=accent, width=6)
         text(d, (W // 2, 203), "&" if neutral else "VS", font(56), fill=accent)
-        if not neutral:
+        if not neutral and not flip:
             text(d, (W // 2, 480), ":", f_score, fill=(150, 150, 170))
 
         if t < INTRO:
             gl = 0.5 + 0.5 * math.sin(t * 6)
-            text(d, (W // 2, 900), "IN NUMBERS" if neutral else "WHO WINS?", font(96),
-                 fill=mix_color((255, 255, 255), accent, gl))
-            text(d, (W // 2, 1000), "5 facts · World Bank data" if neutral else "5 rounds · real data", font(40, False),
-                 fill=(170, 175, 200))
+            big = "IN NUMBERS" if neutral else "WHO WAS RICHER?" if flip else "WHO WINS?"
+            text(d, (W // 2, 900), big, _fit(big, 96, W - 80, True), fill=mix_color((255, 255, 255), accent, gl))
+            small = (f"{ROUNDS} facts · World Bank data" if neutral else
+                     f"{rounds[0][0][3:]} → {rounds[-1][0][3:]} · real data" if flip else f"{ROUNDS} rounds · real data")
+            text(d, (W // 2, 1000), small, font(40, False), fill=(170, 175, 200))
         elif t < final_t:
             i = min(int((t - INTRO) // ROUND_LEN), ROUNDS - 1)
             lt = t - INTRO - i * ROUND_LEN
@@ -128,7 +153,9 @@ def render_duel(a, b, rounds, accent, out_path, seed=0, pill="WHO WINS?", neutra
             fmt = FMT[fmt_id]
             a_in = ease_out(lt / 0.3)
             oyc = int((1 - a_in) * 120)
-            pill = f"FACT {i + 1}/{ROUNDS}" if neutral else f"ROUND {i + 1}/{ROUNDS}"
+            pill = f"FACT {i + 1}/{ROUNDS}" if neutral else label.upper() if flip else f"ROUND {i + 1}/{ROUNDS}"
+            if flip:
+                label = "GDP per person"
             pw = font(34).getlength(pill) + 60
             d.rounded_rectangle((W / 2 - pw / 2, 640 + oyc, W / 2 + pw / 2, 700 + oyc), 30, fill=accent)
             text(d, (W // 2, 670 + oyc), pill, font(34), fill=(20, 20, 30))
@@ -145,7 +172,12 @@ def render_duel(a, b, rounds, accent, out_path, seed=0, pill="WHO WINS?", neutra
                 cx = 300 if side == 0 else W - 300
                 base = 1560 + oyc
                 d.rounded_rectangle((cx - 130, base - max(bh, 12), cx + 130, base), 26, fill=col)
-                if won:
+                if won and flip:
+                    g = int(5 + 3 * math.sin((lt - WIN_AT) * 9))
+                    d.rounded_rectangle((cx - 136, base - max(bh, 12) - 6, cx + 136, base + 6), 30, outline=accent,
+                                        width=g)
+                    text(d, (cx, base + 60), "RICHER", font(40), fill=accent)
+                elif won:
                     g = int(5 + 3 * math.sin((lt - WIN_AT) * 9))
                     d.rounded_rectangle((cx - 136, base - max(bh, 12) - 6, cx + 136, base + 6), 30, outline=accent,
                                         width=g)
@@ -181,7 +213,15 @@ def render_duel(a, b, rounds, accent, out_path, seed=0, pill="WHO WINS?", neutra
             _draw_confetti(d, conf, t - final_t, W // 2, 1100)
             cy = int(H + 500 - a_in * (H // 2 + 400) - a_out * (H // 2 + 600))
             d.rounded_rectangle((80, cy - 380, W - 80, cy + 380), 50, fill=(20, 22, 34), outline=accent, width=8)
-            if winner is None:
+            if flip:
+                text(d, (W // 2, cy - 280), "RICHER TODAY", font(76), fill=accent)
+                fl = flag((a, b)[winner].lower(), 240, 0.08)
+                fy = cy - 75 - fl.height // 2
+                d.rounded_rectangle((W // 2 - fl.width // 2 - 10, fy - 10, W // 2 + fl.width // 2 + 10,
+                                     fy + fl.height + 10), 26, fill=(255, 255, 255))
+                im.paste(fl, (W // 2 - fl.width // 2, fy), fl)
+                text(d, (W // 2, cy + 140), names[winner], _fit(names[winner], 96, W - 240, True))
+            elif winner is None:
                 text(d, (W // 2, cy - 250), "IT'S A", font(70), fill=(200, 200, 215))
                 text(d, (W // 2, cy - 140), "DRAW!", font(120), fill=accent)
                 for side in (0, 1):
@@ -196,7 +236,11 @@ def render_duel(a, b, rounds, accent, out_path, seed=0, pill="WHO WINS?", neutra
                                      fy + fl.height + 10), 26, fill=(255, 255, 255))
                 im.paste(fl, (W // 2 - fl.width // 2, fy), fl)
                 text(d, (W // 2, cy + 140), names[winner], _fit(names[winner], 96, W - 240, True))
-            text(d, (W // 2, cy + 280), f"{total[0]} : {total[1]}", font(90), fill=(255, 255, 255))
+            if flip:
+                tw = f"{k1:.0f}× richer" if k1 >= 2 else f"{k1:.1f}× richer"
+                text(d, (W // 2, cy + 270), tw, font(80), fill=(255, 255, 255))
+            else:
+                text(d, (W // 2, cy + 280), f"{total[0]} : {total[1]}", font(90), fill=(255, 255, 255))
 
         if t < final_t:
             progress(d, t / final_t, 560, accent)
@@ -210,7 +254,8 @@ def render_duel(a, b, rounds, accent, out_path, seed=0, pill="WHO WINS?", neutra
             a2 = ease_back((t - card_end - 0.35) / 0.45)
             cy = int(H + 200 - a2 * (H // 2 + 200))
             d.rounded_rectangle((60, cy - 200, W - 60, cy + 200), 40, fill=(255, 255, 255))
-            lines_ = ("Peace to both", "countries 🕊") if neutral else ("Who should", "fight next?")
+            lines_ = (("Peace to both", "countries 🕊") if neutral else ("Which 2 countries", "should we compare?") if flip
+                      else ("Who should", "fight next?"))
             text(d, (W // 2, cy - 95), lines_[0], font(66), fill=(15, 15, 25))
             text(d, (W // 2, cy - 15), lines_[1].replace(" 🕊", ""), font(66), fill=(15, 15, 25))
             text(d, (W // 2, cy + 75), "Please keep comments respectful" if neutral else "Comment 2 countries",
@@ -223,8 +268,15 @@ def render_duel(a, b, rounds, accent, out_path, seed=0, pill="WHO WINS?", neutra
         plan = [(0.15, f"{names[0]} and {names[1]}, in numbers.")]
         plan += [(INTRO + i * ROUND_LEN + 0.15, f"{r[0]}.") for i, r in enumerate(rounds)]
         plan += [(final_t + 0.2, "Data only. No winners here.")]
+    elif flip:
+        early, late = names[rounds[0][4]], names[winner]
+        plan = [(0.15, f"In {rounds[0][0][3:]}, {early} was richer than {late}. Then this happened.")]
+        plan += [(INTRO + i * ROUND_LEN + 0.15, f"{r[0]}.") for i, r in enumerate(rounds[1:], 1)]
+        plan += [(final_t - 0.9, "And today..."),
+                 (final_t + 0.05, f"{late} is {k1:.0f} times richer!" if k1 >= 2 else f"{late} is richer!"),
+                 (card_end + 0.5, "Comment two countries. We compare them next!")]
     else:
-        plan = [(0.15, f"{names[0]} versus {names[1]}. Five rounds. Who wins?")]
+        plan = [(0.15, f"{names[0]} versus {names[1]}. {['', 'One', 'Two', 'Three', 'Four', 'Five'][ROUNDS]} rounds. Who wins?")]
         plan += [(INTRO + i * ROUND_LEN + 0.15, f"Round {i + 1}. {r[0]}.") for i, r in enumerate(rounds)]
         plan += [(final_t - 0.9, "And the winner is..."),
                  (final_t + 0.05, f"{names[winner]}!" if winner is not None else "It's a draw!"),
