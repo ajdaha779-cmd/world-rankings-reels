@@ -220,9 +220,30 @@
    }
   }
  },
- "lit_shown": [],
- "fans_shown": [],
- "map_at": null,
+ "lit_shown": [
+  "AZ",
+  "JO",
+  "RU",
+  "IR",
+  "FR",
+  "GB",
+  "AR",
+  "MN",
+  "KR"
+ ],
+ "fans_shown": [
+  "AZ:sardvr",
+  "JO:omarhammad2016",
+  "RU:sardvr",
+  "IR:saro0onh18",
+  "IR:ay_han8136",
+  "FR:saro0onh18",
+  "GB:ay_han8136",
+  "AR:ay_han8136",
+  "MN:sumya__bn910",
+  "KR:sumya__bn910"
+ ],
+ "map_at": "2026-11-13T20:38:05.326641Z",
  "notified": [
   "RU:zoktay_16_",
   "IR:ay_han8136",
