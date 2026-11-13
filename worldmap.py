@@ -15,7 +15,7 @@ GEO = os.path.join(BASE, "assets", "map", "ne_110m_countries.geojson")
 MW, MH = 3240, 1530  # карта в равнопромежуточной проекции, широты 84…-58 (без Антарктиды)
 LAT0, LAT1 = 84.0, -58.0
 GOAL = 195
-MAX_DUR = 57.0  # Instagram API: Reels не длиннее 60 с
+MAX_DUR = 33.0  # 13.11: Instagram API отклоняет загрузку длиннее ~35 с (проверено: 34 с — ок, 38 с — ProcessingFailed)
 VIEW_Y0, VIEW_H = 430, 1150  # где в кадре карта
 OCEAN, LAND, BORDER = (10, 14, 30), (38, 46, 74), (60, 70, 105)
 LIT, LIT_EDGE = (255, 205, 60), (255, 240, 170)
@@ -164,8 +164,7 @@ def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
     def length(a, fallback):
         return len(a) / SR if a is not None else fallback
 
-    intro_txt = ("This map lights up from your comments. Comment your country's flag, and the first person "
-                 "to do it gets their name on that country. Forever." if not before else
+    intro_txt = ("Comment your country's flag and it lights up on this map, with your name on it." if not before else
                  f"Yesterday, {n_before} countries were lit. Comment your flag to light yours. Here's who joined the map!")
     intro = clip(intro_txt)
     S0 = 0.3 + length(intro, 4.0) + 0.3  # пока диктор объясняет — тёмная карта и три шага на экране
@@ -182,7 +181,7 @@ def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
         a = clip(txt)
         clips.append((a, max(1.2 if short else 1.6, 0.45 + length(a, 1.0) + 0.2)))
     outro = clip(f"{total} countries lit. {GOAL - total} still dark.")
-    cta = clip("Is your country still dark? Comment its flag, and your name appears on the map in the next video!")
+    cta = clip("Is your country still dark? Comment its flag!")
     tail = 0.4 + max(2.4, length(outro, 2.0) + 0.4) + max(3.0, length(cta, 3.0) + 0.6)
     # 13.11: Instagram (API) не принимает Reels длиннее 60 с — лишние страны сразу горят и попадают в список «ON THE MAP»
     keep = len(new)
