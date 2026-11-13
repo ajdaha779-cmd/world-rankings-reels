@@ -79,7 +79,12 @@ def main():
             fans.collect(conf, fan, history, me.get("username"))
             render.SHOUTS = fans.shoutouts(fan, 4)
             if args.mode == "map":  # карта — отдельный запуск раз в сутки, сверх основных (due.py)
-                item = fans.make_map_item(fan) if fans.map_due(fan) else None
+                recent = instagram.http("GET", f"{conf['api']}/{conf['user_id']}/media",
+                                        {"fields": "caption,timestamp", "limit": 5, "access_token": conf["token"]}).get("data", [])
+                fresh = any("Light Up the World" in (r.get("caption") or "") and
+                            datetime.datetime.utcnow() - datetime.datetime.strptime(r["timestamp"][:19], "%Y-%m-%dT%H:%M:%S")
+                            < datetime.timedelta(hours=20) for r in recent)  # 13.11: защита от дубля карты
+                item = fans.make_map_item(fan) if fans.map_due(fan) and not fresh else None
                 if not item:
                     sys.exit("карта: нет новых людей или уже выходила сегодня")
         except Exception as e:
