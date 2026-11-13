@@ -15,6 +15,7 @@ GEO = os.path.join(BASE, "assets", "map", "ne_110m_countries.geojson")
 MW, MH = 3240, 1530  # карта в равнопромежуточной проекции, широты 84…-58 (без Антарктиды)
 LAT0, LAT1 = 84.0, -58.0
 GOAL = 195
+MAX_DUR = 57.0  # Instagram API: Reels не длиннее 60 с
 VIEW_Y0, VIEW_H = 430, 1150  # где в кадре карта
 OCEAN, LAND, BORDER = (10, 14, 30), (38, 46, 74), (60, 70, 105)
 LIT, LIT_EDGE = (255, 205, 60), (255, 240, 170)
@@ -168,8 +169,7 @@ def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
                  f"Yesterday, {n_before} countries were lit. Comment your flag to light yours. Here's who joined the map!")
     intro = clip(intro_txt)
     S0 = 0.3 + length(intro, 4.0) + 0.3  # пока диктор объясняет — тёмная карта и три шага на экране
-    lines, seg = [], []
-    t = S0
+    clips = []
     for i, iso in enumerate(new):
         by = lit_by.get(iso)
         cn = COUNTRIES.get(iso, iso)
@@ -180,19 +180,33 @@ def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
         else:
             txt = rnd.choice(LINES).format(nick=_say_who(by), country=cn)
         a = clip(txt)
-        L = max(1.2 if short else 1.6, 0.45 + length(a, 1.0) + 0.2)
+        clips.append((a, max(1.2 if short else 1.6, 0.45 + length(a, 1.0) + 0.2)))
+    outro = clip(f"{total} countries lit. {GOAL - total} still dark.")
+    cta = clip("Is your country still dark? Comment its flag, and your name appears on the map in the next video!")
+    tail = 0.4 + max(2.4, length(outro, 2.0) + 0.4) + max(3.0, length(cta, 3.0) + 0.6)
+    # 13.11: Instagram (API) не принимает Reels длиннее 60 с — лишние страны сразу горят и попадают в список «ON THE MAP»
+    keep = len(new)
+    while keep > 1 and S0 + sum(L for _, L in clips[:keep]) + tail > MAX_DUR:
+        keep -= 1
+    extra = new[keep:]  # загорятся все разом в финале
+    new, clips = new[:keep], clips[:keep]
+    before = list(before)
+    n_before = total - len(new) - len(extra)
+    lines, seg = [], []
+    t = S0
+    for a, L in clips:
         seg.append((t, L))
         lines.append((t + 0.45, a))
         t += L
     S1 = t
     final_t = S1 + 0.4
-    outro = clip(f"{total} countries lit. {GOAL - total} still dark.")
     end = final_t + max(2.4, length(outro, 2.0) + 0.4)
-    cta = clip("Is your country still dark? Comment its flag, and your name appears on the map in the next video!")
     dur = end + max(3.0, length(cta, 3.0) + 0.6)
     global LAST
     LAST = {"dur": dur, "moments": [(0, "титул + правила"), (S0, "новые страны"), (final_t, "вся карта"), (end, "призыв")]}
     stages = [_map(set(before) | set(new[:k])) for k in range(len(new) + 1)]
+    if extra:
+        stages.append(_map(set(before) | set(new) | set(extra)))
     fit = W / MW
     world = (MW / 2, (VIEW_H / 2 - 30) / fit, fit)  # общий план: карта у верхнего края, ниже — список участников
 
@@ -233,7 +247,8 @@ def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
         i, lt = where(t)
         k = 0 if t < S0 else len(new) if t >= S1 else i + (1 if lt >= 0.45 else 0)  # загорается, когда камера долетела
         cx, cy, s = cam_at(t)
-        view, box = _cam_view(stages[k], cx, cy, s)
+        fin = bool(extra) and t >= S1  # финал: загораются и страны, которые не уместились в ролик
+        view, box = _cam_view(stages[-1] if fin else stages[k], cx, cy, s)
         im.paste(view, (0, VIEW_Y0))
         d = ImageDraw.Draw(im)
         # ники прямо на странах: кто её зажёг
@@ -247,7 +262,7 @@ def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
             py = VIEW_Y0 + (ly - box[1]) / (box[3] - box[1]) * VIEW_H
             if 0 <= px <= W and VIEW_Y0 + 20 <= py <= VIEW_Y0 + VIEW_H - 20:
                 _tag(im, d, px, py, _who(lit_by[iso]) if iso == cur else "@" + lit_by[iso][0], tsize, iso == cur)
-        lit_now = n_before + k
+        lit_now = n_before + k + (len(extra) if fin else 0)
         text(d, (W // 2, 140), "LIGHT UP", font(96))
         text(d, (W // 2, 240), "THE WORLD", font(96), fill=LIT)
         cnt = f"{lit_now} / {GOAL} countries lit"
@@ -284,9 +299,9 @@ def render_lightup(before, new, lit_by, total, accent, out_path, seed=0):
                 r = int(40 + 260 * (lt - 0.45) / 0.3)
                 d.ellipse((px - r, py - r, px + r, py + r), outline=(255, 255, 255), width=6)
         elif t >= S1:
-            text(d, (W // 2, VIEW_Y0 + VIEW_H + 70), f"TODAY · +{len(new)} new", font(54), fill=LIT)
+            text(d, (W // 2, VIEW_Y0 + VIEW_H + 70), f"TODAY · +{len(new) + len(extra)} new", font(54), fill=LIT)
             # «ON THE MAP»: флаг + ник каждого, кто попал на карту в этом ролике
-            roll = [(c, u) for c in new for u in lit_by.get(c, [])[:3]][:18]
+            roll = [(c, u) for c in new + extra for u in lit_by.get(c, [])[:3]][:18]
             if roll:
                 a = ease_out((t - S1 - 0.5) / 0.5)
                 y0 = VIEW_Y0 + 590
