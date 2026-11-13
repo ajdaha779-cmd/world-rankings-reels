@@ -63,7 +63,7 @@ def collect(c, st, history, me=None):
                 e.setdefault("cids", {})
                 if u not in e["fans"]:
                     e["fans"].append(u)
-                    e["cids"][u] = cm["id"]
+                e["cids"].setdefault(u, cm["id"])  # и для записанных старой версией — чтобы было кому ответить
             if n_back >= 15 or (cm.get("timestamp") or "9")[:10] < start.isoformat():
                 continue  # очки Fan Table — только за эту неделю и под последними роликами
             for iso in requests_q.countries_in(cm.get("text", ""))[:2]:

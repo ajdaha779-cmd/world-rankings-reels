@@ -132,7 +132,9 @@
    "fans": [
     "uzanenkosi16"
    ],
-   "cids": {}
+   "cids": {
+    "uzanenkosi16": "18425352061156683"
+   }
   },
   "AZ": {
    "by": "sardvr",
@@ -140,7 +142,9 @@
    "fans": [
     "sardvr"
    ],
-   "cids": {}
+   "cids": {
+    "sardvr": "18376735582301283"
+   }
   },
   "IN": {
    "by": "anurag.kairi",
@@ -148,7 +152,9 @@
    "fans": [
     "anurag.kairi"
    ],
-   "cids": {}
+   "cids": {
+    "anurag.kairi": "18085984466523817"
+   }
   },
   "JO": {
    "by": "omarhammad2016",
@@ -156,7 +162,9 @@
    "fans": [
     "omarhammad2016"
    ],
-   "cids": {}
+   "cids": {
+    "omarhammad2016": "18097660925161870"
+   }
   },
   "RU": {
    "by": "sardvr",
@@ -166,7 +174,8 @@
     "zoktay_16_"
    ],
    "cids": {
-    "zoktay_16_": "18138488986635017"
+    "zoktay_16_": "18138488986635017",
+    "sardvr": "17880164829632521"
    }
   },
   "MA": {
@@ -175,7 +184,9 @@
    "fans": [
     "mgh_md13"
    ],
-   "cids": {}
+   "cids": {
+    "mgh_md13": "18126618400721490"
+   }
   },
   "IR": {
    "by": "saro0onh18",
@@ -185,7 +196,8 @@
     "ay_han8136"
    ],
    "cids": {
-    "ay_han8136": "18095233871695835"
+    "ay_han8136": "18095233871695835",
+    "saro0onh18": "18176088733397388"
    }
   },
   "FR": {
@@ -194,7 +206,9 @@
    "fans": [
     "saro0onh18"
    ],
-   "cids": {}
+   "cids": {
+    "saro0onh18": "18176088733397388"
+   }
   },
   "GB": {
    "by": "ay_han8136",
@@ -202,7 +216,9 @@
    "fans": [
     "ay_han8136"
    ],
-   "cids": {}
+   "cids": {
+    "ay_han8136": "17908626210668454"
+   }
   },
   "AR": {
    "by": "ay_han8136",
@@ -210,7 +226,9 @@
    "fans": [
     "ay_han8136"
    ],
-   "cids": {}
+   "cids": {
+    "ay_han8136": "17908626210668454"
+   }
   },
   "MN": {
    "by": "sumya__bn910",
@@ -218,7 +236,9 @@
    "fans": [
     "sumya__bn910"
    ],
-   "cids": {}
+   "cids": {
+    "sumya__bn910": "18099526211445963"
+   }
   },
   "KR": {
    "by": "sumya__bn910",
@@ -226,7 +246,9 @@
    "fans": [
     "sumya__bn910"
    ],
-   "cids": {}
+   "cids": {
+    "sumya__bn910": "18099526211445963"
+   }
   }
  },
  "lit_shown": [
@@ -262,6 +284,18 @@
  "map_at": "2026-11-13T20:10:43.342842Z",
  "notified": [
   "RU:zoktay_16_",
-  "IR:ay_han8136"
+  "IR:ay_han8136",
+  "ZW:uzanenkosi16",
+  "AZ:sardvr",
+  "IN:anurag.kairi",
+  "JO:omarhammad2016",
+  "RU:sardvr",
+  "MA:mgh_md13",
+  "IR:saro0onh18",
+  "FR:saro0onh18",
+  "GB:ay_han8136",
+  "AR:ay_han8136",
+  "MN:sumya__bn910",
+  "KR:sumya__bn910"
  ]
 }
