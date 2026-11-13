@@ -13,6 +13,9 @@ on:
         description: "Только сделать ролик, не публиковать"
         type: boolean
         default: false
+      mode:
+        description: "main — обычный ролик, map — ролик-карта"
+        default: "main"
 
 permissions:
   contents: write
@@ -36,7 +39,7 @@ jobs:
       - name: Пора ли публиковать?
         id: due
         run: |
-          if [ "${{ inputs.force }}" = "true" ] || [ "${{ inputs.dry_run }}" = "true" ]; then echo "due=true" >> "$GITHUB_OUTPUT"; echo "sleep=0" >> "$GITHUB_OUTPUT"; echo "mode=main" >> "$GITHUB_OUTPUT"; echo "ручной запуск"; else python due.py; fi
+          if [ "${{ inputs.force }}" = "true" ] || [ "${{ inputs.dry_run }}" = "true" ]; then echo "due=true" >> "$GITHUB_OUTPUT"; echo "sleep=0" >> "$GITHUB_OUTPUT"; echo "mode=${{ inputs.mode || 'main' }}" >> "$GITHUB_OUTPUT"; echo "ручной запуск"; else python due.py; fi
 
       - name: Ответить зрителям (каждый час, даже без нового ролика)
         if: steps.due.outputs.due != 'true'

@@ -95,7 +95,15 @@ def main():
         return
 
     m = {"path": out, "key": item["key"], "title": item["title"], "caption_tiktok_instagram": item["short"]}
-    media_id = instagram.publish(conf, m)
+    try:
+        media_id = instagram.publish(conf, m)
+    except RuntimeError as e:
+        if item["kind"] != "map" or "ProcessingFailed" not in str(e):
+            raise
+        # 13.11: Instagram отклонил карту с @отметками в подписи — повторяем без отметок (люди узнают из ответов бота)
+        print(f"повтор без отметок: {str(e)[:120]}")
+        m["caption_tiktok_instagram"] = "\n".join(l for l in item["short"].splitlines() if "@" not in l)
+        media_id = instagram.publish(conf, m)
     story_id = None
     try:
         story_id = instagram.publish_story(conf, out)
