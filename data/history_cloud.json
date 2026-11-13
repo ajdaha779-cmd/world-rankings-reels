@@ -2084,50 +2084,5 @@
    "хук сработал — оставить такой тип начала",
    "уходят на «раунд 2» — этот участок затянут, ускорить или убрать"
   ]
- },
- {
-  "kind": "map",
-  "topic": "map",
-  "key": "map:2026-11-13",
-  "title": "Light Up the World 🌍 12/195 countries lit — is yours? Comment your flag 👇",
-  "description": "Every comment lights up a country. Newly lit: 🇿🇼 Zimbabwe, 🇦🇿 Azerbaijan, 🇮🇳 India, 🇯🇴 Jordan, 🇷🇺 Russia, 🇲🇦 Morocco, 🇮🇷 Iran, 🇫🇷 France, 🇬🇧 UK, 🇦🇷 Argentina, 🇲🇳 Mongolia, 🇰🇷 South Korea.\nYou're on the map: @uzanenkosi16 @sardvr @anurag.kairi @omarhammad2016 @zoktay_16_ @mgh_md13 @saro0onh18 @ay_han8136 @sumya__bn910 🌍\n\nIs YOUR country dark? Comment its flag — your name stays on it forever 🌍\n\n#shorts #countries #worldmap #geography #challenge",
-  "media_id": "18075092432785716",
-  "story_id": "17979229899141235",
-  "requested": false,
-  "dur": 29.835918367346938,
-  "moments": [
-   [
-    0,
-    "титул + правила"
-   ],
-   [
-    4.845328798185941,
-    "новые страны"
-   ],
-   [
-    22.606598639455783,
-    "вся карта"
-   ],
-   [
-    26.355918367346938,
-    "призыв"
-   ]
-  ],
-  "at": "2026-11-13T20:10:47.022881Z",
-  "stats": {
-   "views": 0,
-   "reach": 0,
-   "likes": 0,
-   "saved": 0,
-   "shares": 0,
-   "comments": 1,
-   "watch": 0.0,
-   "skip": 0
-  },
-  "stats_at": "2026-11-13T20:11:28.629442Z",
-  "analysis": [
-   "хук сработал — оставить такой тип начала",
-   "уходят на «титул + правила» — этот участок затянут, ускорить или убрать"
-  ]
  }
 ]

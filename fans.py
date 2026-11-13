@@ -21,7 +21,7 @@ def _season(d=None):
 def load():
     st = json.load(open(STATE)) if os.path.exists(STATE) else {}
     st.setdefault("season", _season())
-    for k, v in (("points", {}), ("fans", {}), ("counted", []), ("recent", []), ("past", []), ("lit", {}), ("lit_shown", [])):
+    for k, v in (("points", {}), ("fans", {}), ("counted", []), ("recent", []), ("past", []), ("lit", {}), ("lit_shown", []), ("blocked", []), ("mention_ok", [])):
         st.setdefault(k, v)
     if st["season"] != _season():  # новая неделя: чемпион прошлой и сброс
         if st["points"]:
@@ -56,6 +56,8 @@ def collect(c, st, history, me=None):
         for cm in sorted(r.get("data", []), key=lambda x: x.get("timestamp", "")):
             u = cm.get("username")
             if not u or u == me:
+                continue
+            if u in st["blocked"]:  # 14.11: кого нельзя отметить — земля ему не достаётся
                 continue
             for iso in requests_q.countries_in(cm.get("text", ""))[:2]:  # карта: все комментарии за всё время
                 e = st["lit"].setdefault(iso, {"by": u, "at": (cm.get("timestamp") or "")[:10], "fans": [], "cids": {}})
@@ -239,15 +241,15 @@ def make_map_item(st):
     names = ", ".join(f"{flag_emoji(c)} {COUNTRIES[c]}" for c in new_all[:16])
     shown = set(st.get("fans_shown", []))
     tagged = [(c, u) for c in anim for u in by[c] if f"{c}:{u}" not in shown]
-    mentions = " ".join(dict.fromkeys("@" + u for _, u in tagged[:20]))
+    mentions = ""  # 14.11: все отметки — одним комментарием под роликом (map_comment), подпись без ников
     head = f"Light Up the World 🌍 {total}/{GOAL} countries lit — is yours? Comment your flag 👇"
     tags = "#shorts #countries #worldmap #geography #challenge"
     return dict(kind="map", key=f"map:{datetime.date.today()}", topic="map", slug=f"map_{datetime.date.today():%m%d}",
                 title=head, lit_now=list(st["lit"]), tagged=tagged,
                 first_comment="Is your country still dark? 🌑 Comment its flag 👇 The first to light it gets their name on it forever!",
-                description=f"Every comment lights up a country. Newly lit: {names}.\nYou're on the map: {mentions} 🌍\n\n"
+                description=f"Every comment lights up a country. Newly lit: {names}.\n\n"
                             f"Is YOUR country dark? Comment its flag — your name stays on it forever 🌍\n\n{tags}",
-                short=f"{head}\nNewly lit: {names}\nYou're on the map: {mentions} 🌍\n\n{tags}",
+                short=f"{head}\nNewly lit: {names}\nEveryone on the map is tagged in the comments 👇\n\n{tags}",
                 render=lambda out, seed, accent: render_lightup(before, anim, by, total, accent, out, seed=seed))
 
 
@@ -274,3 +276,46 @@ def notify(c, st, tagged):
             st["notified"].append(f"{iso}:{u}")
         except Exception as e:
             print(f"уведомление не отправлено: {str(e)[:120]}")
+
+
+def map_comment(c, media_id, tagged, st=None):
+    """Один комментарий под картой: «On the map: 🇷🇺 @a, 🇮🇷 @b …» — только тех, кого можно отметить."""
+    import instagram
+    rows = list(dict.fromkeys((iso, u) for iso, u in tagged if not st or u not in st["blocked"]))
+    for chunk in [rows[i:i + 15] for i in range(0, len(rows), 15)]:
+        msg = "🌍 On the map: " + ", ".join(f"{flag_emoji(iso)} @{u}" for iso, u in chunk) + \
+              " — your countries are lit! Who's next? Comment your flag 👇"
+        try:
+            instagram.http("POST", f"{c['api']}/{media_id}/comments", {"message": msg, "access_token": c["token"]})
+        except RuntimeError as e:
+            print(f"комментарий с отметками не отправлен: {str(e)[:160]}")
+
+
+def check_mentions(c, st, media_id):
+    """Можно ли отметить каждого нового человека с карты: пробный комментарий «@ник» под своим роликом и сразу удалить.
+    Кого Instagram не даёт отметить (запрет в его настройках) — в blocked: земля ему не достаётся (решение 14.11)."""
+    import instagram
+    users = {u for e in st["lit"].values() for u in e.get("fans", [])} - set(st["mention_ok"]) - set(st["blocked"])
+    for u in sorted(users):
+        try:
+            r = instagram.http("POST", f"{c['api']}/{media_id}/comments", {"message": f"@{u} 🌍", "access_token": c["token"]})
+            instagram.http("DELETE", f"{c['api']}/{r['id']}?access_token={c['token']}")
+            st["mention_ok"].append(u)
+        except RuntimeError as e:
+            if "упоминать" in str(e) or "mention" in str(e).lower():
+                st["blocked"].append(u)
+            else:
+                print(f"проверка отметки @{u} не удалась: {str(e)[:120]}")
+    drop_blocked(st)
+
+
+def drop_blocked(st):
+    """Убирает заблокированных из стран; страна без людей гаснет."""
+    for iso in list(st["lit"]):
+        e = st["lit"][iso]
+        e["fans"] = [u for u in e.get("fans", []) if u not in st["blocked"]]
+        if not e["fans"]:
+            del st["lit"][iso]
+        elif e.get("by") in st["blocked"]:
+            e["by"] = e["fans"][0]
+    st["lit_shown"] = [c for c in st["lit_shown"] if c in st["lit"]]

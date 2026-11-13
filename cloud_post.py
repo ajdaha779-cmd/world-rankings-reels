@@ -84,6 +84,8 @@ def main():
                 fresh = any("Light Up the World" in (r.get("caption") or "") and
                             datetime.datetime.utcnow() - datetime.datetime.strptime(r["timestamp"][:19], "%Y-%m-%dT%H:%M:%S")
                             < datetime.timedelta(hours=20) for r in recent)  # 13.11: защита от дубля карты
+                if fans.map_due(fan) and not fresh:
+                    fans.check_mentions(conf, fan, history[-1]["media_id"])  # не отмечаемых — с карты долой
                 item = fans.make_map_item(fan) if fans.map_due(fan) and not fresh else None
                 if not item:
                     sys.exit("карта: нет новых людей или уже выходила сегодня")
@@ -140,6 +142,7 @@ def main():
         fans.posted(fan, datetime.datetime.utcnow().isoformat() + "Z")
     if item["kind"] == "map":
         fans.map_posted(fan, item["lit_now"], item["tagged"], datetime.datetime.utcnow().isoformat() + "Z")
+        fans.map_comment(conf, media_id, item["tagged"], fan)
         fans.notify(conf, fan, item["tagged"])
     fans.save(fan)
     used.add(item["key"])

@@ -126,16 +126,6 @@
  ],
  "past": [],
  "lit": {
-  "ZW": {
-   "by": "uzanenkosi16",
-   "at": "2026-11-09",
-   "fans": [
-    "uzanenkosi16"
-   ],
-   "cids": {
-    "uzanenkosi16": "18425352061156683"
-   }
-  },
   "AZ": {
    "by": "sardvr",
    "at": "2026-11-10",
@@ -144,16 +134,6 @@
    ],
    "cids": {
     "sardvr": "18376735582301283"
-   }
-  },
-  "IN": {
-   "by": "anurag.kairi",
-   "at": "2026-11-10",
-   "fans": [
-    "anurag.kairi"
-   ],
-   "cids": {
-    "anurag.kairi": "18085984466523817"
    }
   },
   "JO": {
@@ -170,22 +150,11 @@
    "by": "sardvr",
    "at": "2026-11-10",
    "fans": [
-    "sardvr",
-    "zoktay_16_"
+    "sardvr"
    ],
    "cids": {
     "zoktay_16_": "18138488986635017",
     "sardvr": "17880164829632521"
-   }
-  },
-  "MA": {
-   "by": "mgh_md13",
-   "at": "2026-11-11",
-   "fans": [
-    "mgh_md13"
-   ],
-   "cids": {
-    "mgh_md13": "18126618400721490"
    }
   },
   "IR": {
@@ -251,37 +220,9 @@
    }
   }
  },
- "lit_shown": [
-  "ZW",
-  "AZ",
-  "IN",
-  "JO",
-  "RU",
-  "MA",
-  "IR",
-  "FR",
-  "GB",
-  "AR",
-  "MN",
-  "KR"
- ],
- "fans_shown": [
-  "ZW:uzanenkosi16",
-  "AZ:sardvr",
-  "IN:anurag.kairi",
-  "JO:omarhammad2016",
-  "RU:sardvr",
-  "RU:zoktay_16_",
-  "MA:mgh_md13",
-  "IR:saro0onh18",
-  "IR:ay_han8136",
-  "FR:saro0onh18",
-  "GB:ay_han8136",
-  "AR:ay_han8136",
-  "MN:sumya__bn910",
-  "KR:sumya__bn910"
- ],
- "map_at": "2026-11-13T20:10:43.342842Z",
+ "lit_shown": [],
+ "fans_shown": [],
+ "map_at": null,
  "notified": [
   "RU:zoktay_16_",
   "IR:ay_han8136",
@@ -297,5 +238,18 @@
   "AR:ay_han8136",
   "MN:sumya__bn910",
   "KR:sumya__bn910"
+ ],
+ "blocked": [
+  "anurag.kairi",
+  "mgh_md13",
+  "uzanenkosi16",
+  "zoktay_16_"
+ ],
+ "mention_ok": [
+  "ay_han8136",
+  "omarhammad2016",
+  "sardvr",
+  "saro0onh18",
+  "sumya__bn910"
  ]
 }
