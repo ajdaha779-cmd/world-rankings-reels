@@ -12,7 +12,10 @@
   "GB": 1,
   "AR": 1,
   "MN": 1,
-  "KR": 1
+  "KR": 1,
+  "TR": 1,
+  "SK": 1,
+  "DE": 1
  },
  "fans": {
   "ZW": {
@@ -51,6 +54,15 @@
   },
   "KR": {
    "sumya__bn910": 1
+  },
+  "TR": {
+   "ataberkyeni2015": 1
+  },
+  "SK": {
+   "m4c1ke": 1
+  },
+  "DE": {
+   "superwuerzi": 1
   }
  },
  "counted": [
@@ -68,7 +80,10 @@
   "18200103571386706:ay_han8136:GB",
   "18200103571386706:ay_han8136:AR",
   "18200103571386706:sumya__bn910:MN",
-  "18200103571386706:sumya__bn910:KR"
+  "18200103571386706:sumya__bn910:KR",
+  "17999743323021515:ataberkyeni2015:TR",
+  "17999743323021515:m4c1ke:SK",
+  "17999743323021515:superwuerzi:DE"
  ],
  "recent": [
   [
@@ -122,6 +137,18 @@
   [
    "sumya__bn910",
    "KR"
+  ],
+  [
+   "ataberkyeni2015",
+   "TR"
+  ],
+  [
+   "m4c1ke",
+   "SK"
+  ],
+  [
+   "superwuerzi",
+   "DE"
   ]
  ],
  "past": [],
@@ -217,6 +244,36 @@
    ],
    "cids": {
     "sumya__bn910": "18099526211445963"
+   }
+  },
+  "TR": {
+   "by": "ataberkyeni2015",
+   "at": "2026-11-13",
+   "fans": [
+    "ataberkyeni2015"
+   ],
+   "cids": {
+    "ataberkyeni2015": "18102945278533906"
+   }
+  },
+  "SK": {
+   "by": "m4c1ke",
+   "at": "2026-11-13",
+   "fans": [
+    "m4c1ke"
+   ],
+   "cids": {
+    "m4c1ke": "18100088891397862"
+   }
+  },
+  "DE": {
+   "by": "superwuerzi",
+   "at": "2026-11-13",
+   "fans": [
+    "superwuerzi"
+   ],
+   "cids": {
+    "superwuerzi": "17968596879217124"
    }
   }
  },
