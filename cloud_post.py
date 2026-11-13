@@ -29,6 +29,17 @@ def save(path, obj, indent=1):
     json.dump(obj, open(path, "w"), ensure_ascii=False, indent=indent)
 
 
+def loudness_safe(path):
+    """Громкость по стандарту соцсетей (−14 LUFS, пик ≤ −1,5 dBTP). 13.11: Instagram отклонял карту с пиком −0,7 dBTP
+    (ProcessingFailedError при загрузке); видео не перекодируется."""
+    import subprocess
+    from engine import FF
+    fixed = path.replace(".mp4", "_ln.mp4")
+    r = subprocess.run([FF, "-loglevel", "error", "-y", "-i", path, "-c:v", "copy", "-af", "loudnorm=I=-14:TP=-1.5:LRA=11",
+                        "-ar", "44100", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", fixed])
+    return fixed if r.returncode == 0 and os.path.exists(fixed) else path
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
@@ -94,6 +105,7 @@ def main():
     if args.dry_run:
         return
 
+    out = loudness_safe(out)
     m = {"path": out, "key": item["key"], "title": item["title"], "caption_tiktok_instagram": item["short"]}
     try:
         media_id = instagram.publish(conf, m)
