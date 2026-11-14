@@ -18,9 +18,18 @@ ALIASES = {"usa": "US", "america": "US", "united states": "US", "uk": "GB", "eng
            "узбекистан": "UZ", "германия": "DE", "франция": "FR", "сша": "US", "китай": "CN", "япония": "JP",
            "бразилия": "BR", "испания": "ES", "италия": "IT", "индия": "IN", "англия": "GB", "украина": "UA",
            "ivory coast": "CI", "dr congo": "CD", "vietnam": "VN", "viet nam": "VN"}
+# 14.11: самая активная аудитория — иранская; названия стран по-персидски и по-турецки
+ALIASES.update({"ایران": "IR", "انگلیس": "GB", "انگلستان": "GB", "بریتانیا": "GB", "فرانسه": "FR", "آلمان": "DE",
+                "ترکیه": "TR", "آمریکا": "US", "امریکا": "US", "روسیه": "RU", "عراق": "IQ", "افغانستان": "AF",
+                "آذربایجان": "AZ", "چین": "CN", "ژاپن": "JP", "هند": "IN", "هندوستان": "IN", "پاکستان": "PK", "عربستان": "SA",
+                "ایتالیا": "IT", "اسپانیا": "ES", "برزیل": "BR", "آرژانتین": "AR", "کانادا": "CA", "مصر": "EG",
+                "امارات": "AE", "قطر": "QA", "کره": "KR", "کره جنوبی": "KR", "مغولستان": "MN", "ارمنستان": "AM",
+                "گرجستان": "GE", "تاجیکستان": "TJ", "ازبکستان": "UZ", "قزاقستان": "KZ", "سوئد": "SE", "هلند": "NL",
+                "almanya": "DE", "fransa": "FR", "ingiltere": "GB", "rusya": "RU", "amerika": "US", "azerbaycan": "AZ",
+                "iran": "IR", "japonya": "JP", "çin": "CN", "italya": "IT", "ispanya": "ES", "yunanistan": "GR"})
 NAMES = {n.lower(): c for c, n in COUNTRIES.items()}
 NAMES.update(ALIASES)
-_PATTERN = re.compile(r"(?<![a-zа-яё])(" + "|".join(sorted(map(re.escape, NAMES), key=len, reverse=True)) + r")(?![a-zа-яё])")
+_PATTERN = re.compile(r"(?<![a-zа-яё\u0600-\u06FF])(" + "|".join(sorted(map(re.escape, NAMES), key=len, reverse=True)) + r")(?![a-zа-яё\u0600-\u06FF])")
 
 
 _CYR_STEMS = [(re.escape(n[:-1] if n[-1] in "аяйь" else n), c) for n, c in ALIASES.items() if re.search("[а-яё]", n)]
@@ -35,6 +44,8 @@ def countries_in(text):
     for stem, c in _CYR_STEMS:  # русские падежи: «Казахстана», «Турцией»
         for m in re.finditer(r"(?<![а-яё])" + stem + r"[а-яё]{0,3}(?![а-яё])", low):
             found.append((m.start(), c))
+    for m in re.finditer("\U0001F3F4[\U000E0061-\U000E007A]+\U000E007F", text):  # 🏴 Англия/Шотландия/Уэльс → UK
+        found.append((m.start(), "GB"))
     for m in re.finditer(r"[\U0001F1E6-\U0001F1FF]{2}", text):
         iso = "".join(chr(ord(ch) - 0x1F1E6 + 65) for ch in m.group(0))
         found.append((m.start(), iso))

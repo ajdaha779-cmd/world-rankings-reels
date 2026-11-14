@@ -206,6 +206,17 @@ def make_flip(a, b):
                                                              pill="PLOT TWIST", flip=True))
 
 
+def _hot_countries():
+    """Страны, которые зрители называют в комментариях (data/fans.json: карта + очки недели)."""
+    import json
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "fans.json")
+    try:
+        st = json.load(open(path))
+    except Exception:
+        return set()
+    return set(st.get("lit", {})) | set(st.get("points", {}))
+
+
 # страны, про которые спорит весь мир: дуэль малоизвестных пар (Болгария–Румыния) держит хуже — 60% пролистываний
 FAMOUS = set("US CN IN BR DE FR GB JP RU IT ES MX KR TR AR CA AU SA AE PT NL".split())
 
@@ -217,6 +228,9 @@ def _duel_items(used, rng, avoid):
     rivals = list(RIVALS)
     rng.shuffle(rivals)
     pairs = rivals + pairs  # а ещё раньше — соперники
+    # 14.11: впереди — пары со странами наших комментаторов (Iran vs France: 1 425 просмотров, 39 комментариев)
+    hot = _hot_countries()
+    pairs.sort(key=lambda p: -((p[0] in hot) + (p[1] in hot)))
     flips = [p for p in FLIPS if f"flip:{'-'.join(sorted(p))}" not in used]
     if flips and rng.random() < 0:  # 12.11: «plot twist» выключен — пользователю не зашли новые форматы
         a, b = flips[0]

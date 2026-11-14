@@ -217,3 +217,7 @@ DUEL_PAIRS += [("US", "RU"), ("JP", "CN"), ("FR", "ES"), ("SE", "FI"), ("BR", "P
                ("HU", "AT"), ("RO", "BG"), ("UZ", "KG"), ("GE", "TR"), ("KZ", "MN"), ("IE", "IS"), ("NO", "DK"),
                ("CA", "MX"), ("PH", "VN"), ("TH", "MY"), ("IN", "BD"), ("AE", "SG"), ("CH", "SG"), ("CN", "IN"),
                ("PL", "DE"), ("UA", "TR")]
+
+# 14.11: иранская аудитория — самая активная в комментариях
+DUEL_PAIRS += [("IR", "TR"), ("IR", "DE"), ("IR", "IT"), ("IR", "JP"), ("IR", "KR"), ("IR", "IN"), ("IR", "ES"),
+               ("IR", "BR"), ("IR", "EG"), ("IR", "FR"), ("IR", "GB"), ("AZ", "TR"), ("MN", "KR"), ("AR", "GB")]
