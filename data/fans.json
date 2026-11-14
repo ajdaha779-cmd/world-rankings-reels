@@ -264,16 +264,6 @@
     "sumya__bn910": "18099526211445963"
    }
   },
-  "TR": {
-   "by": "ataberkyeni2015",
-   "at": "2026-11-13",
-   "fans": [
-    "ataberkyeni2015"
-   ],
-   "cids": {
-    "ataberkyeni2015": "18102945278533906"
-   }
-  },
   "SK": {
    "by": "m4c1ke",
    "at": "2026-11-13",
@@ -282,16 +272,6 @@
    ],
    "cids": {
     "m4c1ke": "18100088891397862"
-   }
-  },
-  "DE": {
-   "by": "superwuerzi",
-   "at": "2026-11-13",
-   "fans": [
-    "superwuerzi"
-   ],
-   "cids": {
-    "superwuerzi": "17968596879217124"
    }
   },
   "CN": {
@@ -324,7 +304,10 @@
   "GB",
   "AR",
   "MN",
-  "KR"
+  "KR",
+  "SK",
+  "CN",
+  "US"
  ],
  "fans_shown": [
   "AZ:sardvr",
@@ -336,9 +319,12 @@
   "GB:ay_han8136",
   "AR:ay_han8136",
   "MN:sumya__bn910",
-  "KR:sumya__bn910"
+  "KR:sumya__bn910",
+  "SK:m4c1ke",
+  "CN:casper52669",
+  "US:casper52669"
  ],
- "map_at": "2026-11-13T20:38:05.326641Z",
+ "map_at": "2026-11-14T19:08:29.943677Z",
  "notified": [
   "RU:zoktay_16_",
   "IR:ay_han8136",
@@ -353,19 +339,26 @@
   "GB:ay_han8136",
   "AR:ay_han8136",
   "MN:sumya__bn910",
-  "KR:sumya__bn910"
+  "KR:sumya__bn910",
+  "SK:m4c1ke",
+  "CN:casper52669",
+  "US:casper52669"
  ],
  "blocked": [
   "anurag.kairi",
   "mgh_md13",
   "uzanenkosi16",
-  "zoktay_16_"
+  "zoktay_16_",
+  "ataberkyeni2015",
+  "superwuerzi"
  ],
  "mention_ok": [
   "ay_han8136",
   "omarhammad2016",
   "sardvr",
   "saro0onh18",
-  "sumya__bn910"
+  "sumya__bn910",
+  "casper52669",
+  "m4c1ke"
  ]
 }
