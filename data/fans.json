@@ -7,7 +7,8 @@
   "RU": 1,
   "PK": 1,
   "EG": 1,
-  "FI": 1
+  "FI": 1,
+  "IL": 1
  },
  "fans": {
   "KW": {
@@ -30,6 +31,9 @@
   },
   "FI": {
    "samu.suokas": 1
+  },
+  "IL": {
+   "shlomifelix": 1
   }
  },
  "counted": [
@@ -39,7 +43,8 @@
   "18199511290395465:sardvr:RU",
   "17981622749922982:raffaayy__:PK",
   "17981622749922982:taim_123fed:EG",
-  "17981622749922982:samu.suokas:FI"
+  "17981622749922982:samu.suokas:FI",
+  "17981622749922982:shlomifelix:IL"
  ],
  "recent": [
   [
@@ -69,6 +74,10 @@
   [
    "samu.suokas",
    "FI"
+  ],
+  [
+   "shlomifelix",
+   "IL"
   ]
  ],
  "past": [
@@ -250,6 +259,16 @@
    ],
    "cids": {
     "samu.suokas": "18235192381325685"
+   }
+  },
+  "IL": {
+   "by": "shlomifelix",
+   "at": "2026-11-16",
+   "fans": [
+    "shlomifelix"
+   ],
+   "cids": {
+    "shlomifelix": "18017349500973207"
    }
   }
  },
