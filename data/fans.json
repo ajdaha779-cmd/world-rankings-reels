@@ -1,20 +1,29 @@
 {
  "season": "2026-W47",
  "points": {
-  "KW": 1
+  "KW": 1,
+  "IS": 1
  },
  "fans": {
   "KW": {
    "m.alfaraj62": 1
+  },
+  "IS": {
+   "milutin2016": 1
   }
  },
  "counted": [
-  "18199511290395465:m.alfaraj62:KW"
+  "18199511290395465:m.alfaraj62:KW",
+  "18199511290395465:milutin2016:IS"
  ],
  "recent": [
   [
    "m.alfaraj62",
    "KW"
+  ],
+  [
+   "milutin2016",
+   "IS"
   ]
  ],
  "past": [
@@ -156,6 +165,16 @@
    ],
    "cids": {
     "m.alfaraj62": "17910503499331817"
+   }
+  },
+  "IS": {
+   "by": "milutin2016",
+   "at": "2026-11-16",
+   "fans": [
+    "milutin2016"
+   ],
+   "cids": {
+    "milutin2016": "18148684372563761"
    }
   }
  },
