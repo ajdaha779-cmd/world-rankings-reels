@@ -95,7 +95,8 @@ def _h2h_items(used, rng):
     pairs = list(h2h.PAIRS)
     rng.shuffle(pairs)
     hot = _hot_countries()
-    pairs.sort(key=lambda p: -((p[0] in hot) + (p[1] in hot)))
+    # 16.11: пары, уже бывшие дуэлью, — в конец (пользователь заметил «USA vs China уже есть»)
+    pairs.sort(key=lambda p: (f"duel:{'-'.join(sorted(p))}" in used, -((p[0] in hot) + (p[1] in hot))))
     for a, b in pairs:
         key = f"h2h:{'-'.join(sorted((a, b)))}"
         if key in used:
