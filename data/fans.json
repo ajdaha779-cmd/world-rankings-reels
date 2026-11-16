@@ -2,7 +2,8 @@
  "season": "2026-W47",
  "points": {
   "KW": 1,
-  "IS": 1
+  "IS": 1,
+  "TR": 1
  },
  "fans": {
   "KW": {
@@ -10,11 +11,15 @@
   },
   "IS": {
    "milutin2016": 1
+  },
+  "TR": {
+   "ertugrulozkan.aksu": 1
   }
  },
  "counted": [
   "18199511290395465:m.alfaraj62:KW",
-  "18199511290395465:milutin2016:IS"
+  "18199511290395465:milutin2016:IS",
+  "18199511290395465:ertugrulozkan.aksu:TR"
  ],
  "recent": [
   [
@@ -24,6 +29,10 @@
   [
    "milutin2016",
    "IS"
+  ],
+  [
+   "ertugrulozkan.aksu",
+   "TR"
   ]
  ],
  "past": [
@@ -175,6 +184,16 @@
    ],
    "cids": {
     "milutin2016": "18148684372563761"
+   }
+  },
+  "TR": {
+   "by": "ertugrulozkan.aksu",
+   "at": "2026-11-16",
+   "fans": [
+    "ertugrulozkan.aksu"
+   ],
+   "cids": {
+    "ertugrulozkan.aksu": "17945197011388274"
    }
   }
  },
