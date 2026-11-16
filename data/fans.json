@@ -1,9 +1,22 @@
 {
  "season": "2026-W47",
- "points": {},
- "fans": {},
- "counted": [],
- "recent": [],
+ "points": {
+  "KW": 1
+ },
+ "fans": {
+  "KW": {
+   "m.alfaraj62": 1
+  }
+ },
+ "counted": [
+  "18199511290395465:m.alfaraj62:KW"
+ ],
+ "recent": [
+  [
+   "m.alfaraj62",
+   "KW"
+  ]
+ ],
  "past": [
   {
    "season": "2026-W46",
@@ -133,6 +146,16 @@
    ],
    "cids": {
     "casper52669": "17956180074292535"
+   }
+  },
+  "KW": {
+   "by": "m.alfaraj62",
+   "at": "2026-11-16",
+   "fans": [
+    "m.alfaraj62"
+   ],
+   "cids": {
+    "m.alfaraj62": "17910503499331817"
    }
   }
  },
