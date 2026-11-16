@@ -22,7 +22,7 @@ BONUS = {"NY.GDP.PCAP.CD": 0.8, "NY.GDP.MKTP.CD": 0.5, "SP.POP.TOTL": 0.2, "SP.D
 QUESTION = {"NY.GDP.PCAP.CD": "who's richer?", "NY.GDP.MKTP.CD": "whose economy is bigger?",
             "SP.POP.TOTL": "who has more people?", "SP.DYN.LE00.IN": "who lives longer?",
             "MS.MIL.XPND.CD": "who spends more on the army?"}
-PAST = {"NY.GDP.PCAP.CD": "richer", "NY.GDP.MKTP.CD": "a bigger economy", "SP.POP.TOTL": "bigger",
+PAST = {"NY.GDP.PCAP.CD": "richer", "NY.GDP.MKTP.CD": "a bigger economy", "SP.POP.TOTL": "more populous",
         "SP.DYN.LE00.IN": "living longer", "MS.MIL.XPND.CD": "spending more on its army"}
 PAIRS = [("IN", "CN"), ("ID", "MY"), ("KR", "JP"), ("PH", "VN"), ("ID", "PH"), ("TR", "IR"), ("BR", "AR"), ("MX", "BR"),
          ("NG", "ZA"), ("EG", "SA"), ("CN", "JP"), ("US", "CN"), ("RU", "CN"), ("VN", "TH"), ("TH", "MY"), ("KZ", "UZ"),
@@ -58,7 +58,9 @@ def best_stat(a, b):
         if not 1 <= len(flips) <= 3:
             score = math.log(ratio) * 0.5  # без обгона — интересно только огромным разрывом
         else:
-            score = 3 + (flips[-1] - years[0]) / 30 + min(math.log(ratio), 2)
+            score = 3 + (flips[-1] - years[0]) / 30 + min(math.log(ratio), 2) - 0.8 * (len(flips) - 1)
+            if flips[-1] - flips[0] <= 2 and len(flips) > 1:  # «пила» в соседние годы — шум
+                score -= 1.5
         score += BONUS.get(ind, 0)
         if best is None or score > best[0]:
             best = (score, ind, what, label, fmt, s)
@@ -69,12 +71,28 @@ def title_for(a, b, ind, what, s):
     """Острый заголовок: «India was richer than China until 1990 😳» или «China vs India: who's richer? 1960 → 2025»."""
     years, va, vb, flips = s
     na, nb = COUNTRIES[a], COUNTRIES[b]
-    if flips:
+    if len(flips) == 1:  # 16.11: «until» только при одной смене лидера, иначе неправда («China lived longer than USA until 2023»)
         y = flips[-1]
         i = years.index(y) - 1
         lead, other = (na, nb) if va[i] > vb[i] else (nb, na)
         return f"{lead} was {PAST[ind]} than {other} until {y} 😳 {flag_emoji(a)}🆚{flag_emoji(b)}"
+    if flips:
+        return f"{na} vs {nb}: {QUESTION[ind]} The lead changed {len(flips)} times 😳 {flag_emoji(a)}🆚{flag_emoji(b)}"
     return f"{na} vs {nb}: {QUESTION[ind]} {years[0]} → {years[-1]} {flag_emoji(a)}🆚{flag_emoji(b)}"
+
+
+GAP = {"GDP per person (USD)": "richer per person", "GDP (USD)": "bigger economy", "Population": "more people",
+       "Military spending (USD)": "bigger military budget"}
+
+
+def gap_text(label, hi, lo):
+    """Подпись разрыва на финальной карточке: «+0.4 years longer life», «12% richer per person», «3.4× more people»."""
+    if label.startswith("Life expectancy"):
+        return f"+{hi - lo:.1f} years longer life"
+    r = hi / max(lo, 1e-9)
+    if r < 1.5:
+        return f"{(r - 1) * 100:.0f}% {GAP.get(label, 'ahead')}"
+    return f"{r:.1f}× {GAP.get(label, 'ahead')}" if r < 10 else f"{r:.0f}× {GAP.get(label, 'ahead')}"
 
 
 def render_h2h(a, b, years, va, vb, flips, label, fmt_id, accent, out_path, seed=0, what=""):
@@ -150,7 +168,7 @@ def render_h2h(a, b, years, va, vb, flips, label, fmt_id, accent, out_path, seed
                                 26, fill=(255, 255, 255))
             im.paste(fl, (W // 2 - fl.width // 2, cy - 170), fl)
             text(d, (W // 2, cy + 110), names[win], _fit(names[win], 90, W - 240, True))
-            sub = f"{ratio:.1f}× {what}" if ratio < 10 else f"{ratio:.0f}× {what}"
+            sub = gap_text(label, max(va[-1], vb[-1]), min(va[-1], vb[-1]))
             text(d, (W // 2, cy + 220), sub, _fit(sub, 56, W - 220))
         if t < TITLE_CARD:
             im = title_card(im, t, [(names[0].upper(), 100, (255, 255, 255)), ("VS", 80, accent),
