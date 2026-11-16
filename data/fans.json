@@ -185,16 +185,6 @@
    "cids": {
     "milutin2016": "18148684372563761"
    }
-  },
-  "TR": {
-   "by": "ertugrulozkan.aksu",
-   "at": "2026-11-16",
-   "fans": [
-    "ertugrulozkan.aksu"
-   ],
-   "cids": {
-    "ertugrulozkan.aksu": "17945197011388274"
-   }
   }
  },
  "lit_shown": [
@@ -209,7 +199,9 @@
   "KR",
   "SK",
   "CN",
-  "US"
+  "US",
+  "KW",
+  "IS"
  ],
  "fans_shown": [
   "AZ:sardvr",
@@ -224,9 +216,11 @@
   "KR:sumya__bn910",
   "SK:m4c1ke",
   "CN:casper52669",
-  "US:casper52669"
+  "US:casper52669",
+  "KW:m.alfaraj62",
+  "IS:milutin2016"
  ],
- "map_at": "2026-11-14T19:08:29.943677Z",
+ "map_at": "2026-11-16T19:12:51.787624Z",
  "notified": [
   "RU:zoktay_16_",
   "IR:ay_han8136",
@@ -244,7 +238,9 @@
   "KR:sumya__bn910",
   "SK:m4c1ke",
   "CN:casper52669",
-  "US:casper52669"
+  "US:casper52669",
+  "KW:m.alfaraj62",
+  "IS:milutin2016"
  ],
  "blocked": [
   "anurag.kairi",
@@ -252,7 +248,8 @@
   "uzanenkosi16",
   "zoktay_16_",
   "ataberkyeni2015",
-  "superwuerzi"
+  "superwuerzi",
+  "ertugrulozkan.aksu"
  ],
  "mention_ok": [
   "ay_han8136",
@@ -261,6 +258,8 @@
   "saro0onh18",
   "sumya__bn910",
   "casper52669",
-  "m4c1ke"
+  "m4c1ke",
+  "m.alfaraj62",
+  "milutin2016"
  ]
 }
