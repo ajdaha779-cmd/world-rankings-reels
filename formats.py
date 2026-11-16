@@ -172,7 +172,8 @@ def make_duel(a, b, by=None):
     rival = frozenset((a, b)) in RIVAL_SET
     tags = _tags(f"{na.replace(' ', '').lower()} {nb.replace(' ', '').lower()} versus battle" + (" rivals" if rival else ""))
     fl = f"{flag_emoji(a)}⚔️{flag_emoji(b)}"
-    head = f"Rivals: {na} vs {nb} — who really wins? {fl}" if rival else f"{na} vs {nb}: who wins? {fl}"
+    head = (f"You asked for it: {na} vs {nb} — who wins? {fl}" if by else
+            f"Rivals: {na} vs {nb} — who really wins? {fl}" if rival else f"{na} vs {nb}: who wins? {fl}")
     ask = "Who are you rooting for? Comment your side 👇" if rival else "Who should fight next? Comment below 👇"
     credit = f"\nRequested by {' '.join('@' + u for u in by[:5])} 🙌\n" if by else ""
     return dict(kind="duel", key=f"duel:{'-'.join(sorted((a, b)))}", topic="duel", slug=f"duel_{a.lower()}_{b.lower()}",
@@ -180,8 +181,11 @@ def make_duel(a, b, by=None):
                 description=(f"{na} vs {nb} — {len(rounds)} rounds of real data:\n{lines}\n{credit}"
                              f"Source: World Bank Open Data.\n\n{ask}\n\n{tags}"),
                 short=f"{head}{credit} {ask}\n\n{tags}",
+                first_comment=(f"⚔️ {' '.join('@' + u for u in by[:5])} — your battle is here! Who should fight next? "
+                               f"Comment 2 flags 👇") if by else None,
                 render=lambda out, seed, accent: render_duel(a, b, rounds, accent, out, seed=seed,
-                                                             pill="RIVALS · WHO WINS?" if rival else "WHO WINS?"))
+                                                             pill=f"REQUESTED BY @{by[0]}" if by else
+                                                             "RIVALS · WHO WINS?" if rival else "WHO WINS?", by=by))
 
 
 def make_flip(a, b):

@@ -61,10 +61,15 @@ def countries_in(text):
     return out
 
 
+OWN = {"ajdaha.win", "ajdaha.ai"}  # 16.11: свои комментарии (подсказки «comment A or B») — не заказы зрителей
+
+
 def collect(c, history, queue):
     """Читает комментарии последних роликов и копит заказы дуэлей: queue = {"seen": [...], "pairs": {...}}."""
     seen = set(queue.get("seen", []))
     pairs = queue.setdefault("pairs", {})
+    for k in [k for k, p in pairs.items() if set(p.get("users", [])) <= OWN]:  # убрать прежние «заказы» от себя
+        del pairs[k]
     for h in history[-15:]:
         if not h.get("media_id"):
             continue
@@ -78,6 +83,8 @@ def collect(c, history, queue):
             if cm["id"] in seen:
                 continue
             seen.add(cm["id"])
+            if cm.get("username") in OWN:
+                continue
             cs = countries_in(cm.get("text", ""))
             if len(cs) >= 2 and frozenset(cs[:2]) not in BLOCKED:
                 key = "-".join(sorted(cs[:2]))

@@ -83,7 +83,7 @@ def flip_rounds(a, b, mid=1990):
     return rows
 
 
-def render_duel(a, b, rounds, accent, out_path, seed=0, pill="WHO WINS?", neutral=False, flip=False, cup=None):
+def render_duel(a, b, rounds, accent, out_path, seed=0, pill="WHO WINS?", neutral=False, flip=False, cup=None, by=None):
     """neutral — пары с идущим конфликтом: «X и Y в цифрах», без счёта, победителя и мечей.
     flip — «plot twist»: кто был богаче тогда и кто сейчас (раунды — годы, без счёта).
     cup — матч турнира {"stage": "ROUND OF 16 · MATCH 3/8", "prev": {"code", "name", "pct"} | None}: цифры — подсказка,
@@ -130,6 +130,12 @@ def render_duel(a, b, rounds, accent, out_path, seed=0, pill="WHO WINS?", neutra
                 im.paste(pf, (100, 1775 - pf.height // 2), pf)
                 msg = f"Last match: {pv['name']} won with {pv['pct']}% of your votes"
                 text(d, (230, 1775), msg, _fit(msg, 38, W - 330, True), anchor="lm")
+        if by:  # 16.11: заказ зрителя — его ник на экране весь ролик
+            req = f"REQUESTED BY @{by[0]}" + (f" +{len(by) - 1}" if len(by) > 1 else "")
+            f_req = _fit(req, 40, W - 120, True)
+            rw = f_req.getlength(req) + 60
+            d.rounded_rectangle((W / 2 - rw / 2, 22, W / 2 + rw / 2, 82), 30, fill=accent)
+            text(d, (W // 2, 52), req, f_req, fill=(20, 20, 30))
         # шапка: флаги, имена, VS, счёт (видна с первого кадра — хук)
         for side in (0, 1):
             cx = 270 if side == 0 else W - 270
@@ -311,7 +317,8 @@ def render_duel(a, b, rounds, accent, out_path, seed=0, pill="WHO WINS?", neutra
                  (final_t + 0.05, f"{late} is {k1:.0f} times richer!" if k1 >= 2 else f"{late} is richer!"),
                  (card_end + 0.5, "Comment two countries. We compare them next!")]
     else:
-        plan = [(0.15, f"{names[0]} versus {names[1]}. {['', 'One', 'Two', 'Three', 'Four', 'Five'][ROUNDS]} rounds. Who wins?")]
+        plan = [(0.15, f"You asked for it, {by[0].replace('_', ' ').replace('.', ' ')}! {names[0]} versus {names[1]}. Who wins?"
+                 if by else f"{names[0]} versus {names[1]}. {['', 'One', 'Two', 'Three', 'Four', 'Five'][ROUNDS]} rounds. Who wins?")]
         plan += [(INTRO + i * ROUND_LEN + 0.15, f"Round {i + 1}. {r[0]}.") for i, r in enumerate(rounds)]
         plan += [(final_t - 0.9, "And the winner is..."),
                  (final_t + 0.05, f"{names[winner]}!" if winner is not None else "It's a draw!"),

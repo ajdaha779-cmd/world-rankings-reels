@@ -6,7 +6,7 @@
 
   python replies.py
 """
-import json, os, random
+import json, os, random, re
 import instagram, requests_q
 from catalog import BASE, COUNTRIES, EXCLUDE, GROUPS, TOPICS, RACE_TOPICS, FMT, flag_emoji
 from data import indicator
@@ -105,13 +105,65 @@ def rank_line(h, iso, user=None, salt=0):
     return f"@{user} {text}" if user else text
 
 
-def reply_text(h, cs, user=None, salt=0):
+# 16.11: ответ на языке зрителя (иранцы и турки — самые активные)
+def lang_of(text):
+    if re.search("[\u0600-\u06FF]", text):
+        return "fa"
+    if re.search("[а-яё]", text.lower()):
+        return "ru"
+    if re.search("[ğşıİ]", text) or re.search(r"\b(ve|bir|için|türkiye|almanya|ingiltere|rusya|amerika)\b", text.lower()):
+        return "tr"
+    return "en"
+
+
+WHERE = {"fa": {"the world": "جهان", "Europe": "اروپا", "Asia": "آسیا", "the Americas": "قاره آمریکا", "Africa": "آفریقا",
+                "the Middle East": "خاورمیانه", "G20 countries": "کشورهای G20", "EU countries": "اتحادیه اروپا",
+                "ex-USSR countries": "کشورهای شوروی سابق"},
+         "tr": {"the world": "dünyada", "Europe": "Avrupa'da", "Asia": "Asya'da", "the Americas": "Amerika'da",
+                "Africa": "Afrika'da", "the Middle East": "Orta Doğu'da", "G20 countries": "G20 ülkeleri arasında",
+                "EU countries": "AB'de", "ex-USSR countries": "eski SSCB ülkeleri arasında"},
+         "ru": {"the world": "в мире", "Europe": "в Европе", "Asia": "в Азии", "the Americas": "в Америке",
+                "Africa": "в Африке", "the Middle East": "на Ближнем Востоке", "G20 countries": "среди стран G20",
+                "EU countries": "в ЕС", "ex-USSR countries": "среди стран бывшего СССР"}}
+LOC = {"fa": {"rank": "{fl} {name} رتبه {rank} از {total} در {where} است ({value})",
+              "pair": "{a} در برابر {b}؟ عالیه، به لیست نبردهای ما اضافه شد ⚔️",
+              "one": "{name} {fl}! نبرد بعدی با کدام کشور باشد؟",
+              "lit": " 🌍 {name} روی نقشه جهانی ما روشن شد — نام تو در ویدیوی بعدی روی آن خواهد بود!",
+              "point": " +۱ امتیاز برای {name} 🏆"},
+       "tr": {"rank": "{fl} {name}, {where} {total} ülke arasında {rank}. sırada ({value})",
+              "pair": "{a} - {b}? Harika, savaş listemize eklendi ⚔️",
+              "one": "{name} {fl}! Sıradaki rakibi kim olsun?",
+              "lit": " 🌍 {name} dünya haritamızda yandı — adın bir sonraki videoda üzerinde olacak!",
+              "point": " {name} için +1 puan 🏆"},
+       "ru": {"rank": "{fl} {name} — {rank}-е место из {total} {where} ({value})",
+              "pair": "{a} против {b}? Отлично, добавили в список битв ⚔️",
+              "one": "{name} {fl}! С кем ей сразиться дальше?",
+              "lit": " 🌍 Ты зажёг {name} на нашей карте мира — твой ник будет на ней в следующем видео!",
+              "point": " +1 очко для {name} 🏆"}}
+
+
+def loc_text(lang, kind, user=None, **kw):
+    t = LOC[lang][kind].format(**kw)
+    return f"@{user} {t}" if user and kind in ("rank", "pair", "one") else t
+
+
+def reply_text(h, cs, user=None, salt=0, lang="en"):
     rnd = random.Random(f"{cs}{salt}")
     if len(cs) >= 2 and frozenset(cs[:2]) in requests_q.BLOCKED:
         return None  # пары с конфликтами не обсуждаем
     if h.get("key", "").startswith("cup:"):  # матч турнира: «голос засчитан»
         import tournament
         return tournament.vote_reply(h, cs, user, salt)
+    if lang != "en" and (h.get("kind") == "duel" or len(cs) >= 2):
+        if len(cs) >= 2:
+            return loc_text(lang, "pair", user, a=COUNTRIES[cs[0]], b=COUNTRIES[cs[1]])
+        return loc_text(lang, "one", user, name=COUNTRIES[cs[0]], fl=flag_emoji(cs[0]))
+    if lang != "en":
+        r = rank_info(h, cs[0])
+        if not r:
+            return None
+        return loc_text(lang, "rank", user, fl=flag_emoji(cs[0]), name=COUNTRIES[cs[0]], rank=r["rank"], total=r["total"],
+                        where=WHERE[lang].get(r["where"], r["where"]), value=r["value"])
     if h.get("kind") == "duel" or len(cs) >= 2:
         if len(cs) >= 2:
             a, b = COUNTRIES[cs[0]], COUNTRIES[cs[1]]
@@ -149,13 +201,17 @@ def run(c=None, history=None, queue=None):
                 continue
             replied.add(cm["id"])
             cs = requests_q.countries_in(cm.get("text", ""))
-            text = reply_text(h, cs, cm.get("username"), cm["id"]) if cs else None
+            lang = lang_of(cm.get("text", ""))
+            text = reply_text(h, cs, cm.get("username"), cm["id"], lang) if cs else None
             if text and len(cs) == 1 and h.get("kind") != "duel":  # карта мира: кто первый — зажигает страну
                 lit = fans_lit.get(cs[0])
+                name = COUNTRIES[cs[0]]
                 if not lit or lit.get("by") == cm.get("username"):
-                    text += f" 🌍 You just lit up {COUNTRIES[cs[0]]} on our world map — your name goes on it in the next video!"
+                    text += LOC[lang]["lit"].format(name=name) if lang != "en" else \
+                        f" 🌍 You just lit up {name} on our world map — your name goes on it in the next video!"
                 else:
-                    text += f" +1 point for {COUNTRIES[cs[0]]} 🏆 (lit by @{lit['by']})"
+                    text += LOC[lang]["point"].format(name=name) if lang != "en" else \
+                        f" +1 point for {name} 🏆 (lit by @{lit['by']})"
             if not text:
                 continue
             try:

@@ -64,7 +64,7 @@ def main():
     kind = pick_kind(n, weights, [h.get("kind") for h in history[-2:]], rng)
     item, req = None, None
     cup = tournament.load()
-    if conf and args.mode != "map":  # турнир: итоги голосования под прошлым матчем и, если пора, следующий матч — вне очереди
+    if False and conf and args.mode != "map":  # 16.11: турнир выключен — ~150 просмотров, 1 голос за матч; турнир: итоги голосования под прошлым матчем и, если пора, следующий матч — вне очереди
         try:
             tournament.tally(conf, cup)
             m = tournament.next_match(cup)
@@ -91,6 +91,9 @@ def main():
                     sys.exit("карта: нет новых людей или уже выходила сегодня")
         except Exception as e:
             print(f"фанаты пропущены: {str(e)[:200]}")
+    if not item and args.mode != "map" and requests_q.top_request(queue, used) and \
+            not any(h.get("requested") for h in history[-2:]):
+        kind = "duel"  # 16.11: заказ зрителя — вне очереди (Mongolia vs South Korea по заказу: 484 просмотра)
     if kind == "duel" and not item:
         req = requests_q.top_request(queue, used)
         if req:
