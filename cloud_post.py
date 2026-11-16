@@ -108,6 +108,9 @@ def main():
     out = os.path.join(BASE, "work", f"{item['slug']}.mp4")
     item["render"](out, n, ACCENTS[n % len(ACCENTS)])
     timeline = {"ranking": render, "race": race, "duel": duel, "twist": twists, "fans": fans, "map": worldmap}[item["kind"]].LAST
+    if item.get("topic") == "h2h":
+        import h2h
+        timeline = h2h.LAST
     print(f"ролик [{item['kind']}]: {out}\n{item['title']}")
     if os.environ.get("GITHUB_OUTPUT"):
         with open(os.environ["GITHUB_OUTPUT"], "a") as f:

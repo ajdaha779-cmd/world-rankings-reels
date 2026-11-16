@@ -89,7 +89,40 @@ def _ranking_items(used, rng, avoid):
                    render(rows, t, gname, accent, out, seed=seed, fact=fact, teaser=_teaser(fact)))
 
 
+def _h2h_items(used, rng):
+    """«X vs Y, годы» — две страны по годам с самым острым сравнением (16.11; на YouTube такие — лучшие)."""
+    import h2h
+    pairs = list(h2h.PAIRS)
+    rng.shuffle(pairs)
+    hot = _hot_countries()
+    pairs.sort(key=lambda p: -((p[0] in hot) + (p[1] in hot)))
+    for a, b in pairs:
+        key = f"h2h:{'-'.join(sorted((a, b)))}"
+        if key in used:
+            continue
+        best = h2h.best_stat(a, b)
+        if not best:
+            used.add(key)
+            continue
+        ind, what, label, fmt_id, s = best
+        years, va, vb, flips = s
+        if rng.random() < 0.5:  # кто слева — случайно
+            a, b, va, vb = b, a, vb, va
+        head = h2h.title_for(a, b, ind, what, (years, va, vb, flips))
+        na, nb = COUNTRIES[a], COUNTRIES[b]
+        tags = _tags(f"{na.replace(' ', '').lower()} {nb.replace(' ', '').lower()} versus history")
+        ask = "Which 2 countries should race next? Comment 2 flags 👇"
+        yield dict(kind="race", key=key, topic="h2h", slug=f"h2h_{a.lower()}_{b.lower()}", title=head,
+                   description=f"{label}: {na} vs {nb}, every year {years[0]}–{years[-1]}.\nSource: World Bank Open Data.\n\n{ask}\n\n{tags}",
+                   short=f"{head} {ask}\n\n{tags}",
+                   render=lambda out, seed, accent, a=a, b=b, years=years, va=va, vb=vb, flips=flips, label=label,
+                   fmt_id=fmt_id, what=what: h2h.render_h2h(a, b, years, va, vb, flips, label, fmt_id, accent, out,
+                                                           seed=seed, what=what))
+
+
 def _race_items(used, rng, avoid):
+    if "h2h" not in avoid and rng.random() < 0.6:  # 16.11: «X vs Y по годам» — чаще обычной гонки
+        yield from _h2h_items(used, rng)
     from race import render_race
     # сильные темы и крупные регионы выпадают чаще (взвешенная случайная сортировка)
     combos = sorted(((t, g) for t in RACE_TOPICS for g in RACE_GROUPS),
