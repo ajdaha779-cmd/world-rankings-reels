@@ -3,7 +3,8 @@
  "points": {
   "KW": 1,
   "IS": 1,
-  "TR": 1
+  "TR": 1,
+  "RU": 1
  },
  "fans": {
   "KW": {
@@ -14,12 +15,16 @@
   },
   "TR": {
    "ertugrulozkan.aksu": 1
+  },
+  "RU": {
+   "sardvr": 1
   }
  },
  "counted": [
   "18199511290395465:m.alfaraj62:KW",
   "18199511290395465:milutin2016:IS",
-  "18199511290395465:ertugrulozkan.aksu:TR"
+  "18199511290395465:ertugrulozkan.aksu:TR",
+  "18199511290395465:sardvr:RU"
  ],
  "recent": [
   [
@@ -33,6 +38,10 @@
   [
    "ertugrulozkan.aksu",
    "TR"
+  ],
+  [
+   "sardvr",
+   "RU"
   ]
  ],
  "past": [
