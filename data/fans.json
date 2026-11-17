@@ -12,7 +12,8 @@
   "BE": 1,
   "AT": 1,
   "SE": 1,
-  "IN": 1
+  "IN": 1,
+  "NI": 1
  },
  "fans": {
   "KW": {
@@ -51,6 +52,9 @@
   },
   "IN": {
    "armaan_gabhru": 1
+  },
+  "NI": {
+   "mostlycloudy999": 1
   }
  },
  "counted": [
@@ -67,7 +71,8 @@
   "18199511290395465:noafinnj_dragons:BE",
   "18029908346918095:wima.matt._123:AT",
   "18029908346918095:oskarhft:SE",
-  "18029908346918095:armaan_gabhru:IN"
+  "18029908346918095:armaan_gabhru:IN",
+  "18029908346918095:mostlycloudy999:NI"
  ],
  "recent": [
   [
@@ -121,6 +126,10 @@
   [
    "armaan_gabhru",
    "IN"
+  ],
+  [
+   "mostlycloudy999",
+   "NI"
   ]
  ],
  "past": [
@@ -313,6 +322,16 @@
    ],
    "cids": {
     "armaan_gabhru": "18197770777403897"
+   }
+  },
+  "NI": {
+   "by": "mostlycloudy999",
+   "at": "2026-11-17",
+   "fans": [
+    "mostlycloudy999"
+   ],
+   "cids": {
+    "mostlycloudy999": "18352316191254249"
    }
   }
  },
