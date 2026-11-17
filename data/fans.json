@@ -231,8 +231,7 @@
    "by": "m.alfaraj62",
    "at": "2026-11-16",
    "fans": [
-    "m.alfaraj62",
-    "rashid.almotar"
+    "m.alfaraj62"
    ],
    "cids": {
     "m.alfaraj62": "17910503499331817",
@@ -249,36 +248,6 @@
     "milutin2016": "18148684372563761"
    }
   },
-  "PK": {
-   "by": "raffaayy__",
-   "at": "2026-11-16",
-   "fans": [
-    "raffaayy__"
-   ],
-   "cids": {
-    "raffaayy__": "18172938478465009"
-   }
-  },
-  "EG": {
-   "by": "taim_123fed",
-   "at": "2026-11-16",
-   "fans": [
-    "taim_123fed"
-   ],
-   "cids": {
-    "taim_123fed": "18058833587809194"
-   }
-  },
-  "FI": {
-   "by": "samu.suokas",
-   "at": "2026-11-16",
-   "fans": [
-    "samu.suokas"
-   ],
-   "cids": {
-    "samu.suokas": "18235192381325685"
-   }
-  },
   "IL": {
    "by": "shlomifelix",
    "at": "2026-11-16",
@@ -287,16 +256,6 @@
    ],
    "cids": {
     "shlomifelix": "18017349500973207"
-   }
-  },
-  "BE": {
-   "by": "noafinnj_dragons",
-   "at": "2026-11-17",
-   "fans": [
-    "noafinnj_dragons"
-   ],
-   "cids": {
-    "noafinnj_dragons": "18349594228280897"
    }
   }
  },
@@ -314,7 +273,8 @@
   "CN",
   "US",
   "KW",
-  "IS"
+  "IS",
+  "IL"
  ],
  "fans_shown": [
   "AZ:sardvr",
@@ -331,9 +291,10 @@
   "CN:casper52669",
   "US:casper52669",
   "KW:m.alfaraj62",
-  "IS:milutin2016"
+  "IS:milutin2016",
+  "IL:shlomifelix"
  ],
- "map_at": "2026-11-16T19:12:51.787624Z",
+ "map_at": "2026-11-17T21:09:46.272881Z",
  "notified": [
   "RU:zoktay_16_",
   "IR:ay_han8136",
@@ -353,7 +314,8 @@
   "CN:casper52669",
   "US:casper52669",
   "KW:m.alfaraj62",
-  "IS:milutin2016"
+  "IS:milutin2016",
+  "IL:shlomifelix"
  ],
  "blocked": [
   "anurag.kairi",
@@ -362,7 +324,12 @@
   "zoktay_16_",
   "ataberkyeni2015",
   "superwuerzi",
-  "ertugrulozkan.aksu"
+  "ertugrulozkan.aksu",
+  "noafinnj_dragons",
+  "raffaayy__",
+  "rashid.almotar",
+  "samu.suokas",
+  "taim_123fed"
  ],
  "mention_ok": [
   "ay_han8136",
@@ -373,6 +340,7 @@
   "casper52669",
   "m4c1ke",
   "m.alfaraj62",
-  "milutin2016"
+  "milutin2016",
+  "shlomifelix"
  ]
 }
