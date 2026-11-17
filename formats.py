@@ -17,9 +17,10 @@ GROUP_WEIGHT = {"world": 3, "europe": 2, "asia": 2, "americas": 1.5, "exussr": 1
 # EU/ex-USSR и безработица в Европе — 66–77%)
 RANK_WEIGHT = {"pop": 3, "boom": 2.5, "shrink": 2, "economy": 2, "rich": 2 if YOUTUBE else 0.7, "life": 2,
                "young": 1.5, "old": 1.5, "babies": 1.5, "crowded": 1.5, "ppp": 1 if YOUTUBE else 0.5,
+               # 17.11: safest world 563/16 комм. — лучший за сутки; army G20 130, G20 в среднем 214 против Азии 553
                # острые темы (11.11) — повод найти свою страну и поспорить
-               "danger": 3, "safe": 2.5, "army": 3, "soldiers": 2.5, "fat": 2.5, "unequal": 2, "shortlife": 2}
-RANK_GROUP_WEIGHT = {"world": 3, "g20": 3, "asia": 2.5, "europe": 1.5, "americas": 1.5, "mideast": 1, "africa": 1,
+               "danger": 3, "safe": 3.5, "army": 1.5, "soldiers": 2.5, "fat": 2.5, "unequal": 2, "shortlife": 2}
+RANK_GROUP_WEIGHT = {"world": 3, "g20": 2, "asia": 3, "europe": 1.5, "americas": 1.5, "mideast": 1, "africa": 1,
                      "exussr": 0.7, "eu": 0.7}
 BASE_TAGS = "#shorts #countries #geography #comparison #data"
 
