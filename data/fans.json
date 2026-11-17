@@ -1,7 +1,7 @@
 {
  "season": "2026-W47",
  "points": {
-  "KW": 1,
+  "KW": 3,
   "IS": 1,
   "TR": 1,
   "RU": 1,
@@ -12,7 +12,8 @@
  },
  "fans": {
   "KW": {
-   "m.alfaraj62": 1
+   "m.alfaraj62": 1,
+   "rashid.almotar": 2
   },
   "IS": {
    "milutin2016": 1
@@ -44,7 +45,9 @@
   "17981622749922982:raffaayy__:PK",
   "17981622749922982:taim_123fed:EG",
   "17981622749922982:samu.suokas:FI",
-  "17981622749922982:shlomifelix:IL"
+  "17981622749922982:shlomifelix:IL",
+  "18199511290395465:rashid.almotar:KW",
+  "17944564416101354:rashid.almotar:KW"
  ],
  "recent": [
   [
@@ -78,6 +81,10 @@
   [
    "shlomifelix",
    "IL"
+  ],
+  [
+   "rashid.almotar",
+   "KW"
   ]
  ],
  "past": [
@@ -215,10 +222,12 @@
    "by": "m.alfaraj62",
    "at": "2026-11-16",
    "fans": [
-    "m.alfaraj62"
+    "m.alfaraj62",
+    "rashid.almotar"
    ],
    "cids": {
-    "m.alfaraj62": "17910503499331817"
+    "m.alfaraj62": "17910503499331817",
+    "rashid.almotar": "18112368182263967"
    }
   },
   "IS": {
