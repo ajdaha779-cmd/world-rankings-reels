@@ -8,7 +8,8 @@
   "PK": 1,
   "EG": 1,
   "FI": 1,
-  "IL": 1
+  "IL": 1,
+  "BE": 1
  },
  "fans": {
   "KW": {
@@ -35,6 +36,9 @@
   },
   "IL": {
    "shlomifelix": 1
+  },
+  "BE": {
+   "noafinnj_dragons": 1
   }
  },
  "counted": [
@@ -47,7 +51,8 @@
   "17981622749922982:samu.suokas:FI",
   "17981622749922982:shlomifelix:IL",
   "18199511290395465:rashid.almotar:KW",
-  "17944564416101354:rashid.almotar:KW"
+  "17944564416101354:rashid.almotar:KW",
+  "18199511290395465:noafinnj_dragons:BE"
  ],
  "recent": [
   [
@@ -85,6 +90,10 @@
   [
    "rashid.almotar",
    "KW"
+  ],
+  [
+   "noafinnj_dragons",
+   "BE"
   ]
  ],
  "past": [
@@ -278,6 +287,16 @@
    ],
    "cids": {
     "shlomifelix": "18017349500973207"
+   }
+  },
+  "BE": {
+   "by": "noafinnj_dragons",
+   "at": "2026-11-17",
+   "fans": [
+    "noafinnj_dragons"
+   ],
+   "cids": {
+    "noafinnj_dragons": "18349594228280897"
    }
   }
  },
