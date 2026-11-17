@@ -9,7 +9,10 @@
   "EG": 1,
   "FI": 1,
   "IL": 1,
-  "BE": 1
+  "BE": 1,
+  "AT": 1,
+  "SE": 1,
+  "IN": 1
  },
  "fans": {
   "KW": {
@@ -39,6 +42,15 @@
   },
   "BE": {
    "noafinnj_dragons": 1
+  },
+  "AT": {
+   "wima.matt._123": 1
+  },
+  "SE": {
+   "oskarhft": 1
+  },
+  "IN": {
+   "armaan_gabhru": 1
   }
  },
  "counted": [
@@ -52,7 +64,10 @@
   "17981622749922982:shlomifelix:IL",
   "18199511290395465:rashid.almotar:KW",
   "17944564416101354:rashid.almotar:KW",
-  "18199511290395465:noafinnj_dragons:BE"
+  "18199511290395465:noafinnj_dragons:BE",
+  "18029908346918095:wima.matt._123:AT",
+  "18029908346918095:oskarhft:SE",
+  "18029908346918095:armaan_gabhru:IN"
  ],
  "recent": [
   [
@@ -94,6 +109,18 @@
   [
    "noafinnj_dragons",
    "BE"
+  ],
+  [
+   "wima.matt._123",
+   "AT"
+  ],
+  [
+   "oskarhft",
+   "SE"
+  ],
+  [
+   "armaan_gabhru",
+   "IN"
   ]
  ],
  "past": [
@@ -256,6 +283,36 @@
    ],
    "cids": {
     "shlomifelix": "18017349500973207"
+   }
+  },
+  "AT": {
+   "by": "wima.matt._123",
+   "at": "2026-11-17",
+   "fans": [
+    "wima.matt._123"
+   ],
+   "cids": {
+    "wima.matt._123": "18104702522386538"
+   }
+  },
+  "SE": {
+   "by": "oskarhft",
+   "at": "2026-11-17",
+   "fans": [
+    "oskarhft"
+   ],
+   "cids": {
+    "oskarhft": "18094779458201181"
+   }
+  },
+  "IN": {
+   "by": "armaan_gabhru",
+   "at": "2026-11-17",
+   "fans": [
+    "armaan_gabhru"
+   ],
+   "cids": {
+    "armaan_gabhru": "18197770777403897"
    }
   }
  },
