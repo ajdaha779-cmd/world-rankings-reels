@@ -9,11 +9,12 @@
   "EG": 1,
   "FI": 1,
   "IL": 1,
-  "BE": 1,
+  "BE": 2,
   "AT": 1,
   "SE": 1,
   "IN": 1,
-  "NI": 1
+  "NI": 1,
+  "CA": 1
  },
  "fans": {
   "KW": {
@@ -42,7 +43,8 @@
    "shlomifelix": 1
   },
   "BE": {
-   "noafinnj_dragons": 1
+   "noafinnj_dragons": 1,
+   "maxim.aerts_": 1
   },
   "AT": {
    "wima.matt._123": 1
@@ -55,6 +57,9 @@
   },
   "NI": {
    "mostlycloudy999": 1
+  },
+  "CA": {
+   "htzhusin": 1
   }
  },
  "counted": [
@@ -72,7 +77,9 @@
   "18029908346918095:wima.matt._123:AT",
   "18029908346918095:oskarhft:SE",
   "18029908346918095:armaan_gabhru:IN",
-  "18029908346918095:mostlycloudy999:NI"
+  "18029908346918095:mostlycloudy999:NI",
+  "18116872151150983:htzhusin:CA",
+  "18116872151150983:maxim.aerts_:BE"
  ],
  "recent": [
   [
@@ -130,6 +137,14 @@
   [
    "mostlycloudy999",
    "NI"
+  ],
+  [
+   "htzhusin",
+   "CA"
+  ],
+  [
+   "maxim.aerts_",
+   "BE"
   ]
  ],
  "past": [
@@ -302,6 +317,26 @@
    ],
    "cids": {
     "wima.matt._123": "18104702522386538"
+   }
+  },
+  "CA": {
+   "by": "htzhusin",
+   "at": "2026-11-18",
+   "fans": [
+    "htzhusin"
+   ],
+   "cids": {
+    "htzhusin": "18122254648978999"
+   }
+  },
+  "BE": {
+   "by": "maxim.aerts_",
+   "at": "2026-11-18",
+   "fans": [
+    "maxim.aerts_"
+   ],
+   "cids": {
+    "maxim.aerts_": "17998147722102310"
    }
   }
  },
