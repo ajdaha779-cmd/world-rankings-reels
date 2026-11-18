@@ -12,7 +12,7 @@
   "BE": 2,
   "AT": 1,
   "SE": 1,
-  "IN": 1,
+  "IN": 2,
   "NI": 1,
   "CA": 1
  },
@@ -53,7 +53,8 @@
    "oskarhft": 1
   },
   "IN": {
-   "armaan_gabhru": 1
+   "armaan_gabhru": 1,
+   "zyroxfx0": 1
   },
   "NI": {
    "mostlycloudy999": 1
@@ -79,7 +80,8 @@
   "18029908346918095:armaan_gabhru:IN",
   "18029908346918095:mostlycloudy999:NI",
   "18116872151150983:htzhusin:CA",
-  "18116872151150983:maxim.aerts_:BE"
+  "18116872151150983:maxim.aerts_:BE",
+  "18116872151150983:zyroxfx0:IN"
  ],
  "recent": [
   [
@@ -145,6 +147,10 @@
   [
    "maxim.aerts_",
    "BE"
+  ],
+  [
+   "zyroxfx0",
+   "IN"
   ]
  ],
  "past": [
@@ -337,6 +343,16 @@
    ],
    "cids": {
     "maxim.aerts_": "17998147722102310"
+   }
+  },
+  "IN": {
+   "by": "zyroxfx0",
+   "at": "2026-11-18",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "18134473648809705"
    }
   }
  },
