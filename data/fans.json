@@ -17,7 +17,9 @@
   "CA": 1,
   "MN": 1,
   "PL": 1,
-  "SA": 1
+  "SA": 1,
+  "AF": 1,
+  "DE": 1
  },
  "fans": {
   "KW": {
@@ -74,6 +76,12 @@
   },
   "SA": {
    "mariah_skypon": 1
+  },
+  "AF": {
+   "mujib_rahmat_ogli_": 1
+  },
+  "DE": {
+   "pt0.80197": 1
   }
  },
  "counted": [
@@ -98,7 +106,9 @@
   "18133121380893271:dutchbhd:MN",
   "18133121380893271:pixel_phantom26:PK",
   "18116872151150983:juleczka_wojcik:PL",
-  "18116872151150983:mariah_skypon:SA"
+  "18116872151150983:mariah_skypon:SA",
+  "18133121380893271:mujib_rahmat_ogli_:AF",
+  "18116872151150983:pt0.80197:DE"
  ],
  "recent": [
   [
@@ -184,6 +194,14 @@
   [
    "mariah_skypon",
    "SA"
+  ],
+  [
+   "mujib_rahmat_ogli_",
+   "AF"
+  ],
+  [
+   "pt0.80197",
+   "DE"
   ]
  ],
  "past": [
@@ -418,6 +436,26 @@
    ],
    "cids": {
     "mariah_skypon": "18133099333819829"
+   }
+  },
+  "AF": {
+   "by": "mujib_rahmat_ogli_",
+   "at": "2026-11-19",
+   "fans": [
+    "mujib_rahmat_ogli_"
+   ],
+   "cids": {
+    "mujib_rahmat_ogli_": "17922274188455099"
+   }
+  },
+  "DE": {
+   "by": "pt0.80197",
+   "at": "2026-11-19",
+   "fans": [
+    "pt0.80197"
+   ],
+   "cids": {
+    "pt0.80197": "17883512943543092"
    }
   }
  },
