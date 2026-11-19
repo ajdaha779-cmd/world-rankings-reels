@@ -41,8 +41,16 @@ def main():
     ap.add_argument("--count", type=int, default=21)
     ap.add_argument("--start", help="первый день публикаций, ГГГГ-ММ-ДД (по умолчанию — после прошлой пачки или завтра)")
     ap.add_argument("--upload", action="store_true", help="сразу загрузить на YouTube с отложенной публикацией (API)")
+    ap.add_argument("--daily", action="store_true",
+                    help="20.11: 3 ролика на сегодня (по Нью-Йорку), темы — по свежей статистике; раз в день")
     args = ap.parse_args()
-    if not args.start and os.path.exists(NEXT):
+    if args.daily:  # пользователь 20.11: «никогда заранее на несколько дней — каждый день аналитика и подбор»
+        today_ny = datetime.datetime.now(AUDIENCE).date()
+        if os.path.exists(NEXT) and json.load(open(NEXT))["start"] > str(today_ny):
+            print("сегодняшние ролики YouTube уже загружены")
+            return
+        args.start, args.count = str(today_ny), len(POST_TIMES)
+    elif not args.start and os.path.exists(NEXT):
         if os.environ.get("GITHUB_EVENT_NAME") == "schedule" and json.load(open(NEXT))["start"] > str(datetime.date.today() + datetime.timedelta(days=3)):
             print("автопачка: запас роликов ещё есть, пропуск")  # запасной запуск расписания в понедельник
             return
@@ -65,7 +73,8 @@ def main():
     folder = os.path.join(OUTBOX, f"{today:%Y-%m-%d}")
     os.makedirs(folder, exist_ok=True)
     plan, meta, recent = [], [], []
-    for i, when in enumerate(slots(args.count, start)):
+    now = datetime.datetime.now(AUDIENCE) + datetime.timedelta(minutes=40)
+    for i, when in enumerate(w for w in slots(args.count, start) if w > now):  # прошедшие слоты дня — пропуск
         item = next_item(i, used, rng, avoid=recent[-2:])
         if not item:
             notify("Темы закончились — нужно добавить новые в catalog.py")
@@ -98,6 +107,10 @@ def main():
                     f"YouTube — название:\n{item['title']}\n\nYouTube — описание:\n{item['description']}\n\n"
                     f"TikTok / Instagram — подпись:\n{item['short']}\n")
     if not meta:
+        if args.daily:
+            json.dump({"start": str(start + datetime.timedelta(days=1))}, open(NEXT, "w"))
+            print("на сегодня слотов не осталось")
+            return
         sys.exit("нет свободных тем")
     json.dump(meta, open(os.path.join(folder, "metadata.json"), "w"), ensure_ascii=False, indent=2)
     last = datetime.datetime.fromisoformat(meta[-1]["publish_us_east"]).date()

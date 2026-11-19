@@ -1,11 +1,9 @@
 name: YouTube batch
 
-# Пачка роликов с озвучкой → сразу на YouTube через API с отложенной публикацией (20.11: аудит не нужен).
-# Сама — по воскресеньям (запасной запуск в понедельник пропускается, если запас есть). Ролики — и в Artifacts.
+# YouTube через API (20.11: аудит не нужен). Ежедневно (daily=true): свежая статистика канала → hits.py → 3 ролика
+# на сегодня (09/13/19 Нью-Йорк = 18/22/04 Баку). Запускает instagram.yml (будильник cron-job.org) утром, раз в день.
+# Пачки на несколько дней вперёд НЕ делать — решение пользователя 20.11.
 on:
-  schedule:
-    - cron: "0 6 * * 0"
-    - cron: "0 6 * * 1"
   workflow_dispatch:
     inputs:
       count:
@@ -17,9 +15,16 @@ on:
       upload:
         description: "Загрузить на YouTube (true/false)"
         default: "true"
+      daily:
+        description: "Ролики на сегодня по свежей статистике (true/false)"
+        default: "true"
 
 permissions:
   contents: write
+
+concurrency:
+  group: youtube
+  cancel-in-progress: false
 
 jobs:
   batch:
@@ -45,7 +50,7 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
           pip install -r requirements.txt
       - name: Сделать пачку
-        run: python make_batch.py --count ${{ inputs.count || '21' }} ${{ inputs.start && format('--start {0}', inputs.start) || '' }} ${{ (inputs.upload || 'true') == 'true' && '--upload' || '' }}
+        run: python make_batch.py --count ${{ inputs.count || '21' }} ${{ inputs.start && format('--start {0}', inputs.start) || '' }} ${{ (inputs.upload || 'true') == 'true' && '--upload' || '' }} ${{ inputs.daily == 'true' && '--daily' || '' }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:

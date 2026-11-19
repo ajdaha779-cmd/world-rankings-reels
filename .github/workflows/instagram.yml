@@ -19,6 +19,7 @@ on:
 
 permissions:
   contents: write
+  actions: write  # 20.11: утром запускает ежедневные ролики YouTube
 
 concurrency:
   group: instagram
@@ -35,6 +36,18 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
+
+      - name: YouTube — ролики на сегодня (раз в день, 10:00–17:00 по Баку)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          h=$(date -u +%H); today=$(TZ=America/New_York date +%F)
+          next=$(python -c "import json;print(json.load(open('data/youtube_next.json'))['start'])" 2>/dev/null || echo 0)
+          if [ "$h" -ge 6 ] && [ "$h" -le 13 ] && [[ ! "$next" > "$today" ]] && \
+             [ -z "$(gh run list --workflow youtube-batch.yml --status in_progress --json databaseId -q '.[0].databaseId')" ] && \
+             [ -z "$(gh run list --workflow youtube-batch.yml --status queued --json databaseId -q '.[0].databaseId')" ]; then
+            gh workflow run youtube-batch.yml -f daily=true -f upload=true && echo "YouTube: запущены ролики на $today"
+          else echo "YouTube: не сейчас (час $h UTC, следующий день $next)"; fi
 
       - name: Пора ли публиковать?
         id: due
