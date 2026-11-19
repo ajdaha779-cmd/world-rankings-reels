@@ -14,7 +14,8 @@
   "SE": 1,
   "IN": 2,
   "NI": 1,
-  "CA": 1
+  "CA": 1,
+  "MN": 1
  },
  "fans": {
   "KW": {
@@ -61,6 +62,9 @@
   },
   "CA": {
    "htzhusin": 1
+  },
+  "MN": {
+   "dutchbhd": 1
   }
  },
  "counted": [
@@ -81,7 +85,8 @@
   "18029908346918095:mostlycloudy999:NI",
   "18116872151150983:htzhusin:CA",
   "18116872151150983:maxim.aerts_:BE",
-  "18116872151150983:zyroxfx0:IN"
+  "18116872151150983:zyroxfx0:IN",
+  "18133121380893271:dutchbhd:MN"
  ],
  "recent": [
   [
@@ -151,6 +156,10 @@
   [
    "zyroxfx0",
    "IN"
+  ],
+  [
+   "dutchbhd",
+   "MN"
   ]
  ],
  "past": [
@@ -238,10 +247,12 @@
    "by": "sumya__bn910",
    "at": "2026-11-12",
    "fans": [
-    "sumya__bn910"
+    "sumya__bn910",
+    "dutchbhd"
    ],
    "cids": {
-    "sumya__bn910": "18099526211445963"
+    "sumya__bn910": "18099526211445963",
+    "dutchbhd": "18012386708778141"
    }
   },
   "KR": {
