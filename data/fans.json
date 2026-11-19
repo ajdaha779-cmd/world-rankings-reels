@@ -21,7 +21,9 @@
   "AF": 1,
   "DE": 1,
   "PH": 1,
-  "CZ": 1
+  "CZ": 1,
+  "LU": 1,
+  "TV": 1
  },
  "fans": {
   "KW": {
@@ -92,6 +94,12 @@
   },
   "CZ": {
    "lindoronthetop.xd": 1
+  },
+  "LU": {
+   "not_haydenfarns": 1
+  },
+  "TV": {
+   "mannylaundering": 1
   }
  },
  "counted": [
@@ -122,7 +130,9 @@
   "18116872151150983:jsh_7.12:IN",
   "18116872151150983:dwynedlcrzz_:PH",
   "17915271108490575:t_61pala:TR",
-  "17915271108490575:lindoronthetop.xd:CZ"
+  "17915271108490575:lindoronthetop.xd:CZ",
+  "17915271108490575:not_haydenfarns:LU",
+  "17915271108490575:mannylaundering:TV"
  ],
  "recent": [
   [
@@ -232,6 +242,14 @@
   [
    "lindoronthetop.xd",
    "CZ"
+  ],
+  [
+   "not_haydenfarns",
+   "LU"
+  ],
+  [
+   "mannylaundering",
+   "TV"
   ]
  ],
  "past": [
@@ -467,6 +485,26 @@
    ],
    "cids": {
     "lindoronthetop.xd": "17972275940965120"
+   }
+  },
+  "LU": {
+   "by": "not_haydenfarns",
+   "at": "2026-11-19",
+   "fans": [
+    "not_haydenfarns"
+   ],
+   "cids": {
+    "not_haydenfarns": "18112740145901020"
+   }
+  },
+  "TV": {
+   "by": "mannylaundering",
+   "at": "2026-11-19",
+   "fans": [
+    "mannylaundering"
+   ],
+   "cids": {
+    "mannylaundering": "18039303674903970"
    }
   }
  },
