@@ -23,7 +23,10 @@
   "PH": 1,
   "CZ": 1,
   "LU": 1,
-  "TV": 1
+  "TV": 1,
+  "BR": 1,
+  "AZ": 1,
+  "KZ": 1
  },
  "fans": {
   "KW": {
@@ -100,6 +103,15 @@
   },
   "TV": {
    "mannylaundering": 1
+  },
+  "BR": {
+   "davilucasss_11": 1
+  },
+  "AZ": {
+   "the_napaleon_oficial": 1
+  },
+  "KZ": {
+   "the_napaleon_oficial": 1
   }
  },
  "counted": [
@@ -132,7 +144,10 @@
   "17915271108490575:t_61pala:TR",
   "17915271108490575:lindoronthetop.xd:CZ",
   "17915271108490575:not_haydenfarns:LU",
-  "17915271108490575:mannylaundering:TV"
+  "17915271108490575:mannylaundering:TV",
+  "17915271108490575:davilucasss_11:BR",
+  "17915271108490575:the_napaleon_oficial:AZ",
+  "17915271108490575:the_napaleon_oficial:KZ"
  ],
  "recent": [
   [
@@ -250,6 +265,18 @@
   [
    "mannylaundering",
    "TV"
+  ],
+  [
+   "davilucasss_11",
+   "BR"
+  ],
+  [
+   "the_napaleon_oficial",
+   "AZ"
+  ],
+  [
+   "the_napaleon_oficial",
+   "KZ"
   ]
  ],
  "past": [
@@ -264,10 +291,12 @@
    "by": "sardvr",
    "at": "2026-11-10",
    "fans": [
-    "sardvr"
+    "sardvr",
+    "the_napaleon_oficial"
    ],
    "cids": {
-    "sardvr": "18376735582301283"
+    "sardvr": "18376735582301283",
+    "the_napaleon_oficial": "18134790061825465"
    }
   },
   "JO": {
@@ -505,6 +534,26 @@
    ],
    "cids": {
     "mannylaundering": "18039303674903970"
+   }
+  },
+  "BR": {
+   "by": "davilucasss_11",
+   "at": "2026-11-19",
+   "fans": [
+    "davilucasss_11"
+   ],
+   "cids": {
+    "davilucasss_11": "17946511152376047"
+   }
+  },
+  "KZ": {
+   "by": "the_napaleon_oficial",
+   "at": "2026-11-19",
+   "fans": [
+    "the_napaleon_oficial"
+   ],
+   "cids": {
+    "the_napaleon_oficial": "18134790061825465"
    }
   }
  },
