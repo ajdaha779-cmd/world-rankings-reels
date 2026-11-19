@@ -19,7 +19,8 @@
   "PL": 1,
   "SA": 1,
   "AF": 1,
-  "DE": 1
+  "DE": 1,
+  "PH": 1
  },
  "fans": {
   "KW": {
@@ -83,6 +84,9 @@
   },
   "DE": {
    "pt0.80197": 1
+  },
+  "PH": {
+   "dwynedlcrzz_": 1
   }
  },
  "counted": [
@@ -110,7 +114,8 @@
   "18116872151150983:mariah_skypon:SA",
   "18133121380893271:mujib_rahmat_ogli_:AF",
   "18116872151150983:pt0.80197:DE",
-  "18116872151150983:jsh_7.12:IN"
+  "18116872151150983:jsh_7.12:IN",
+  "18116872151150983:dwynedlcrzz_:PH"
  ],
  "recent": [
   [
@@ -208,6 +213,10 @@
   [
    "jsh_7.12",
    "IN"
+  ],
+  [
+   "dwynedlcrzz_",
+   "PH"
   ]
  ],
  "past": [
@@ -384,16 +393,6 @@
     "wima.matt._123": "18104702522386538"
    }
   },
-  "CA": {
-   "by": "htzhusin",
-   "at": "2026-11-18",
-   "fans": [
-    "htzhusin"
-   ],
-   "cids": {
-    "htzhusin": "18122254648978999"
-   }
-  },
   "BE": {
    "by": "maxim.aerts_",
    "at": "2026-11-18",
@@ -408,8 +407,7 @@
    "by": "zyroxfx0",
    "at": "2026-11-18",
    "fans": [
-    "zyroxfx0",
-    "jsh_7.12"
+    "zyroxfx0"
    ],
    "cids": {
     "zyroxfx0": "18134473648809705",
@@ -426,26 +424,6 @@
     "pixel_phantom26": "18099468014405417"
    }
   },
-  "PL": {
-   "by": "juleczka_wojcik",
-   "at": "2026-11-19",
-   "fans": [
-    "juleczka_wojcik"
-   ],
-   "cids": {
-    "juleczka_wojcik": "18114032396219459"
-   }
-  },
-  "SA": {
-   "by": "mariah_skypon",
-   "at": "2026-11-19",
-   "fans": [
-    "mariah_skypon"
-   ],
-   "cids": {
-    "mariah_skypon": "18133099333819829"
-   }
-  },
   "AF": {
    "by": "mujib_rahmat_ogli_",
    "at": "2026-11-19",
@@ -454,16 +432,6 @@
    ],
    "cids": {
     "mujib_rahmat_ogli_": "17922274188455099"
-   }
-  },
-  "DE": {
-   "by": "pt0.80197",
-   "at": "2026-11-19",
-   "fans": [
-    "pt0.80197"
-   ],
-   "cids": {
-    "pt0.80197": "17883512943543092"
    }
   }
  },
@@ -483,7 +451,11 @@
   "KW",
   "IS",
   "IL",
-  "AT"
+  "AT",
+  "BE",
+  "IN",
+  "PK",
+  "AF"
  ],
  "fans_shown": [
   "AZ:sardvr",
@@ -502,9 +474,14 @@
   "KW:m.alfaraj62",
   "IS:milutin2016",
   "IL:shlomifelix",
-  "AT:wima.matt._123"
+  "AT:wima.matt._123",
+  "MN:dutchbhd",
+  "BE:maxim.aerts_",
+  "IN:zyroxfx0",
+  "PK:pixel_phantom26",
+  "AF:mujib_rahmat_ogli_"
  ],
- "map_at": "2026-11-18T19:29:20.940635Z",
+ "map_at": "2026-11-19T18:08:03.368142Z",
  "notified": [
   "RU:zoktay_16_",
   "IR:ay_han8136",
@@ -526,7 +503,12 @@
   "KW:m.alfaraj62",
   "IS:milutin2016",
   "IL:shlomifelix",
-  "AT:wima.matt._123"
+  "AT:wima.matt._123",
+  "MN:dutchbhd",
+  "BE:maxim.aerts_",
+  "IN:zyroxfx0",
+  "PK:pixel_phantom26",
+  "AF:mujib_rahmat_ogli_"
  ],
  "blocked": [
   "anurag.kairi",
@@ -543,7 +525,13 @@
   "taim_123fed",
   "armaan_gabhru",
   "mostlycloudy999",
-  "oskarhft"
+  "oskarhft",
+  "dwynedlcrzz_",
+  "htzhusin",
+  "jsh_7.12",
+  "juleczka_wojcik",
+  "mariah_skypon",
+  "pt0.80197"
  ],
  "mention_ok": [
   "ay_han8136",
@@ -556,6 +544,11 @@
   "m.alfaraj62",
   "milutin2016",
   "shlomifelix",
-  "wima.matt._123"
+  "wima.matt._123",
+  "dutchbhd",
+  "maxim.aerts_",
+  "mujib_rahmat_ogli_",
+  "pixel_phantom26",
+  "zyroxfx0"
  ]
 }
