@@ -16,7 +16,8 @@
   "NI": 1,
   "CA": 1,
   "MN": 1,
-  "PL": 1
+  "PL": 1,
+  "SA": 1
  },
  "fans": {
   "KW": {
@@ -70,6 +71,9 @@
   },
   "PL": {
    "juleczka_wojcik": 1
+  },
+  "SA": {
+   "mariah_skypon": 1
   }
  },
  "counted": [
@@ -93,7 +97,8 @@
   "18116872151150983:zyroxfx0:IN",
   "18133121380893271:dutchbhd:MN",
   "18133121380893271:pixel_phantom26:PK",
-  "18116872151150983:juleczka_wojcik:PL"
+  "18116872151150983:juleczka_wojcik:PL",
+  "18116872151150983:mariah_skypon:SA"
  ],
  "recent": [
   [
@@ -175,6 +180,10 @@
   [
    "juleczka_wojcik",
    "PL"
+  ],
+  [
+   "mariah_skypon",
+   "SA"
   ]
  ],
  "past": [
@@ -399,6 +408,16 @@
    ],
    "cids": {
     "juleczka_wojcik": "18114032396219459"
+   }
+  },
+  "SA": {
+   "by": "mariah_skypon",
+   "at": "2026-11-19",
+   "fans": [
+    "mariah_skypon"
+   ],
+   "cids": {
+    "mariah_skypon": "18133099333819829"
    }
   }
  },
