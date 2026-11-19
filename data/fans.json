@@ -15,7 +15,8 @@
   "IN": 2,
   "NI": 1,
   "CA": 1,
-  "MN": 1
+  "MN": 1,
+  "PL": 1
  },
  "fans": {
   "KW": {
@@ -66,6 +67,9 @@
   },
   "MN": {
    "dutchbhd": 1
+  },
+  "PL": {
+   "juleczka_wojcik": 1
   }
  },
  "counted": [
@@ -88,7 +92,8 @@
   "18116872151150983:maxim.aerts_:BE",
   "18116872151150983:zyroxfx0:IN",
   "18133121380893271:dutchbhd:MN",
-  "18133121380893271:pixel_phantom26:PK"
+  "18133121380893271:pixel_phantom26:PK",
+  "18116872151150983:juleczka_wojcik:PL"
  ],
  "recent": [
   [
@@ -166,6 +171,10 @@
   [
    "pixel_phantom26",
    "PK"
+  ],
+  [
+   "juleczka_wojcik",
+   "PL"
   ]
  ],
  "past": [
@@ -380,6 +389,16 @@
    ],
    "cids": {
     "pixel_phantom26": "18099468014405417"
+   }
+  },
+  "PL": {
+   "by": "juleczka_wojcik",
+   "at": "2026-11-19",
+   "fans": [
+    "juleczka_wojcik"
+   ],
+   "cids": {
+    "juleczka_wojcik": "18114032396219459"
    }
   }
  },
