@@ -17,9 +17,10 @@ GROUP_WEIGHT = {"world": 3, "europe": 2, "asia": 2, "americas": 1.5, "exussr": 1
 # EU/ex-USSR и безработица в Европе — 66–77%)
 RANK_WEIGHT = {"pop": 3, "boom": 2.5, "shrink": 2, "economy": 2, "rich": 2 if YOUTUBE else 0.7, "life": 2,
                "young": 1.5, "old": 1.5, "babies": 1.5, "crowded": 1.5, "ppp": 1 if YOUTUBE else 0.5,
+               # 20.11: most dangerous in Asia — 1 700 просм., 19 лайков, 12 комм. (2-й результат канала)
                # 17.11: safest world 563/16 комм. — лучший за сутки; army G20 130, G20 в среднем 214 против Азии 553
                # острые темы (11.11) — повод найти свою страну и поспорить
-               "danger": 3, "safe": 3.5, "army": 1.5, "soldiers": 2.5, "fat": 2.5, "unequal": 2, "shortlife": 2}
+               "danger": 4.5, "safe": 3.5, "army": 1.5, "soldiers": 2.5, "fat": 2.5, "unequal": 2, "shortlife": 2}
 RANK_GROUP_WEIGHT = {"world": 3, "g20": 2, "asia": 3, "europe": 1.5, "americas": 1.5, "mideast": 1, "africa": 1,
                      "exussr": 0.7, "eu": 0.7}
 BASE_TAGS = "#shorts #countries #geography #comparison #data"
@@ -123,7 +124,8 @@ def _h2h_items(used, rng):
 
 
 def _race_items(used, rng, avoid):
-    if "h2h" not in avoid and rng.random() < 0.6:  # 16.11: «X vs Y по годам» — чаще обычной гонки
+    # 20.11: в Instagram h2h слабые (154–160 просм., 4 шт.) — 25%; на YouTube оставляем 60%
+    if "h2h" not in avoid and rng.random() < (0.6 if YOUTUBE else 0.25):  # 16.11: «X vs Y по годам»
         yield from _h2h_items(used, rng)
     from race import render_race
     # сильные темы и крупные регионы выпадают чаще (взвешенная случайная сортировка)
