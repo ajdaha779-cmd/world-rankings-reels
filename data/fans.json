@@ -9,7 +9,7 @@
   "EG": 1,
   "FI": 1,
   "IL": 1,
-  "BE": 2,
+  "BE": 3,
   "AT": 1,
   "SE": 1,
   "IN": 3,
@@ -58,7 +58,7 @@
   },
   "BE": {
    "noafinnj_dragons": 1,
-   "maxim.aerts_": 1
+   "maxim.aerts_": 2
   },
   "AT": {
    "wima.matt._123": 1
@@ -147,7 +147,8 @@
   "17915271108490575:mannylaundering:TV",
   "17915271108490575:davilucasss_11:BR",
   "17915271108490575:the_napaleon_oficial:AZ",
-  "17915271108490575:the_napaleon_oficial:KZ"
+  "17915271108490575:the_napaleon_oficial:KZ",
+  "17915271108490575:maxim.aerts_:BE"
  ],
  "recent": [
   [
