@@ -43,7 +43,7 @@ def main():
     ap.add_argument("--upload", action="store_true", help="сразу загрузить на YouTube с отложенной публикацией (API)")
     args = ap.parse_args()
     if not args.start and os.path.exists(NEXT):
-        if args.upload and json.load(open(NEXT))["start"] > str(datetime.date.today() + datetime.timedelta(days=3)):
+        if os.environ.get("GITHUB_EVENT_NAME") == "schedule" and json.load(open(NEXT))["start"] > str(datetime.date.today() + datetime.timedelta(days=3)):
             print("автопачка: запас роликов ещё есть, пропуск")  # запасной запуск расписания в понедельник
             return
         args.start = max(json.load(open(NEXT))["start"], str(datetime.date.today() + datetime.timedelta(days=1)))
