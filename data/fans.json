@@ -15,7 +15,7 @@
   "IN": 3,
   "NI": 1,
   "CA": 1,
-  "MN": 1,
+  "MN": 2,
   "PL": 1,
   "SA": 1,
   "AF": 1,
@@ -78,7 +78,8 @@
    "htzhusin": 1
   },
   "MN": {
-   "dutchbhd": 1
+   "dutchbhd": 1,
+   "anandchmg": 1
   },
   "PL": {
    "juleczka_wojcik": 1
@@ -148,7 +149,8 @@
   "17915271108490575:davilucasss_11:BR",
   "17915271108490575:the_napaleon_oficial:AZ",
   "17915271108490575:the_napaleon_oficial:KZ",
-  "17915271108490575:maxim.aerts_:BE"
+  "17915271108490575:maxim.aerts_:BE",
+  "17915271108490575:anandchmg:MN"
  ],
  "recent": [
   [
@@ -278,6 +280,10 @@
   [
    "the_napaleon_oficial",
    "KZ"
+  ],
+  [
+   "anandchmg",
+   "MN"
   ]
  ],
  "past": [
@@ -368,11 +374,13 @@
    "at": "2026-11-12",
    "fans": [
     "sumya__bn910",
-    "dutchbhd"
+    "dutchbhd",
+    "anandchmg"
    ],
    "cids": {
     "sumya__bn910": "18099526211445963",
-    "dutchbhd": "18012386708778141"
+    "dutchbhd": "18012386708778141",
+    "anandchmg": "18103969472649347"
    }
   },
   "KR": {
