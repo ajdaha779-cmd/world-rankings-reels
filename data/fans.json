@@ -3,7 +3,7 @@
  "points": {
   "KW": 3,
   "IS": 1,
-  "TR": 1,
+  "TR": 2,
   "RU": 1,
   "PK": 2,
   "EG": 1,
@@ -20,7 +20,8 @@
   "SA": 1,
   "AF": 1,
   "DE": 1,
-  "PH": 1
+  "PH": 1,
+  "CZ": 1
  },
  "fans": {
   "KW": {
@@ -31,7 +32,8 @@
    "milutin2016": 1
   },
   "TR": {
-   "ertugrulozkan.aksu": 1
+   "ertugrulozkan.aksu": 1,
+   "t_61pala": 1
   },
   "RU": {
    "sardvr": 1
@@ -87,6 +89,9 @@
   },
   "PH": {
    "dwynedlcrzz_": 1
+  },
+  "CZ": {
+   "lindoronthetop.xd": 1
   }
  },
  "counted": [
@@ -115,7 +120,9 @@
   "18133121380893271:mujib_rahmat_ogli_:AF",
   "18116872151150983:pt0.80197:DE",
   "18116872151150983:jsh_7.12:IN",
-  "18116872151150983:dwynedlcrzz_:PH"
+  "18116872151150983:dwynedlcrzz_:PH",
+  "17915271108490575:t_61pala:TR",
+  "17915271108490575:lindoronthetop.xd:CZ"
  ],
  "recent": [
   [
@@ -217,6 +224,14 @@
   [
    "dwynedlcrzz_",
    "PH"
+  ],
+  [
+   "t_61pala",
+   "TR"
+  ],
+  [
+   "lindoronthetop.xd",
+   "CZ"
   ]
  ],
  "past": [
@@ -432,6 +447,26 @@
    ],
    "cids": {
     "mujib_rahmat_ogli_": "17922274188455099"
+   }
+  },
+  "TR": {
+   "by": "t_61pala",
+   "at": "2026-11-19",
+   "fans": [
+    "t_61pala"
+   ],
+   "cids": {
+    "t_61pala": "18026756399939925"
+   }
+  },
+  "CZ": {
+   "by": "lindoronthetop.xd",
+   "at": "2026-11-19",
+   "fans": [
+    "lindoronthetop.xd"
+   ],
+   "cids": {
+    "lindoronthetop.xd": "17972275940965120"
    }
   }
  },
