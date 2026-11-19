@@ -1,16 +1,22 @@
 name: YouTube batch
 
-# Пачка роликов с озвучкой для ручной загрузки в YouTube Studio (с отложенной публикацией).
-# Запуск: Actions → YouTube batch → Run workflow. Ролики — во вкладке Artifacts запуска.
+# Пачка роликов с озвучкой → сразу на YouTube через API с отложенной публикацией (20.11: аудит не нужен).
+# Сама — по воскресеньям (запасной запуск в понедельник пропускается, если запас есть). Ролики — и в Artifacts.
 on:
+  schedule:
+    - cron: "0 6 * * 0"
+    - cron: "0 6 * * 1"
   workflow_dispatch:
     inputs:
       count:
         description: "Сколько роликов"
         default: "21"
       start:
-        description: "Первый день публикаций ГГГГ-ММ-ДД (пусто = завтра)"
+        description: "Первый день публикаций ГГГГ-ММ-ДД (пусто = после прошлой пачки)"
         default: ""
+      upload:
+        description: "Загрузить на YouTube (true/false)"
+        default: "true"
 
 permissions:
   contents: write
@@ -21,6 +27,9 @@ jobs:
     timeout-minutes: 120
     env:
       REELS_PLATFORM: youtube
+      YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+      YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+      YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -36,17 +45,19 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
           pip install -r requirements.txt
       - name: Сделать пачку
-        run: python make_batch.py --count ${{ inputs.count }} ${{ inputs.start && format('--start {0}', inputs.start) || '' }}
+        run: python make_batch.py --count ${{ inputs.count || '21' }} ${{ inputs.start && format('--start {0}', inputs.start) || '' }} ${{ (inputs.upload || 'true') == 'true' && '--upload' || '' }}
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: youtube-batch-${{ github.run_number }}
           path: к-публикации/
           retention-days: 14
       - name: Запомнить темы
+        if: always()  # даже если часть не загрузилась — темы уже использованы
         run: |
           git config user.name "reels-bot"
           git config user.email "reels-bot@users.noreply.github.com"
-          git add data/used_youtube.json
+          git add data/used_youtube.json data/youtube_next.json
           git diff --cached --quiet && exit 0
           git commit -q -m "YouTube: пачка #${{ github.run_number }}"
           for i in 1 2 3 4 5; do git push && exit 0; sleep $((i * 20)); git pull --rebase -q || true; done
