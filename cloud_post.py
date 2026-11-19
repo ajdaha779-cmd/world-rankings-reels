@@ -88,7 +88,8 @@ def main():
                     fans.check_mentions(conf, fan, history[-1]["media_id"])  # не отмечаемых — с карты долой
                 item = fans.make_map_item(fan) if fans.map_due(fan) and not fresh else None
                 if not item:
-                    sys.exit("карта: нет новых людей или уже выходила сегодня")
+                    print("карта: нет новых людей или уже выходила сегодня")
+                    sys.exit(0)  # 20.11: не ошибка — не красить запуск в красный
         except Exception as e:
             print(f"фанаты пропущены: {str(e)[:200]}")
     if not item and args.mode != "map" and requests_q.top_request(queue, used) and \
