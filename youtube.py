@@ -106,3 +106,34 @@ if __name__ == "__main__":
     else:
         ch = my_channel()
         print(ch["snippet"]["title"], ch["snippet"].get("customUrl"))
+
+
+def channel_stats(token=None, path=None):
+    """20.11: просмотры всех роликов канала → data/youtube_stats.json (для hits.py: что залетает на YouTube)."""
+    token = token or access_token()
+    _, b = call("GET", "channels", token, {"part": "contentDetails", "mine": "true"})
+    up = json.loads(b)["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
+    ids, page = [], None
+    while True:
+        p = {"part": "contentDetails", "playlistId": up, "maxResults": 50}
+        if page:
+            p["pageToken"] = page
+        _, b = call("GET", "playlistItems", token, p)
+        d = json.loads(b)
+        ids += [i["contentDetails"]["videoId"] for i in d["items"]]
+        page = d.get("nextPageToken")
+        if not page:
+            break
+    out = []
+    for i in range(0, len(ids), 50):
+        _, b = call("GET", "videos", token, {"part": "snippet,statistics,status", "id": ",".join(ids[i:i + 50])})
+        for v in json.loads(b)["items"]:
+            if v["status"]["privacyStatus"] != "public":
+                continue
+            s = v["statistics"]
+            out.append({"id": v["id"], "title": v["snippet"]["title"], "published": v["snippet"]["publishedAt"],
+                        "views": int(s.get("viewCount", 0)), "likes": int(s.get("likeCount", 0)),
+                        "comments": int(s.get("commentCount", 0))})
+    out.sort(key=lambda v: v["published"])
+    json.dump(out, open(path or os.path.join(os.path.dirname(CONF), "youtube_stats.json"), "w"), ensure_ascii=False, indent=1)
+    return out

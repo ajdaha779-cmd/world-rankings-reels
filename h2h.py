@@ -18,7 +18,7 @@ STATS = [("NY.GDP.PCAP.CD", "richer per person", "GDP per person (USD)", "money"
          ("SP.DYN.LE00.IN", "longer lives", "Life expectancy (years)", "years"),
          ("MS.MIL.XPND.CD", "the bigger military budget", "Military spending (USD)", "money")]
 BONUS = {"NY.GDP.PCAP.CD": 0.8, "NY.GDP.MKTP.CD": 0.5, "SP.POP.TOTL": 0.2, "SP.DYN.LE00.IN": -1.5,
-         "MS.MIL.XPND.CD": -0.8}  # «кто богаче» цепляет сильнее всего; армия — изредка, жизнь — спокойная тема
+         "MS.MIL.XPND.CD": -2.0}  # «кто богаче» цепляет сильнее всего; армия — изредка, жизнь — спокойная тема
 QUESTION = {"NY.GDP.PCAP.CD": "who's richer?", "NY.GDP.MKTP.CD": "whose economy is bigger?",
             "SP.POP.TOTL": "who has more people?", "SP.DYN.LE00.IN": "who lives longer?",
             "MS.MIL.XPND.CD": "who spends more on the army?"}
@@ -28,7 +28,10 @@ PAIRS = [("IN", "CN"), ("ID", "MY"), ("KR", "JP"), ("PH", "VN"), ("ID", "PH"), (
          ("NG", "ZA"), ("EG", "SA"), ("CN", "JP"), ("US", "CN"), ("RU", "CN"), ("VN", "TH"), ("TH", "MY"), ("KZ", "UZ"),
          ("AZ", "GE"), ("SA", "AE"), ("IN", "ID"), ("KR", "TW"), ("PL", "PT"), ("TR", "GR"), ("CL", "AR"), ("BD", "PK"),
          ("IE", "GB"), ("ES", "IT"), ("DE", "JP"), ("CN", "BR"), ("NG", "EG"), ("PH", "TH"), ("VN", "ID"),
-         ("KE", "ET"), ("UZ", "AZ"), ("CO", "PE"), ("TR", "PL"), ("KR", "IT"), ("MY", "SG"), ("IN", "BD")]
+         ("KE", "ET"), ("UZ", "AZ"), ("CO", "PE"), ("TR", "PL"), ("KR", "IT"), ("MY", "SG"), ("IN", "BD"),
+         # 20.11: на YouTube h2h с большими странами — 721–1 214 просмотров (USA–China, Russia–China, India–China)
+         ("IN", "JP"), ("JP", "RU"), ("CN", "DE"), ("IN", "BR"), ("IN", "GB"), ("CN", "GB"), ("US", "RU"), ("CN", "ID"),
+         ("IN", "DE"), ("IN", "FR"), ("CN", "FR"), ("CN", "IT"), ("IN", "IT"), ("KR", "RU"), ("ID", "RU"), ("BR", "RU")]
 
 
 def series(a, b, ind):

@@ -51,6 +51,12 @@ def main():
     if args.upload:
         import youtube
         token = youtube.access_token()
+        try:  # 20.11: свежие просмотры канала → hits.py подбирает темы, которые залетают на YouTube
+            print(f"статистика YouTube: {len(youtube.channel_stats(token))} роликов", flush=True)
+            import hits
+            hits.report()
+        except Exception as e:
+            print(f"статистика YouTube не получена: {str(e)[:200]}")
 
     used = set(json.load(open(USED))) if os.path.exists(USED) else set()
     today = datetime.date.today()

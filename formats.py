@@ -10,6 +10,8 @@ from duel import duel_rounds, flip_rounds, FLIPS
 
 ROTATION = ["race", "duel", "race", "ranking", "race"]  # 12.11: твисты пользователю не понравились — выключены  # 04.11: гонка после правок — 45% пролистываний и 47% досмотра, лучший формат
 YOUTUBE = os.environ.get("REELS_PLATFORM") == "youtube"
+import hits  # 20.11: что залетает на площадке → эти темы и регионы выпадают чаще (множители из статистики)
+BIG = set("US CN IN RU JP".split())  # 20.11: на YouTube h2h с ними — 721–1 214 просмотров
 # 11.11: на YouTube гонки про богатство в топе (461), в Instagram богатство пролистывают (77%)
 RACE_WEIGHT = {"pop": 3, "economy": 3, "army": 3, "rich": 2.5 if YOUTUBE else 1, "life": 1.5, "online": 1.5, "old": 1, "co2": 1}
 GROUP_WEIGHT = {"world": 3, "europe": 2, "asia": 2, "americas": 1.5, "exussr": 1.5, "africa": 1}
@@ -65,7 +67,8 @@ def _teaser(fact):
 def _ranking_items(used, rng, avoid):
     from render import render
     combos = sorted(((t, g) for t in TOPICS for g in GROUPS),
-                    key=lambda tg: -rng.random() ** (1 / (RANK_WEIGHT.get(tg[0]["id"], 1) * RANK_GROUP_WEIGHT.get(tg[1], 1)) ** 2))
+                    key=lambda tg: -rng.random() ** (1 / (RANK_WEIGHT.get(tg[0]["id"], 1) * RANK_GROUP_WEIGHT.get(tg[1], 1)
+                                                          * hits.topic(tg[0]["id"]) * hits.group(tg[1])) ** 2))
     for t, g in combos:
         key = f"{t['id']}:{g}"
         if key in used or t["id"] in avoid:
@@ -109,6 +112,9 @@ def _h2h_items(used, rng):
             continue
         ind, what, label, fmt_id, s = best
         years, va, vb, flips = s
+        if flips and flips[-1] - years[0] < 10:  # 20.11: «more populous until 1963» — обгон в самом начале, скучно
+            used.add(key)
+            continue
         if rng.random() < 0.5:  # кто слева — случайно
             a, b, va, vb = b, a, vb, va
         head = h2h.title_for(a, b, ind, what, (years, va, vb, flips))
@@ -130,7 +136,8 @@ def _race_items(used, rng, avoid):
     from race import render_race
     # сильные темы и крупные регионы выпадают чаще (взвешенная случайная сортировка)
     combos = sorted(((t, g) for t in RACE_TOPICS for g in RACE_GROUPS),
-                    key=lambda tg: -rng.random() ** (1 / (RACE_WEIGHT.get(tg[0]["id"], 1) * GROUP_WEIGHT.get(tg[1], 1)) ** 2))
+                    key=lambda tg: -rng.random() ** (1 / (RACE_WEIGHT.get(tg[0]["id"], 1) * GROUP_WEIGHT.get(tg[1], 1)
+                                                          * hits.topic(tg[0]["id"]) * hits.group(tg[1])) ** 2))
     for t, g in combos:
         key = f"race:{t['id']}:{g}"
         if key in used or f"race-{t['id']}" in avoid:
@@ -270,7 +277,7 @@ def _duel_items(used, rng, avoid):
     rng.shuffle(rivals)
     pairs = rivals + pairs  # а ещё раньше — соперники
     # 14.11: впереди — пары со странами наших комментаторов (Iran vs France: 1 425 просмотров, 39 комментариев)
-    hot = _hot_countries()
+    hot = _hot_countries() | (BIG if YOUTUBE else set())
     pairs.sort(key=lambda p: -((p[0] in hot) + (p[1] in hot)))
     flips = [p for p in FLIPS if f"flip:{'-'.join(sorted(p))}" not in used]
     if flips and rng.random() < 0:  # 12.11: «plot twist» выключен — пользователю не зашли новые форматы
