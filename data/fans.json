@@ -4,7 +4,7 @@
   "KW": 3,
   "IS": 1,
   "TR": 2,
-  "RU": 1,
+  "RU": 2,
   "PK": 2,
   "EG": 1,
   "FI": 1,
@@ -27,7 +27,8 @@
   "BR": 1,
   "AZ": 1,
   "KZ": 1,
-  "UZ": 1
+  "UZ": 1,
+  "KG": 1
  },
  "fans": {
   "KW": {
@@ -42,7 +43,8 @@
    "t_61pala": 1
   },
   "RU": {
-   "sardvr": 1
+   "sardvr": 1,
+   "fritoblob": 1
   },
   "PK": {
    "raffaayy__": 1,
@@ -117,6 +119,9 @@
   },
   "UZ": {
    "_muhammad.1117": 1
+  },
+  "KG": {
+   "mukhammad78862": 1
   }
  },
  "counted": [
@@ -155,7 +160,9 @@
   "17915271108490575:the_napaleon_oficial:KZ",
   "17915271108490575:maxim.aerts_:BE",
   "17915271108490575:anandchmg:MN",
-  "17915271108490575:_muhammad.1117:UZ"
+  "17915271108490575:_muhammad.1117:UZ",
+  "17915271108490575:fritoblob:RU",
+  "17915271108490575:mukhammad78862:KG"
  ],
  "recent": [
   [
@@ -293,6 +300,14 @@
   [
    "_muhammad.1117",
    "UZ"
+  ],
+  [
+   "fritoblob",
+   "RU"
+  ],
+  [
+   "mukhammad78862",
+   "KG"
   ]
  ],
  "past": [
@@ -329,11 +344,13 @@
    "by": "sardvr",
    "at": "2026-11-10",
    "fans": [
-    "sardvr"
+    "sardvr",
+    "fritoblob"
    ],
    "cids": {
     "zoktay_16_": "18138488986635017",
-    "sardvr": "17880164829632521"
+    "sardvr": "17880164829632521",
+    "fritoblob": "18111403409218256"
    }
   },
   "IR": {
@@ -582,6 +599,16 @@
    ],
    "cids": {
     "_muhammad.1117": "17919602982541650"
+   }
+  },
+  "KG": {
+   "by": "mukhammad78862",
+   "at": "2026-11-20",
+   "fans": [
+    "mukhammad78862"
+   ],
+   "cids": {
+    "mukhammad78862": "17967723201236877"
    }
   }
  },
