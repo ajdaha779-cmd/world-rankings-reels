@@ -26,7 +26,8 @@
   "TV": 1,
   "BR": 1,
   "AZ": 1,
-  "KZ": 1
+  "KZ": 1,
+  "UZ": 1
  },
  "fans": {
   "KW": {
@@ -113,6 +114,9 @@
   },
   "KZ": {
    "the_napaleon_oficial": 1
+  },
+  "UZ": {
+   "_muhammad.1117": 1
   }
  },
  "counted": [
@@ -150,7 +154,8 @@
   "17915271108490575:the_napaleon_oficial:AZ",
   "17915271108490575:the_napaleon_oficial:KZ",
   "17915271108490575:maxim.aerts_:BE",
-  "17915271108490575:anandchmg:MN"
+  "17915271108490575:anandchmg:MN",
+  "17915271108490575:_muhammad.1117:UZ"
  ],
  "recent": [
   [
@@ -284,6 +289,10 @@
   [
    "anandchmg",
    "MN"
+  ],
+  [
+   "_muhammad.1117",
+   "UZ"
   ]
  ],
  "past": [
@@ -563,6 +572,16 @@
    ],
    "cids": {
     "the_napaleon_oficial": "18134790061825465"
+   }
+  },
+  "UZ": {
+   "by": "_muhammad.1117",
+   "at": "2026-11-20",
+   "fans": [
+    "_muhammad.1117"
+   ],
+   "cids": {
+    "_muhammad.1117": "17919602982541650"
    }
   }
  },
