@@ -79,10 +79,14 @@ def history(ind):
     return out
 
 
-def race_frames(ind, group, top_n=10, min_countries=12):
-    """Ряды для гонки: (годы, {iso: [значение по годам]}) с заполнением пропусков. None — если данных мало."""
+def race_frames(ind, group, top_n=10, min_countries=12, min_pop=0):
+    """Ряды для гонки: (годы, {iso: [значение по годам]}) с заполнением пропусков. None — если данных мало.
+    min_pop — без крошечных стран (20.11: в «most dangerous» лезли Сент-Китс, Доминика — шум малых чисел)."""
     h = history(ind)
     members = [c for c in GROUPS[group][1] if c in h and len(h[c]) >= 5]
+    if min_pop:
+        pop = indicator("SP.POP.TOTL")
+        members = [c for c in members if pop.get(c, (0,))[0] >= min_pop]
     if len(members) < min_countries:
         return None
     years_all = sorted({y for c in members for y in h[c]})

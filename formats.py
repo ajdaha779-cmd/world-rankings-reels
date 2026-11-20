@@ -13,7 +13,7 @@ YOUTUBE = os.environ.get("REELS_PLATFORM") == "youtube"
 import hits  # 20.11: что залетает на площадке → эти темы и регионы выпадают чаще (множитель² — сильнее ручных весов)
 BIG = set("US CN IN RU JP".split())  # 20.11: на YouTube h2h с ними — 721–1 214 просмотров
 # 11.11: на YouTube гонки про богатство в топе (461), в Instagram богатство пролистывают (77%)
-RACE_WEIGHT = {"pop": 3, "economy": 3, "army": 3, "rich": 2.5 if YOUTUBE else 1, "life": 1.5, "online": 1.5, "old": 1, "co2": 1}
+RACE_WEIGHT = {"danger": 2.5, "pop": 3, "economy": 3, "army": 3, "rich": 2.5 if YOUTUBE else 1, "life": 1.5, "online": 1.5, "old": 1, "co2": 1}
 GROUP_WEIGHT = {"world": 3, "europe": 2, "asia": 2, "americas": 1.5, "exussr": 1.5, "africa": 1}
 # рейтинги: темы про людей и крупные группы держат лучше (07.11: «most people in Asia» 51%, G20 52% пролистываний;
 # EU/ex-USSR и безработица в Европе — 66–77%)
@@ -144,7 +144,7 @@ def _race_items(used, rng, avoid):
             continue
         if t["id"] == "army" and g in ("exussr", "europe", "asia"):  # без войн: в Азии — Израиль, Иран, Индия-Пакистан
             continue
-        rf = race_frames(t["ind"], g)
+        rf = race_frames(t["ind"], g, min_pop=1e6 if t["id"] == "danger" else 0)
         if not rf:
             used.add(key)
             continue

@@ -141,6 +141,9 @@ RACE_TOPICS = [
      "Oldest countries {g}, {y0} → {y1}", "population aging history"),
     ("co2", "EN.GHG.CO2.PC.CE.AR5", ("BIGGEST POLLUTERS", "PER PERSON"), "CO2 per person (tonnes)", "tonnes",
      "Biggest polluters per person {g}, {y0} → {y1}", "climate environment history"),
+    # 20.11: «most dangerous» — хиты Instagram (Asia 1 704, Europe 1 509) → та же тема гонкой по годам
+    ("danger", "VC.IHR.PSRC.P5", ("MOST DANGEROUS", "COUNTRIES"), "Murders per 100,000 people", "dec1",
+     "Most dangerous countries {g}, {y0} → {y1}", "safety crime travel history"),
 ]
 RACE_TOPICS = [dict(zip(("id", "ind", "hook", "sub", "fmt", "question", "tags"), t)) for t in RACE_TOPICS]
 
