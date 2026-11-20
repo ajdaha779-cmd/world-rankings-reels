@@ -240,6 +240,8 @@ def make_map_item(st):
     by = {c: st["lit"][c].get("fans") or [st["lit"][c]["by"]] for c in st["lit"]}
     names = ", ".join(f"{flag_emoji(c)} {COUNTRIES[c]}" for c in new_all[:16])
     shown = set(st.get("fans_shown", []))
+    # 21.11 (пользователь): новый зритель уже зажжённой страны — его ник рядом со старым, и он первый (не прячется в «+N»)
+    by = {c: [u for u in v if f"{c}:{u}" not in shown] + [u for u in v if f"{c}:{u}" in shown] for c, v in by.items()}
     tagged = [(c, u) for c in anim for u in by[c] if f"{c}:{u}" not in shown]
     mentions = ""  # 14.11: все отметки — одним комментарием под роликом (map_comment), подпись без ников
     head = f"Light Up the World 🌍 {total}/{GOAL} countries lit — is yours? Comment your flag 👇"

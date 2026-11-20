@@ -129,17 +129,20 @@ LOC = {"fa": {"rank": "{fl} {name} رتبه {rank} از {total} در {where} ا�
               "pair": "{a} در برابر {b}؟ عالیه، به لیست نبردهای ما اضافه شد ⚔️",
               "one": "{name} {fl}! نبرد بعدی با کدام کشور باشد؟",
               "lit": " 🌍 {name} روی نقشه جهانی ما روشن شد — نام تو در ویدیوی بعدی روی آن خواهد بود!",
-              "point": " +۱ امتیاز برای {name} 🏆"},
+              "point": " +۱ امتیاز برای {name} 🏆",
+              "join": " 🌍 {name} را @{by} روشن کرده — نام شما هم در ویدیوی بعدی کنار او روی نقشه می‌آید!"},
        "tr": {"rank": "{fl} {name}, {where} {total} ülke arasında {rank}. sırada ({value})",
               "pair": "{a} - {b}? Harika, savaş listemize eklendi ⚔️",
               "one": "{name} {fl}! Sıradaki rakibi kim olsun?",
               "lit": " 🌍 {name} dünya haritamızda yandı — adın bir sonraki videoda üzerinde olacak!",
-              "point": " {name} için +1 puan 🏆"},
+              "point": " {name} için +1 puan 🏆",
+              "join": " 🌍 {name} zaten @{by} tarafından yakıldı — adın bir sonraki harita videosunda onun yanında olacak!"},
        "ru": {"rank": "{fl} {name} — {rank}-е место из {total} {where} ({value})",
               "pair": "{a} против {b}? Отлично, добавили в список битв ⚔️",
               "one": "{name} {fl}! С кем ей сразиться дальше?",
               "lit": " 🌍 Ты зажёг {name} на нашей карте мира — твой ник будет на ней в следующем видео!",
-              "point": " +1 очко для {name} 🏆"}}
+              "point": " +1 очко для {name} 🏆",
+              "join": " 🌍 {name} уже зажёг @{by} — твой ник появится рядом с его ником в следующем ролике-карте!"}}
 
 
 def loc_text(lang, kind, user=None, **kw):
@@ -210,8 +213,8 @@ def run(c=None, history=None, queue=None):
                     text += LOC[lang]["lit"].format(name=name) if lang != "en" else \
                         f" 🌍 You just lit up {name} on our world map — your name goes on it in the next video!"
                 else:
-                    text += LOC[lang]["point"].format(name=name) if lang != "en" else \
-                        f" +1 point for {name} 🏆 (lit by @{lit['by']})"
+                    text += LOC[lang]["join"].format(name=name, by=lit["by"]) if lang != "en" else \
+                        f" 🌍 {name} is already lit by @{lit['by']} — your name goes on it right next to theirs in the next map video!"
             if not text:
                 continue
             try:
