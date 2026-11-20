@@ -18,7 +18,7 @@ STATS = [("NY.GDP.PCAP.CD", "richer per person", "GDP per person (USD)", "money"
          ("SP.DYN.LE00.IN", "longer lives", "Life expectancy (years)", "years"),
          ("MS.MIL.XPND.CD", "the bigger military budget", "Military spending (USD)", "money")]
 BONUS = {"NY.GDP.PCAP.CD": 0.8, "NY.GDP.MKTP.CD": 0.5, "SP.POP.TOTL": 0.2, "SP.DYN.LE00.IN": -1.5,
-         "MS.MIL.XPND.CD": -2.0}  # «кто богаче» цепляет сильнее всего; армия — изредка, жизнь — спокойная тема
+         "MS.MIL.XPND.CD": -3.0}  # «кто богаче» цепляет сильнее всего; армия — изредка, жизнь — спокойная тема
 QUESTION = {"NY.GDP.PCAP.CD": "who's richer?", "NY.GDP.MKTP.CD": "whose economy is bigger?",
             "SP.POP.TOTL": "who has more people?", "SP.DYN.LE00.IN": "who lives longer?",
             "MS.MIL.XPND.CD": "who spends more on the army?"}

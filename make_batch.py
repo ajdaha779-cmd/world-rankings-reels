@@ -75,7 +75,13 @@ def main():
     plan, meta, recent = [], [], []
     now = datetime.datetime.now(AUDIENCE) + datetime.timedelta(minutes=40)
     for i, when in enumerate(w for w in slots(args.count, start) if w > now):  # прошедшие слоты дня — пропуск
-        item = next_item(i, used, rng, avoid=recent[-2:])
+        kind = None
+        if args.daily:  # 20.11: формат — по статистике YouTube (h2h/гонки ×1.3–1.4, дуэли ×0.95), не по кругу
+            import hits
+            kw = {"race": max(hits.kind("race"), hits.kind("h2h")) ** 3, "ranking": hits.kind("ranking") ** 3,
+                  "duel": hits.kind("duel") ** 3}
+            kind = rng.choices(list(kw), weights=list(kw.values()))[0]
+        item = next_item(i, used, rng, avoid=recent[-2:], kind=kind)
         if not item:
             notify("Темы закончились — нужно добавить новые в catalog.py")
             break

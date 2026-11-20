@@ -131,6 +131,10 @@ def group(g):
     return _get()[1].get(g, 1.0)
 
 
+def kind(k):
+    return _get()[2].get(k, 1.0)
+
+
 def report():
     rows = _rows()
     print(f"{'YouTube' if YOUTUBE else 'Instagram'}: {len(rows)} роликов")
