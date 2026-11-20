@@ -97,7 +97,7 @@ def rank_line(h, iso, user=None, salt=0):
                            f"{fl} {name} comes {_ord(r['rank'])} in {r['where']} — {r['value']}",
                            f"{name} is number {r['rank']} in {r['where']} {fl} ({r['value']})"])
     good = r["rank"] <= max(3, r["total"] // 3)
-    end = rnd.choice([e for e in ENDINGS if good or "Not bad" not in e])
+    end = rnd.choice([e for e in ENDINGS if (good or "Not bad" not in e) and (r["rank"] > 3 or "higher" not in e)])
     if end.strip() and end.strip() != "👀" and body[-1].isalnum():
         body += "."
     body = body[0].upper() + body[1:]

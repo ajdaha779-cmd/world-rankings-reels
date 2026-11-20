@@ -49,6 +49,22 @@ jobs:
             gh workflow run youtube-batch.yml -f daily=true -f upload=true && echo "YouTube: запущены ролики на $today"
           else echo "YouTube: не сейчас (час $h UTC, следующий день $next)"; fi
 
+      - name: YouTube — ответы на комментарии (каждый час)
+        continue-on-error: true
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+        run: |
+          pip install -q certifi numpy pillow
+          python yt_replies.py
+          git config user.name "reels-bot"
+          git config user.email "reels-bot@users.noreply.github.com"
+          git add data/yt_replied.json
+          git diff --cached --quiet && exit 0
+          git commit -q -m "YouTube: ответы на комментарии"
+          for i in 1 2 3; do git push && exit 0; sleep $((i * 15)); git pull --rebase -q || true; done
+
       - name: Пора ли публиковать?
         id: due
         run: |
