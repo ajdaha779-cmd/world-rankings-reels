@@ -303,6 +303,27 @@ def _duel_items(used, rng, avoid):
 SOURCES = {"ranking": _ranking_items, "race": _race_items, "duel": _duel_items}
 
 
+def item_by_key(key, used, rng=None):
+    """20.11: ролик по конкретному ключу («race:online:asia», «boom:world», «h2h:CN-IN») — для подбора по хитам."""
+    import h2h
+    rng = rng or random.Random(key)
+    universe = {f"{t['id']}:{g}" for t in TOPICS for g in GROUPS} | \
+               {f"race:{t['id']}:{g}" for t in RACE_TOPICS for g in RACE_GROUPS} | \
+               {f"h2h:{'-'.join(sorted(p))}" for p in h2h.PAIRS}
+    blocked = (universe - {key}) | set(used)
+    blocked.discard(key)
+    if key.startswith("h2h:"):
+        gen = _h2h_items(blocked, rng)
+    elif key.startswith("race:"):
+        gen = _race_items(blocked, rng, {"h2h"})
+    else:
+        gen = _ranking_items(blocked, rng, set())
+    for item in gen:
+        if item["key"] == key:
+            return item
+    return None
+
+
 def pick_kind(n_done, weights, recent_kinds, rng):
     """Формат следующего ролика: по весам статистики (если она есть), иначе по кругу ROTATION.
     Один и тот же формат не идёт три раза подряд."""

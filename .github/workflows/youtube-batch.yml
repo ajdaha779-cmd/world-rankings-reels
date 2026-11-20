@@ -18,6 +18,9 @@ on:
       daily:
         description: "Ролики на сегодня по свежей статистике (true/false)"
         default: "true"
+      keys:
+        description: "Темы через запятую (подбор по хитам), пусто = автоподбор"
+        default: ""
 
 permissions:
   contents: write
@@ -50,7 +53,7 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
           pip install -r requirements.txt
       - name: Сделать пачку
-        run: python make_batch.py --count ${{ inputs.count || '21' }} ${{ inputs.start && format('--start {0}', inputs.start) || '' }} ${{ (inputs.upload || 'true') == 'true' && '--upload' || '' }} ${{ inputs.daily == 'true' && '--daily' || '' }}
+        run: python make_batch.py --count ${{ inputs.count || '21' }} ${{ inputs.start && format('--start {0}', inputs.start) || '' }} ${{ (inputs.upload || 'true') == 'true' && '--upload' || '' }} ${{ inputs.daily == 'true' && '--daily' || '' }} ${{ inputs.keys && format('--keys {0}', inputs.keys) || '' }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:

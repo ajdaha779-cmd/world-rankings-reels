@@ -43,7 +43,11 @@ def main():
     ap.add_argument("--upload", action="store_true", help="сразу загрузить на YouTube с отложенной публикацией (API)")
     ap.add_argument("--daily", action="store_true",
                     help="20.11: 3 ролика на сегодня (по Нью-Йорку), темы — по свежей статистике; раз в день")
+    ap.add_argument("--keys", help="20.11: список тем через запятую (по хитам) вместо автоподбора")
     args = ap.parse_args()
+    keys = args.keys.split(",") if args.keys else None
+    if keys:
+        args.count = len(keys)
     if args.daily:  # пользователь 20.11: «никогда заранее на несколько дней — каждый день аналитика и подбор»
         today_ny = datetime.datetime.now(AUDIENCE).date()
         if os.path.exists(NEXT) and json.load(open(NEXT))["start"] > str(today_ny):
@@ -81,7 +85,13 @@ def main():
             kw = {"race": max(hits.kind("race"), hits.kind("h2h")) ** 3, "ranking": hits.kind("ranking") ** 3,
                   "duel": hits.kind("duel") ** 3}
             kind = rng.choices(list(kw), weights=list(kw.values()))[0]
-        item = next_item(i, used, rng, avoid=recent[-2:], kind=kind)
+        item = None
+        if keys:
+            from formats import item_by_key
+            item = item_by_key(keys[i], used)
+            if not item:
+                print(f"тема {keys[i]} недоступна — беру автоподбор", flush=True)
+        item = item or next_item(i, used, rng, avoid=recent[-2:], kind=kind)
         if not item:
             notify("Темы закончились — нужно добавить новые в catalog.py")
             break
