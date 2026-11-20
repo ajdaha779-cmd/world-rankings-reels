@@ -3,7 +3,7 @@
  "points": {
   "KW": 3,
   "IS": 1,
-  "TR": 3,
+  "TR": 4,
   "RU": 2,
   "PK": 2,
   "EG": 1,
@@ -45,7 +45,8 @@
   "TR": {
    "ertugrulozkan.aksu": 1,
    "t_61pala": 1,
-   "tabiki_pooyyrrrr": 1
+   "tabiki_pooyyrrrr": 1,
+   "komutankertenkele35": 1
   },
   "RU": {
    "sardvr": 1,
@@ -188,7 +189,8 @@
   "17915271108490575:aarav.aarav85:MY",
   "17993153597867861:gyp_etra:HU",
   "17993153597867861:tabiki_pooyyrrrr:TR",
-  "17993153597867861:katopis_:GR"
+  "17993153597867861:katopis_:GR",
+  "17920739424530702:komutankertenkele35:TR"
  ],
  "recent": [
   [
@@ -362,6 +364,10 @@
   [
    "katopis_",
    "GR"
+  ],
+  [
+   "komutankertenkele35",
+   "TR"
   ]
  ],
  "past": [
@@ -639,10 +645,12 @@
    "by": "tabiki_pooyyrrrr",
    "at": "2026-11-20",
    "fans": [
-    "tabiki_pooyyrrrr"
+    "tabiki_pooyyrrrr",
+    "komutankertenkele35"
    ],
    "cids": {
-    "tabiki_pooyyrrrr": "18072967049507711"
+    "tabiki_pooyyrrrr": "18072967049507711",
+    "komutankertenkele35": "17957408781038499"
    }
   },
   "GR": {
