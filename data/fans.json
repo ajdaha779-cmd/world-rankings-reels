@@ -3,7 +3,7 @@
  "points": {
   "KW": 3,
   "IS": 1,
-  "TR": 2,
+  "TR": 3,
   "RU": 2,
   "PK": 2,
   "EG": 1,
@@ -30,7 +30,9 @@
   "UZ": 1,
   "KG": 1,
   "NL": 1,
-  "MY": 2
+  "MY": 2,
+  "HU": 1,
+  "GR": 1
  },
  "fans": {
   "KW": {
@@ -42,7 +44,8 @@
   },
   "TR": {
    "ertugrulozkan.aksu": 1,
-   "t_61pala": 1
+   "t_61pala": 1,
+   "tabiki_pooyyrrrr": 1
   },
   "RU": {
    "sardvr": 1,
@@ -132,6 +135,12 @@
   "MY": {
    "ashley._ed": 1,
    "aarav.aarav85": 1
+  },
+  "HU": {
+   "gyp_etra": 1
+  },
+  "GR": {
+   "katopis_": 1
   }
  },
  "counted": [
@@ -176,7 +185,10 @@
   "17915271108490575:aaronjoriswitting:NL",
   "18157323949524692:kobe_waegemans:BE",
   "17915271108490575:ashley._ed:MY",
-  "17915271108490575:aarav.aarav85:MY"
+  "17915271108490575:aarav.aarav85:MY",
+  "17993153597867861:gyp_etra:HU",
+  "17993153597867861:tabiki_pooyyrrrr:TR",
+  "17993153597867861:katopis_:GR"
  ],
  "recent": [
   [
@@ -338,6 +350,18 @@
   [
    "aarav.aarav85",
    "MY"
+  ],
+  [
+   "gyp_etra",
+   "HU"
+  ],
+  [
+   "tabiki_pooyyrrrr",
+   "TR"
+  ],
+  [
+   "katopis_",
+   "GR"
   ]
  ],
  "past": [
@@ -599,6 +623,36 @@
    "cids": {
     "ashley._ed": "17994624000079153",
     "aarav.aarav85": "18084346328710861"
+   }
+  },
+  "HU": {
+   "by": "gyp_etra",
+   "at": "2026-11-20",
+   "fans": [
+    "gyp_etra"
+   ],
+   "cids": {
+    "gyp_etra": "18645115111033229"
+   }
+  },
+  "TR": {
+   "by": "tabiki_pooyyrrrr",
+   "at": "2026-11-20",
+   "fans": [
+    "tabiki_pooyyrrrr"
+   ],
+   "cids": {
+    "tabiki_pooyyrrrr": "18072967049507711"
+   }
+  },
+  "GR": {
+   "by": "katopis_",
+   "at": "2026-11-20",
+   "fans": [
+    "katopis_"
+   ],
+   "cids": {
+    "katopis_": "18577039306079297"
    }
   }
  },
