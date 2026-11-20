@@ -9,7 +9,7 @@
   "EG": 1,
   "FI": 1,
   "IL": 1,
-  "BE": 3,
+  "BE": 4,
   "AT": 1,
   "SE": 1,
   "IN": 3,
@@ -28,7 +28,8 @@
   "AZ": 1,
   "KZ": 1,
   "UZ": 1,
-  "KG": 1
+  "KG": 1,
+  "NL": 1
  },
  "fans": {
   "KW": {
@@ -61,7 +62,8 @@
   },
   "BE": {
    "noafinnj_dragons": 1,
-   "maxim.aerts_": 2
+   "maxim.aerts_": 2,
+   "kobe_waegemans": 1
   },
   "AT": {
    "wima.matt._123": 1
@@ -122,6 +124,9 @@
   },
   "KG": {
    "mukhammad78862": 1
+  },
+  "NL": {
+   "aaronjoriswitting": 1
   }
  },
  "counted": [
@@ -162,7 +167,9 @@
   "17915271108490575:anandchmg:MN",
   "17915271108490575:_muhammad.1117:UZ",
   "17915271108490575:fritoblob:RU",
-  "17915271108490575:mukhammad78862:KG"
+  "17915271108490575:mukhammad78862:KG",
+  "17915271108490575:aaronjoriswitting:NL",
+  "18157323949524692:kobe_waegemans:BE"
  ],
  "recent": [
   [
@@ -308,6 +315,14 @@
   [
    "mukhammad78862",
    "KG"
+  ],
+  [
+   "aaronjoriswitting",
+   "NL"
+  ],
+  [
+   "kobe_waegemans",
+   "BE"
   ]
  ],
  "past": [
@@ -494,10 +509,12 @@
    "by": "maxim.aerts_",
    "at": "2026-11-18",
    "fans": [
-    "maxim.aerts_"
+    "maxim.aerts_",
+    "kobe_waegemans"
    ],
    "cids": {
-    "maxim.aerts_": "17998147722102310"
+    "maxim.aerts_": "17998147722102310",
+    "kobe_waegemans": "18059305481580927"
    }
   },
   "IN": {
@@ -609,6 +626,16 @@
    ],
    "cids": {
     "mukhammad78862": "17967723201236877"
+   }
+  },
+  "NL": {
+   "by": "aaronjoriswitting",
+   "at": "2026-11-20",
+   "fans": [
+    "aaronjoriswitting"
+   ],
+   "cids": {
+    "aaronjoriswitting": "17871848895661997"
    }
   }
  },
