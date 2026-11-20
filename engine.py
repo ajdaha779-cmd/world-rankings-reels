@@ -192,6 +192,13 @@ def music_bed(dur, bpm=118, root=55.0, seed=0):
     return out
 
 
+# 20.11: в сетке канала YouTube превью Shorts обрезано сверху и снизу (~150 px) — заголовки срезались.
+# Для YouTube весь кадр уменьшаем до 82% и ставим по центру на размытый фон из того же кадра.
+YT_SAFE = ["-vf", "split[a][b];[a]scale=270:480,boxblur=8,scale=1080:1920,eq=brightness=-0.12[bg];"
+                  "[b]scale=886:1576[fg];[bg][fg]overlay=97:172"] \
+    if os.environ.get("REELS_PLATFORM") == "youtube" else []
+
+
 class Video:
     def __init__(self, name, duration, out_path=None):
         self.name, self.duration = name, duration
@@ -201,7 +208,7 @@ class Video:
         self.tmp = os.path.join(OUT, f"_{name}_v.mp4")
         self.p = subprocess.Popen(
             [FF, "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
-             "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
+             "-r", str(FPS), "-i", "-", *YT_SAFE, "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
              "-pix_fmt", "yuv420p", self.tmp], stdin=subprocess.PIPE)
 
     def sfx(self, t, kind, vol=1.0, **kw):
