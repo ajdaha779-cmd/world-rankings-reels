@@ -30,7 +30,7 @@
   "UZ": 1,
   "KG": 1,
   "NL": 1,
-  "MY": 1
+  "MY": 2
  },
  "fans": {
   "KW": {
@@ -130,7 +130,8 @@
    "aaronjoriswitting": 1
   },
   "MY": {
-   "ashley._ed": 1
+   "ashley._ed": 1,
+   "aarav.aarav85": 1
   }
  },
  "counted": [
@@ -174,7 +175,8 @@
   "17915271108490575:mukhammad78862:KG",
   "17915271108490575:aaronjoriswitting:NL",
   "18157323949524692:kobe_waegemans:BE",
-  "17915271108490575:ashley._ed:MY"
+  "17915271108490575:ashley._ed:MY",
+  "17915271108490575:aarav.aarav85:MY"
  ],
  "recent": [
   [
@@ -331,6 +333,10 @@
   ],
   [
    "ashley._ed",
+   "MY"
+  ],
+  [
+   "aarav.aarav85",
    "MY"
   ]
  ],
@@ -651,10 +657,12 @@
    "by": "ashley._ed",
    "at": "2026-11-20",
    "fans": [
-    "ashley._ed"
+    "ashley._ed",
+    "aarav.aarav85"
    ],
    "cids": {
-    "ashley._ed": "17994624000079153"
+    "ashley._ed": "17994624000079153",
+    "aarav.aarav85": "18084346328710861"
    }
   }
  },
