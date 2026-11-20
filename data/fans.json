@@ -352,8 +352,7 @@
    "by": "sardvr",
    "at": "2026-11-10",
    "fans": [
-    "sardvr",
-    "the_napaleon_oficial"
+    "sardvr"
    ],
    "cids": {
     "sardvr": "18376735582301283",
@@ -374,8 +373,7 @@
    "by": "sardvr",
    "at": "2026-11-10",
    "fans": [
-    "sardvr",
-    "fritoblob"
+    "sardvr"
    ],
    "cids": {
     "zoktay_16_": "18138488986635017",
@@ -430,8 +428,7 @@
    "at": "2026-11-12",
    "fans": [
     "sumya__bn910",
-    "dutchbhd",
-    "anandchmg"
+    "dutchbhd"
    ],
    "cids": {
     "sumya__bn910": "18099526211445963",
@@ -524,8 +521,7 @@
    "by": "maxim.aerts_",
    "at": "2026-11-18",
    "fans": [
-    "maxim.aerts_",
-    "kobe_waegemans"
+    "maxim.aerts_"
    ],
    "cids": {
     "maxim.aerts_": "17998147722102310",
@@ -563,46 +559,6 @@
     "mujib_rahmat_ogli_": "17922274188455099"
    }
   },
-  "TR": {
-   "by": "t_61pala",
-   "at": "2026-11-19",
-   "fans": [
-    "t_61pala"
-   ],
-   "cids": {
-    "t_61pala": "18026756399939925"
-   }
-  },
-  "CZ": {
-   "by": "lindoronthetop.xd",
-   "at": "2026-11-19",
-   "fans": [
-    "lindoronthetop.xd"
-   ],
-   "cids": {
-    "lindoronthetop.xd": "17972275940965120"
-   }
-  },
-  "LU": {
-   "by": "not_haydenfarns",
-   "at": "2026-11-19",
-   "fans": [
-    "not_haydenfarns"
-   ],
-   "cids": {
-    "not_haydenfarns": "18112740145901020"
-   }
-  },
-  "TV": {
-   "by": "mannylaundering",
-   "at": "2026-11-19",
-   "fans": [
-    "mannylaundering"
-   ],
-   "cids": {
-    "mannylaundering": "18039303674903970"
-   }
-  },
   "BR": {
    "by": "davilucasss_11",
    "at": "2026-11-19",
@@ -611,26 +567,6 @@
    ],
    "cids": {
     "davilucasss_11": "17946511152376047"
-   }
-  },
-  "KZ": {
-   "by": "the_napaleon_oficial",
-   "at": "2026-11-19",
-   "fans": [
-    "the_napaleon_oficial"
-   ],
-   "cids": {
-    "the_napaleon_oficial": "18134790061825465"
-   }
-  },
-  "UZ": {
-   "by": "_muhammad.1117",
-   "at": "2026-11-20",
-   "fans": [
-    "_muhammad.1117"
-   ],
-   "cids": {
-    "_muhammad.1117": "17919602982541650"
    }
   },
   "KG": {
@@ -686,7 +622,11 @@
   "BE",
   "IN",
   "PK",
-  "AF"
+  "AF",
+  "BR",
+  "KG",
+  "NL",
+  "MY"
  ],
  "fans_shown": [
   "AZ:sardvr",
@@ -710,9 +650,14 @@
   "BE:maxim.aerts_",
   "IN:zyroxfx0",
   "PK:pixel_phantom26",
-  "AF:mujib_rahmat_ogli_"
+  "AF:mujib_rahmat_ogli_",
+  "BR:davilucasss_11",
+  "KG:mukhammad78862",
+  "NL:aaronjoriswitting",
+  "MY:ashley._ed",
+  "MY:aarav.aarav85"
  ],
- "map_at": "2026-11-19T18:08:03.368142Z",
+ "map_at": "2026-11-20T19:20:38.918296Z",
  "notified": [
   "RU:zoktay_16_",
   "IR:ay_han8136",
@@ -739,7 +684,12 @@
   "BE:maxim.aerts_",
   "IN:zyroxfx0",
   "PK:pixel_phantom26",
-  "AF:mujib_rahmat_ogli_"
+  "AF:mujib_rahmat_ogli_",
+  "BR:davilucasss_11",
+  "KG:mukhammad78862",
+  "NL:aaronjoriswitting",
+  "MY:ashley._ed",
+  "MY:aarav.aarav85"
  ],
  "blocked": [
   "anurag.kairi",
@@ -762,7 +712,16 @@
   "jsh_7.12",
   "juleczka_wojcik",
   "mariah_skypon",
-  "pt0.80197"
+  "pt0.80197",
+  "_muhammad.1117",
+  "anandchmg",
+  "fritoblob",
+  "kobe_waegemans",
+  "lindoronthetop.xd",
+  "mannylaundering",
+  "not_haydenfarns",
+  "t_61pala",
+  "the_napaleon_oficial"
  ],
  "mention_ok": [
   "ay_han8136",
@@ -780,6 +739,11 @@
   "maxim.aerts_",
   "mujib_rahmat_ogli_",
   "pixel_phantom26",
-  "zyroxfx0"
+  "zyroxfx0",
+  "aarav.aarav85",
+  "aaronjoriswitting",
+  "ashley._ed",
+  "davilucasss_11",
+  "mukhammad78862"
  ]
 }
