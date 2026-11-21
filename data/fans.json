@@ -31,9 +31,15 @@
   "KG": 1,
   "NL": 1,
   "MY": 2,
-  "HU": 1,
+  "HU": 2,
   "GR": 1,
-  "GB": 1
+  "GB": 1,
+  "ES": 1,
+  "OM": 1,
+  "BG": 1,
+  "RO": 1,
+  "TD": 1,
+  "DZ": 1
  },
  "fans": {
   "KW": {
@@ -140,13 +146,32 @@
    "aarav.aarav85": 1
   },
   "HU": {
-   "gyp_etra": 1
+   "gyp_etra": 1,
+   "nezoroki_pictures": 1
   },
   "GR": {
    "katopis_": 1
   },
   "GB": {
    "chathatajpreet": 1
+  },
+  "ES": {
+   "salami_jr27": 1
+  },
+  "OM": {
+   "mohalwah1": 1
+  },
+  "BG": {
+   "gabriela_rasheva11": 1
+  },
+  "RO": {
+   "xeroquiz": 1
+  },
+  "TD": {
+   "xeroquiz": 1
+  },
+  "DZ": {
+   "drip.faker": 1
   }
  },
  "counted": [
@@ -197,7 +222,14 @@
   "17993153597867861:katopis_:GR",
   "17920739424530702:komutankertenkele35:TR",
   "17917787163517081:chathatajpreet:GB",
-  "17917787163517081:topiko3321:TR"
+  "17917787163517081:topiko3321:TR",
+  "18644253256020585:salami_jr27:ES",
+  "18644253256020585:nezoroki_pictures:HU",
+  "18644253256020585:mohalwah1:OM",
+  "18644253256020585:gabriela_rasheva11:BG",
+  "18644253256020585:xeroquiz:RO",
+  "18644253256020585:xeroquiz:TD",
+  "18644253256020585:drip.faker:DZ"
  ],
  "recent": [
   [
@@ -383,6 +415,34 @@
   [
    "topiko3321",
    "TR"
+  ],
+  [
+   "salami_jr27",
+   "ES"
+  ],
+  [
+   "nezoroki_pictures",
+   "HU"
+  ],
+  [
+   "mohalwah1",
+   "OM"
+  ],
+  [
+   "gabriela_rasheva11",
+   "BG"
+  ],
+  [
+   "xeroquiz",
+   "RO"
+  ],
+  [
+   "xeroquiz",
+   "TD"
+  ],
+  [
+   "drip.faker",
+   "DZ"
   ]
  ],
  "past": [
@@ -668,6 +728,76 @@
    ],
    "cids": {
     "katopis_": "18577039306079297"
+   }
+  },
+  "ES": {
+   "by": "salami_jr27",
+   "at": "2026-11-21",
+   "fans": [
+    "salami_jr27"
+   ],
+   "cids": {
+    "salami_jr27": "18117363095170053"
+   }
+  },
+  "HU": {
+   "by": "nezoroki_pictures",
+   "at": "2026-11-21",
+   "fans": [
+    "nezoroki_pictures"
+   ],
+   "cids": {
+    "nezoroki_pictures": "17962770363279640"
+   }
+  },
+  "OM": {
+   "by": "mohalwah1",
+   "at": "2026-11-21",
+   "fans": [
+    "mohalwah1"
+   ],
+   "cids": {
+    "mohalwah1": "17923884600461510"
+   }
+  },
+  "BG": {
+   "by": "gabriela_rasheva11",
+   "at": "2026-11-21",
+   "fans": [
+    "gabriela_rasheva11"
+   ],
+   "cids": {
+    "gabriela_rasheva11": "18114024908145244"
+   }
+  },
+  "RO": {
+   "by": "xeroquiz",
+   "at": "2026-11-21",
+   "fans": [
+    "xeroquiz"
+   ],
+   "cids": {
+    "xeroquiz": "18134309053875160"
+   }
+  },
+  "TD": {
+   "by": "xeroquiz",
+   "at": "2026-11-21",
+   "fans": [
+    "xeroquiz"
+   ],
+   "cids": {
+    "xeroquiz": "18134309053875160"
+   }
+  },
+  "DZ": {
+   "by": "drip.faker",
+   "at": "2026-11-21",
+   "fans": [
+    "drip.faker"
+   ],
+   "cids": {
+    "drip.faker": "18115118225139417"
    }
   }
  },
