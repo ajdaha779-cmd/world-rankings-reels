@@ -3,7 +3,7 @@
  "points": {
   "KW": 3,
   "IS": 1,
-  "TR": 4,
+  "TR": 5,
   "RU": 2,
   "PK": 2,
   "EG": 1,
@@ -32,7 +32,8 @@
   "NL": 1,
   "MY": 2,
   "HU": 1,
-  "GR": 1
+  "GR": 1,
+  "GB": 1
  },
  "fans": {
   "KW": {
@@ -46,7 +47,8 @@
    "ertugrulozkan.aksu": 1,
    "t_61pala": 1,
    "tabiki_pooyyrrrr": 1,
-   "komutankertenkele35": 1
+   "komutankertenkele35": 1,
+   "topiko3321": 1
   },
   "RU": {
    "sardvr": 1,
@@ -142,6 +144,9 @@
   },
   "GR": {
    "katopis_": 1
+  },
+  "GB": {
+   "chathatajpreet": 1
   }
  },
  "counted": [
@@ -190,7 +195,9 @@
   "17993153597867861:gyp_etra:HU",
   "17993153597867861:tabiki_pooyyrrrr:TR",
   "17993153597867861:katopis_:GR",
-  "17920739424530702:komutankertenkele35:TR"
+  "17920739424530702:komutankertenkele35:TR",
+  "17917787163517081:chathatajpreet:GB",
+  "17917787163517081:topiko3321:TR"
  ],
  "recent": [
   [
@@ -368,6 +375,14 @@
   [
    "komutankertenkele35",
    "TR"
+  ],
+  [
+   "chathatajpreet",
+   "GB"
+  ],
+  [
+   "topiko3321",
+   "TR"
   ]
  ],
  "past": [
@@ -437,10 +452,12 @@
    "by": "ay_han8136",
    "at": "2026-11-12",
    "fans": [
-    "ay_han8136"
+    "ay_han8136",
+    "chathatajpreet"
    ],
    "cids": {
-    "ay_han8136": "17908626210668454"
+    "ay_han8136": "17908626210668454",
+    "chathatajpreet": "18444453328176488"
    }
   },
   "AR": {
@@ -646,11 +663,13 @@
    "at": "2026-11-20",
    "fans": [
     "tabiki_pooyyrrrr",
-    "komutankertenkele35"
+    "komutankertenkele35",
+    "topiko3321"
    ],
    "cids": {
     "tabiki_pooyyrrrr": "18072967049507711",
-    "komutankertenkele35": "17957408781038499"
+    "komutankertenkele35": "17957408781038499",
+    "topiko3321": "18113117420244052"
    }
   },
   "GR": {
