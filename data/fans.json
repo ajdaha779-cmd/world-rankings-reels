@@ -648,23 +648,11 @@
     "aarav.aarav85": "18084346328710861"
    }
   },
-  "HU": {
-   "by": "gyp_etra",
-   "at": "2026-11-20",
-   "fans": [
-    "gyp_etra"
-   ],
-   "cids": {
-    "gyp_etra": "18645115111033229"
-   }
-  },
   "TR": {
    "by": "tabiki_pooyyrrrr",
    "at": "2026-11-20",
    "fans": [
-    "tabiki_pooyyrrrr",
-    "komutankertenkele35",
-    "topiko3321"
+    "tabiki_pooyyrrrr"
    ],
    "cids": {
     "tabiki_pooyyrrrr": "18072967049507711",
@@ -681,14 +669,6 @@
    "cids": {
     "katopis_": "18577039306079297"
    }
-  },
-  "ZW": {
-   "by": "uzanenkosi16",
-   "at": "2026-11-21",
-   "fans": [
-    "uzanenkosi16"
-   ],
-   "cids": {}
   }
  },
  "lit_shown": [
@@ -715,7 +695,9 @@
   "BR",
   "KG",
   "NL",
-  "MY"
+  "MY",
+  "TR",
+  "GR"
  ],
  "fans_shown": [
   "AZ:sardvr",
@@ -744,9 +726,12 @@
   "KG:mukhammad78862",
   "NL:aaronjoriswitting",
   "MY:ashley._ed",
-  "MY:aarav.aarav85"
+  "MY:aarav.aarav85",
+  "GB:chathatajpreet",
+  "TR:tabiki_pooyyrrrr",
+  "GR:katopis_"
  ],
- "map_at": "2026-11-20T19:20:38.918296Z",
+ "map_at": "2026-11-21T18:07:12.607966Z",
  "notified": [
   "RU:zoktay_16_",
   "IR:ay_han8136",
@@ -778,7 +763,10 @@
   "KG:mukhammad78862",
   "NL:aaronjoriswitting",
   "MY:ashley._ed",
-  "MY:aarav.aarav85"
+  "MY:aarav.aarav85",
+  "GB:chathatajpreet",
+  "TR:tabiki_pooyyrrrr",
+  "GR:katopis_"
  ],
  "blocked": [
   "anurag.kairi",
@@ -810,7 +798,10 @@
   "mannylaundering",
   "not_haydenfarns",
   "t_61pala",
-  "the_napaleon_oficial"
+  "the_napaleon_oficial",
+  "gyp_etra",
+  "komutankertenkele35",
+  "topiko3321"
  ],
  "mention_ok": [
   "ay_han8136",
@@ -833,6 +824,9 @@
   "aaronjoriswitting",
   "ashley._ed",
   "davilucasss_11",
-  "mukhammad78862"
+  "mukhammad78862",
+  "chathatajpreet",
+  "katopis_",
+  "tabiki_pooyyrrrr"
  ]
 }
