@@ -11,7 +11,17 @@ from duel import duel_rounds, flip_rounds, FLIPS
 ROTATION = ["race", "duel", "race", "ranking", "race"]  # 12.11: твисты пользователю не понравились — выключены  # 04.11: гонка после правок — 45% пролистываний и 47% досмотра, лучший формат
 YOUTUBE = os.environ.get("REELS_PLATFORM") == "youtube"
 import hits  # 20.11: что залетает на площадке → эти темы и регионы выпадают чаще (множитель² — сильнее ручных весов)
-BIG = set("US CN IN RU JP".split())  # 20.11: на YouTube h2h с ними — 721–1 214 просмотров
+BIG = set("US CN IN RU JP".split())
+# 23.11 (пользователь: «что не набирает 500 — по максимуму уменьшай»): в Instagram из 81 ролика ≥500 только 10 —
+# danger (4 из 5, медиана 1 654), pop (2 из 4), safe (1 из 1). Остальные темы — ни разу. Только они, пока не кончатся.
+IG_TOPICS = {"danger", "safe", "pop", "boom"}
+
+
+def _ig_ok(tid):
+    return YOUTUBE or IG_ONLY_OFF[0] or tid in IG_TOPICS
+
+
+IG_ONLY_OFF = [False]  # когда темы-хиты кончились — разрешаем остальные (второй проход)  # 20.11: на YouTube h2h с ними — 721–1 214 просмотров
 # 11.11: на YouTube гонки про богатство в топе (461), в Instagram богатство пролистывают (77%)
 RACE_WEIGHT = {"danger": 2.5, "pop": 3, "economy": 3, "army": 3, "rich": 2.5 if YOUTUBE else 1, "life": 1.5, "online": 1.5, "old": 1, "co2": 1}
 GROUP_WEIGHT = {"world": 3, "europe": 2, "asia": 2, "americas": 1.5, "exussr": 1.5, "africa": 1}
@@ -70,6 +80,8 @@ def _ranking_items(used, rng, avoid):
                     key=lambda tg: -rng.random() ** (1 / (RANK_WEIGHT.get(tg[0]["id"], 1) * RANK_GROUP_WEIGHT.get(tg[1], 1)
                                                           * (hits.topic(tg[0]["id"]) * hits.group(tg[1])) ** 2) ** 2))
     for t, g in combos:
+        if not _ig_ok(t["id"]):
+            continue
         key = f"{t['id']}:{g}"
         if key in used or t["id"] in avoid:
             continue
@@ -131,7 +143,7 @@ def _h2h_items(used, rng):
 
 def _race_items(used, rng, avoid):
     # 20.11: в Instagram h2h слабые (154–160 просм., 4 шт.) — 25%; на YouTube оставляем 60%
-    if "h2h" not in avoid and rng.random() < (0.6 if YOUTUBE else 0.25):  # 16.11: «X vs Y по годам»
+    if "h2h" not in avoid and rng.random() < (0.6 if YOUTUBE else 0):  # 23.11: в Instagram h2h 0 из 3 ≥500 — выкл  # 16.11: «X vs Y по годам»
         yield from _h2h_items(used, rng)
     from race import render_race
     # сильные темы и крупные регионы выпадают чаще (взвешенная случайная сортировка)
@@ -139,6 +151,8 @@ def _race_items(used, rng, avoid):
                     key=lambda tg: -rng.random() ** (1 / (RACE_WEIGHT.get(tg[0]["id"], 1) * GROUP_WEIGHT.get(tg[1], 1)
                                                           * (hits.topic(tg[0]["id"]) * hits.group(tg[1])) ** 2) ** 2))
     for t, g in combos:
+        if not _ig_ok(t["id"]):
+            continue
         key = f"race:{t['id']}:{g}"
         if key in used or f"race-{t['id']}" in avoid:
             continue
@@ -340,9 +354,17 @@ def next_item(n_done, used, rng=None, avoid=(), kind=None):
     rng = rng or random.Random(n_done)
     kind = kind or ROTATION[n_done % len(ROTATION)]
     order = [kind] + [k for k in ROTATION if k != kind]
+    if not YOUTUBE and not IG_ONLY_OFF[0]:  # 23.11: в Instagram обычные дуэли не добираем (0 из 15 ≥500)
+        order = [k for k in order if k != "duel" or kind == "duel"]
     for k in dict.fromkeys(order):
         for item in SOURCES[k](used, rng, set(avoid)):
             return item
+    if not YOUTUBE and not IG_ONLY_OFF[0]:  # темы-хиты кончились — разрешаем остальные
+        IG_ONLY_OFF[0] = True
+        try:
+            return next_item(n_done, used, rng, avoid, kind)
+        finally:
+            IG_ONLY_OFF[0] = False
     return None
 
 

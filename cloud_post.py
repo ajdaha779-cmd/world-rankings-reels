@@ -100,8 +100,8 @@ def main():
         if req:
             item = make_duel(req["a"], req["b"], by=req["users"])
             print(f"дуэль по заказу зрителей ({req['votes']} голосов)")
-    if kind == "duel" and not item and rng.random() < 0.5:
-        item = next_neutral(used, history)  # редко и нейтрально: пары с идущим конфликтом
+    if kind in ("duel", "twist") and not item:  # 23.11: обычные дуэли в Instagram — 0 из 15 ≥500; только по заказу
+        kind = "ranking" if rng.random() < 0.7 else "race"
     item = item or next_item(n, used, rng, avoid={h["topic"] for h in history[-2:]}, kind=kind)
     if not item:
         sys.exit("Ролики закончились — добавь темы в catalog.py")
