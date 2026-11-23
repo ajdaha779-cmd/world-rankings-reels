@@ -10,7 +10,10 @@ import datetime, json, os, random, sys
 BASE = os.path.dirname(os.path.abspath(__file__))
 MIN_GAP = 85          # минут между роликами, не меньше
 DAY_START_UTC = 11    # «эфирные сутки» начинаются в 11:00 UTC (15:00 по Баку)
-WINDOW = 16           # часов в эфирном окне: 15:00–06:59 по Баку — день Европы и США
+WINDOW = 20           # часов в эфирном окне: 15:00–10:59 по Баку
+# 23.11: по статистике лучше всего заходят ролики, выложенные утром по Баку (06–11: медиана 245–281, пролистали 56%),
+# хуже — ночью (00–05) и днём (15–17): ~180, 63%. При 2 роликах в день — один утром, один вечером (20–23, медиана ~209).
+PREFERRED = [[15, 16, 17, 18, 19], [5, 6, 7, 8]]  # смещения от 15:00 Баку: 06–10 утра и 20–23 вечера
 MAX_SLEEP = 8 * 60    # случайная задержка внутри часа, секунд
 MAP_HOUR = 6          # ролик-карта — раз в сутки СВЕРХ основных, с 17:00 UTC (21:00 по Баку) и позже
 
@@ -23,6 +26,9 @@ def day_start(now):
 def plan(start, per_day):
     """Случайные часы публикаций на эти сутки (одинаковые для всех запусков в течение суток)."""
     rng = random.Random(f"plan-{start:%Y-%m-%d}-{per_day}")
+    if per_day <= len(PREFERRED):
+        hours = sorted(rng.choice(PREFERRED[i]) for i in range(per_day))
+        return [start + datetime.timedelta(hours=h, minutes=17) for h in hours]
     for _ in range(200):  # ищем раскладку, где соседние ролики не ближе 2 часов
         hours = sorted(rng.sample(range(WINDOW), per_day))
         if all(b - a >= 2 for a, b in zip(hours, hours[1:])):

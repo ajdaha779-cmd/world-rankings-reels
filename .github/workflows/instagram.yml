@@ -2,7 +2,7 @@ name: Instagram Reels
 
 on:
   schedule:
-    - cron: "17 0-2,11-23 * * *"  # каждый час в эфирное окно (15:00–06:59 по Баку); решает due.py
+    - cron: "17 0-6,11-23 * * *"  # каждый час в эфирное окно (15:00–10:59 по Баку); решает due.py
   workflow_dispatch:        # ручной запуск кнопкой Run workflow
     inputs:
       force:
