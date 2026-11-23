@@ -280,8 +280,7 @@
    "by": "tabiki_pooyyrrrr",
    "at": "2026-11-20",
    "fans": [
-    "tabiki_pooyyrrrr",
-    "topiko2163"
+    "tabiki_pooyyrrrr"
    ],
    "cids": {
     "tabiki_pooyyrrrr": "18072967049507711",
@@ -300,16 +299,6 @@
     "katopis_": "18577039306079297"
    }
   },
-  "ES": {
-   "by": "salami_jr27",
-   "at": "2026-11-21",
-   "fans": [
-    "salami_jr27"
-   ],
-   "cids": {
-    "salami_jr27": "18117363095170053"
-   }
-  },
   "HU": {
    "by": "nezoroki_pictures",
    "at": "2026-11-21",
@@ -318,26 +307,6 @@
    ],
    "cids": {
     "nezoroki_pictures": "17962770363279640"
-   }
-  },
-  "OM": {
-   "by": "mohalwah1",
-   "at": "2026-11-21",
-   "fans": [
-    "mohalwah1"
-   ],
-   "cids": {
-    "mohalwah1": "17923884600461510"
-   }
-  },
-  "BG": {
-   "by": "gabriela_rasheva11",
-   "at": "2026-11-21",
-   "fans": [
-    "gabriela_rasheva11"
-   ],
-   "cids": {
-    "gabriela_rasheva11": "18114024908145244"
    }
   },
   "RO": {
@@ -407,7 +376,12 @@
   "NL",
   "MY",
   "TR",
-  "GR"
+  "GR",
+  "HU",
+  "RO",
+  "TD",
+  "DZ",
+  "AU"
  ],
  "fans_shown": [
   "AZ:sardvr",
@@ -439,9 +413,16 @@
   "MY:aarav.aarav85",
   "GB:chathatajpreet",
   "TR:tabiki_pooyyrrrr",
-  "GR:katopis_"
+  "GR:katopis_",
+  "SK:mato.taf",
+  "SK:mato.yvl",
+  "HU:nezoroki_pictures",
+  "RO:xeroquiz",
+  "TD:xeroquiz",
+  "DZ:drip.faker",
+  "AU:zyroxfx0"
  ],
- "map_at": "2026-11-21T18:07:12.607966Z",
+ "map_at": "2026-11-23T18:18:17.904473Z",
  "notified": [
   "RU:zoktay_16_",
   "IR:ay_han8136",
@@ -476,7 +457,14 @@
   "MY:aarav.aarav85",
   "GB:chathatajpreet",
   "TR:tabiki_pooyyrrrr",
-  "GR:katopis_"
+  "GR:katopis_",
+  "SK:mato.taf",
+  "SK:mato.yvl",
+  "HU:nezoroki_pictures",
+  "RO:xeroquiz",
+  "TD:xeroquiz",
+  "DZ:drip.faker",
+  "AU:zyroxfx0"
  ],
  "blocked": [
   "anurag.kairi",
@@ -511,7 +499,11 @@
   "the_napaleon_oficial",
   "gyp_etra",
   "komutankertenkele35",
-  "topiko3321"
+  "topiko3321",
+  "gabriela_rasheva11",
+  "mohalwah1",
+  "salami_jr27",
+  "topiko2163"
  ],
  "mention_ok": [
   "ay_han8136",
@@ -537,6 +529,11 @@
   "mukhammad78862",
   "chathatajpreet",
   "katopis_",
-  "tabiki_pooyyrrrr"
+  "tabiki_pooyyrrrr",
+  "drip.faker",
+  "mato.taf",
+  "mato.yvl",
+  "nezoroki_pictures",
+  "xeroquiz"
  ]
 }
