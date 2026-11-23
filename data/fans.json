@@ -1,9 +1,40 @@
 {
  "season": "2026-W48",
- "points": {},
- "fans": {},
- "counted": [],
- "recent": [],
+ "points": {
+  "RO": 1,
+  "TD": 1,
+  "FI": 1
+ },
+ "fans": {
+  "RO": {
+   "xeroquiz": 1
+  },
+  "TD": {
+   "xeroquiz": 1
+  },
+  "FI": {
+   "miska_malmi": 1
+  }
+ },
+ "counted": [
+  "17920039584265409:xeroquiz:RO",
+  "17920039584265409:xeroquiz:TD",
+  "17920039584265409:miska_malmi:FI"
+ ],
+ "recent": [
+  [
+   "xeroquiz",
+   "RO"
+  ],
+  [
+   "xeroquiz",
+   "TD"
+  ],
+  [
+   "miska_malmi",
+   "FI"
+  ]
+ ],
  "past": [
   {
    "season": "2026-W46",
@@ -347,6 +378,16 @@
    ],
    "cids": {
     "zyroxfx0": "18177364783459924"
+   }
+  },
+  "FI": {
+   "by": "miska_malmi",
+   "at": "2026-11-23",
+   "fans": [
+    "miska_malmi"
+   ],
+   "cids": {
+    "miska_malmi": "18082301603392998"
    }
   }
  },
