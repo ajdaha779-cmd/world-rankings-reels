@@ -17,8 +17,32 @@ BIG = set("US CN IN RU JP".split())
 IG_TOPICS = {"danger", "safe", "pop", "boom"}
 
 
+# 23.11: «разведка» — каждый 3-й ролик Instagram пробует новую тему с той же механикой; набрала заметно больше среднего
+# (hits ≥ 1.4) — становится постоянной, нет — больше не выходит. Чтобы к концу хайпа «опасных» был следующий хит.
+TEST_TOPICS = ["womendanger", "womensafe", "smokers", "youthjobs", "inflation", "movein", "moveout"]
+TEST_GROUPS = ["europe", "asia", "mideast", "world"]
+TEST_MODE = [False]
+
+
 def _ig_ok(tid):
-    return YOUTUBE or IG_ONLY_OFF[0] or tid in IG_TOPICS
+    if YOUTUBE or IG_ONLY_OFF[0]:
+        return True
+    if TEST_MODE[0]:
+        return tid in TEST_TOPICS
+    return tid in IG_TOPICS or hits.topic(tid) >= 1.4
+
+
+def test_item(used, rng):
+    """Ролик-разведка для Instagram: непроверенная тема в сильном регионе."""
+    TEST_MODE[0] = True
+    try:
+        for item in _ranking_items(used, rng, set()):
+            tid, g = item["key"].split(":", 1)
+            if tid in TEST_TOPICS and g in TEST_GROUPS and hits.topic(tid) > 0.8:  # провалилась — не повторяем
+                return item
+    finally:
+        TEST_MODE[0] = False
+    return None
 
 
 IG_ONLY_OFF = [False]  # когда темы-хиты кончились — разрешаем остальные (второй проход)  # 20.11: на YouTube h2h с ними — 721–1 214 просмотров

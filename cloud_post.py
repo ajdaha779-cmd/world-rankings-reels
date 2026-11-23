@@ -102,6 +102,11 @@ def main():
             print(f"дуэль по заказу зрителей ({req['votes']} голосов)")
     if kind in ("duel", "twist") and not item:  # 23.11: обычные дуэли в Instagram — 0 из 15 ≥500; только по заказу
         kind = "ranking" if rng.random() < 0.7 else "race"
+    if not item and args.mode != "map" and n % 3 == 0:  # 23.11: каждый 3-й — разведка новой темы
+        from formats import test_item
+        item = test_item(used, rng)
+        if item:
+            print(f"разведка новой темы: {item['key']}")
     item = item or next_item(n, used, rng, avoid={h["topic"] for h in history[-2:]}, kind=kind)
     if not item:
         sys.exit("Ролики закончились — добавь темы в catalog.py")

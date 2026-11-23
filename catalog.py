@@ -208,6 +208,15 @@ _MORE += [
      "Where is the gap between rich and poor the biggest {g}?", "inequality money"),
     ("shortlife", "SP.DYN.LE00.IN", "asc", ("SHORTEST", "LIVES"), "Life expectancy at birth", "years",
      "Where do people die the youngest {g}?", "health lifeexpectancy"),
+    # 23.11: темы с той же механикой, что «most dangerous» (моя страна + стыд/гордость + спор); свежие данные World Bank
+    ("womendanger", "VC.IHR.PSRC.FE.P5", "desc", ("MOST DANGEROUS", "FOR WOMEN"), "Women murdered per 100,000", "dec1",
+     "Where is it most dangerous to be a woman {g}?", "safety women travel"),
+    ("womensafe", "VC.IHR.PSRC.FE.P5", "asc", ("SAFEST", "FOR WOMEN"), "Women murdered per 100,000", "dec1",
+     "Where is it safest to be a woman {g}?", "safety women travel"),
+    ("smokers", "SH.PRV.SMOK", "desc", ("BIGGEST", "SMOKERS"), "Adults who smoke (%)", "pct",
+     "Which countries smoke the most {g}?", "health smoking"),
+    ("youthjobs", "SL.UEM.1524.ZS", "desc", ("NO JOBS", "FOR YOUNG PEOPLE"), "Youth unemployment (%)", "pct",
+     "Where can't young people find a job {g}?", "jobs youth economy"),
 ]
 TOPICS += [dict(zip(("id", "ind", "order", "hook", "sub", "fmt", "question", "tags"), t)) for t in _MORE]
 RACE_TOPICS += [dict(zip(("id", "ind", "hook", "sub", "fmt", "question", "tags"), t)) for t in [

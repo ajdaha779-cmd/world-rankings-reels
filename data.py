@@ -37,10 +37,16 @@ def indicator(ind):
     return out
 
 
+SMALL_NOISY = {"danger", "safe", "womendanger", "womensafe"}
+
+
 def ranking(topic, group, top_n=15, min_n=8):
     """Список [(iso2, имя, значение, год)] или None, если данных мало."""
     vals = indicator(topic["ind"])
     members = [c for c in GROUPS[group][1] if c in vals]
+    if topic["id"] in SMALL_NOISY:  # 23.11: на 100 тыс. жителей — в крошечных странах 1 случай = скачок (Лихтенштейн)
+        pop = indicator("SP.POP.TOTL")
+        members = [c for c in members if pop.get(c, (0,))[0] >= 1e6]
     if len(members) < min_n:
         return None
     rows = sorted(members, key=lambda c: vals[c][0], reverse=topic["order"] == "desc")
