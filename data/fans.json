@@ -4,7 +4,10 @@
   "RO": 1,
   "TD": 1,
   "FI": 1,
-  "GT": 1
+  "GT": 1,
+  "MM": 1,
+  "ID": 1,
+  "VN": 1
  },
  "fans": {
   "RO": {
@@ -18,13 +21,25 @@
   },
   "GT": {
    "prussia_da_best_kingdom": 1
+  },
+  "MM": {
+   "zyroxfx0": 1
+  },
+  "ID": {
+   "zyroxfx0": 1
+  },
+  "VN": {
+   "zyroxfx0": 1
   }
  },
  "counted": [
   "17920039584265409:xeroquiz:RO",
   "17920039584265409:xeroquiz:TD",
   "17920039584265409:miska_malmi:FI",
-  "18231289522336818:prussia_da_best_kingdom:GT"
+  "18231289522336818:prussia_da_best_kingdom:GT",
+  "17920039584265409:zyroxfx0:MM",
+  "17920039584265409:zyroxfx0:ID",
+  "17920039584265409:zyroxfx0:VN"
  ],
  "recent": [
   [
@@ -42,6 +57,18 @@
   [
    "prussia_da_best_kingdom",
    "GT"
+  ],
+  [
+   "zyroxfx0",
+   "MM"
+  ],
+  [
+   "zyroxfx0",
+   "ID"
+  ],
+  [
+   "zyroxfx0",
+   "VN"
   ]
  ],
  "past": [
@@ -407,6 +434,36 @@
    ],
    "cids": {
     "prussia_da_best_kingdom": "18354084097264227"
+   }
+  },
+  "MM": {
+   "by": "zyroxfx0",
+   "at": "2026-11-24",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "17926213887220861"
+   }
+  },
+  "ID": {
+   "by": "zyroxfx0",
+   "at": "2026-11-24",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "18092772314700825"
+   }
+  },
+  "VN": {
+   "by": "zyroxfx0",
+   "at": "2026-11-24",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "17954434533301857"
    }
   }
  },
