@@ -47,7 +47,7 @@ def test_item(used, rng):
 
 IG_ONLY_OFF = [False]  # когда темы-хиты кончились — разрешаем остальные (второй проход)  # 20.11: на YouTube h2h с ними — 721–1 214 просмотров
 # 11.11: на YouTube гонки про богатство в топе (461), в Instagram богатство пролистывают (77%)
-RACE_WEIGHT = {"danger": 2.5, "pop": 3, "economy": 3, "army": 3, "rich": 2.5 if YOUTUBE else 1, "life": 1.5, "online": 1.5, "old": 1, "co2": 1}
+RACE_WEIGHT = {"danger": 2.5 if YOUTUBE else 5, "pop": 3, "economy": 3, "army": 3, "rich": 2.5 if YOUTUBE else 1, "life": 1.5, "online": 1.5, "old": 1, "co2": 1}
 GROUP_WEIGHT = {"world": 3, "europe": 2, "asia": 2, "americas": 1.5, "exussr": 1.5, "africa": 1}
 # рейтинги: темы про людей и крупные группы держат лучше (07.11: «most people in Asia» 51%, G20 52% пролистываний;
 # EU/ex-USSR и безработица в Европе — 66–77%)

@@ -10,7 +10,7 @@ import requests_q
 
 STATE = os.path.join(BASE, "data", "fans.json")
 MIN_COUNTRIES = 8  # меньше — таблица выглядит пустой, ролик не делаем
-EVERY_H = 22
+EVERY_H = 46  # 24.11: карта раз в 2 дня — 140–200 просмотров, при 2 роликах в день была половиной ленты
 
 
 def _season(d=None):
