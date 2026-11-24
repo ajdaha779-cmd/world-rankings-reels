@@ -7,7 +7,10 @@
   "GT": 1,
   "MM": 1,
   "ID": 1,
-  "VN": 1
+  "VN": 1,
+  "NO": 1,
+  "ES": 1,
+  "BG": 1
  },
  "fans": {
   "RO": {
@@ -30,6 +33,15 @@
   },
   "VN": {
    "zyroxfx0": 1
+  },
+  "NO": {
+   "blitzkriegwithknowledge": 1
+  },
+  "ES": {
+   "harry.melando": 1
+  },
+  "BG": {
+   "lazartodorov_2012": 1
   }
  },
  "counted": [
@@ -39,7 +51,10 @@
   "18231289522336818:prussia_da_best_kingdom:GT",
   "17920039584265409:zyroxfx0:MM",
   "17920039584265409:zyroxfx0:ID",
-  "17920039584265409:zyroxfx0:VN"
+  "17920039584265409:zyroxfx0:VN",
+  "18350124208281921:blitzkriegwithknowledge:NO",
+  "18350124208281921:harry.melando:ES",
+  "18350124208281921:lazartodorov_2012:BG"
  ],
  "recent": [
   [
@@ -69,6 +84,18 @@
   [
    "zyroxfx0",
    "VN"
+  ],
+  [
+   "blitzkriegwithknowledge",
+   "NO"
+  ],
+  [
+   "harry.melando",
+   "ES"
+  ],
+  [
+   "lazartodorov_2012",
+   "BG"
   ]
  ],
  "past": [
@@ -454,6 +481,36 @@
    ],
    "cids": {
     "zyroxfx0": "17954434533301857"
+   }
+  },
+  "NO": {
+   "by": "blitzkriegwithknowledge",
+   "at": "2026-11-24",
+   "fans": [
+    "blitzkriegwithknowledge"
+   ],
+   "cids": {
+    "blitzkriegwithknowledge": "17978802105156989"
+   }
+  },
+  "ES": {
+   "by": "harry.melando",
+   "at": "2026-11-24",
+   "fans": [
+    "harry.melando"
+   ],
+   "cids": {
+    "harry.melando": "18092929583256356"
+   }
+  },
+  "BG": {
+   "by": "lazartodorov_2012",
+   "at": "2026-11-24",
+   "fans": [
+    "lazartodorov_2012"
+   ],
+   "cids": {
+    "lazartodorov_2012": "18117980693137944"
    }
   }
  },
