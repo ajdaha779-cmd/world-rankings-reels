@@ -3,7 +3,8 @@
  "points": {
   "RO": 1,
   "TD": 1,
-  "FI": 1
+  "FI": 1,
+  "GT": 1
  },
  "fans": {
   "RO": {
@@ -14,12 +15,16 @@
   },
   "FI": {
    "miska_malmi": 1
+  },
+  "GT": {
+   "prussia_da_best_kingdom": 1
   }
  },
  "counted": [
   "17920039584265409:xeroquiz:RO",
   "17920039584265409:xeroquiz:TD",
-  "17920039584265409:miska_malmi:FI"
+  "17920039584265409:miska_malmi:FI",
+  "18231289522336818:prussia_da_best_kingdom:GT"
  ],
  "recent": [
   [
@@ -33,6 +38,10 @@
   [
    "miska_malmi",
    "FI"
+  ],
+  [
+   "prussia_da_best_kingdom",
+   "GT"
   ]
  ],
  "past": [
@@ -388,6 +397,16 @@
    ],
    "cids": {
     "miska_malmi": "18082301603392998"
+   }
+  },
+  "GT": {
+   "by": "prussia_da_best_kingdom",
+   "at": "2026-11-24",
+   "fans": [
+    "prussia_da_best_kingdom"
+   ],
+   "cids": {
+    "prussia_da_best_kingdom": "18354084097264227"
    }
   }
  },
