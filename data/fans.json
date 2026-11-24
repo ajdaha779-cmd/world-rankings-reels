@@ -416,16 +416,6 @@
     "zyroxfx0": "18177364783459924"
    }
   },
-  "FI": {
-   "by": "miska_malmi",
-   "at": "2026-11-23",
-   "fans": [
-    "miska_malmi"
-   ],
-   "cids": {
-    "miska_malmi": "18082301603392998"
-   }
-  },
   "GT": {
    "by": "prussia_da_best_kingdom",
    "at": "2026-11-24",
@@ -498,7 +488,11 @@
   "RO",
   "TD",
   "DZ",
-  "AU"
+  "AU",
+  "GT",
+  "MM",
+  "ID",
+  "VN"
  ],
  "fans_shown": [
   "AZ:sardvr",
@@ -537,9 +531,13 @@
   "RO:xeroquiz",
   "TD:xeroquiz",
   "DZ:drip.faker",
-  "AU:zyroxfx0"
+  "AU:zyroxfx0",
+  "GT:prussia_da_best_kingdom",
+  "MM:zyroxfx0",
+  "ID:zyroxfx0",
+  "VN:zyroxfx0"
  ],
- "map_at": "2026-11-23T18:18:17.904473Z",
+ "map_at": "2026-11-24T17:11:12.919786Z",
  "notified": [
   "RU:zoktay_16_",
   "IR:ay_han8136",
@@ -581,7 +579,11 @@
   "RO:xeroquiz",
   "TD:xeroquiz",
   "DZ:drip.faker",
-  "AU:zyroxfx0"
+  "AU:zyroxfx0",
+  "GT:prussia_da_best_kingdom",
+  "MM:zyroxfx0",
+  "ID:zyroxfx0",
+  "VN:zyroxfx0"
  ],
  "blocked": [
   "anurag.kairi",
@@ -620,7 +622,8 @@
   "gabriela_rasheva11",
   "mohalwah1",
   "salami_jr27",
-  "topiko2163"
+  "topiko2163",
+  "miska_malmi"
  ],
  "mention_ok": [
   "ay_han8136",
@@ -651,6 +654,7 @@
   "mato.taf",
   "mato.yvl",
   "nezoroki_pictures",
-  "xeroquiz"
+  "xeroquiz",
+  "prussia_da_best_kingdom"
  ]
 }
