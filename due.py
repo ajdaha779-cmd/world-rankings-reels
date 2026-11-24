@@ -26,9 +26,14 @@ def day_start(now):
 def plan(start, per_day):
     """Случайные часы публикаций на эти сутки (одинаковые для всех запусков в течение суток)."""
     rng = random.Random(f"plan-{start:%Y-%m-%d}-{per_day}")
-    if per_day <= len(PREFERRED):
-        hours = sorted(rng.choice(PREFERRED[i]) for i in range(per_day))
-        return [start + datetime.timedelta(hours=h, minutes=17) for h in hours]
+    if per_day <= len(PREFERRED) + 1:  # 24.11: 3 в день = утро + вечер + ещё один утром (утро лучшее), не ближе 2 ч
+        for _ in range(200):
+            hours = [rng.choice(PREFERRED[i % len(PREFERRED)]) for i in range(per_day)]
+            if per_day > len(PREFERRED):
+                hours[-1] = rng.choice(PREFERRED[0])
+            hours.sort()
+            if all(b - a >= 2 for a, b in zip(hours, hours[1:])):
+                return [start + datetime.timedelta(hours=h, minutes=17) for h in hours]
     for _ in range(200):  # ищем раскладку, где соседние ролики не ближе 2 часов
         hours = sorted(rng.sample(range(WINDOW), per_day))
         if all(b - a >= 2 for a, b in zip(hours, hours[1:])):
