@@ -9,7 +9,7 @@
   "ID": 1,
   "VN": 1,
   "NO": 1,
-  "ES": 1,
+  "ES": 2,
   "BG": 1
  },
  "fans": {
@@ -38,7 +38,8 @@
    "blitzkriegwithknowledge": 1
   },
   "ES": {
-   "harry.melando": 1
+   "harry.melando": 1,
+   "gage__f": 1
   },
   "BG": {
    "lazartodorov_2012": 1
@@ -54,7 +55,8 @@
   "17920039584265409:zyroxfx0:VN",
   "18350124208281921:blitzkriegwithknowledge:NO",
   "18350124208281921:harry.melando:ES",
-  "18350124208281921:lazartodorov_2012:BG"
+  "18350124208281921:lazartodorov_2012:BG",
+  "18136393594763400:gage__f:ES"
  ],
  "recent": [
   [
@@ -96,6 +98,10 @@
   [
    "lazartodorov_2012",
    "BG"
+  ],
+  [
+   "gage__f",
+   "ES"
   ]
  ],
  "past": [
@@ -497,10 +503,12 @@
    "by": "harry.melando",
    "at": "2026-11-24",
    "fans": [
-    "harry.melando"
+    "harry.melando",
+    "gage__f"
    ],
    "cids": {
-    "harry.melando": "18092929583256356"
+    "harry.melando": "18092929583256356",
+    "gage__f": "18108764768201472"
    }
   },
   "BG": {
