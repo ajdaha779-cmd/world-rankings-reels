@@ -9,8 +9,22 @@
   "ID": 1,
   "VN": 1,
   "NO": 1,
-  "ES": 2,
-  "BG": 1
+  "ES": 3,
+  "BG": 1,
+  "UZ": 1,
+  "KZ": 1,
+  "CA": 1,
+  "CL": 1,
+  "JP": 1,
+  "KR": 1,
+  "NG": 1,
+  "ZA": 1,
+  "PT": 1,
+  "NP": 1,
+  "BT": 1,
+  "LK": 1,
+  "PK": 1,
+  "BD": 1
  },
  "fans": {
   "RO": {
@@ -39,10 +53,53 @@
   },
   "ES": {
    "harry.melando": 1,
-   "gage__f": 1
+   "gage__f": 1,
+   "zyroxfx0": 1
   },
   "BG": {
    "lazartodorov_2012": 1
+  },
+  "UZ": {
+   "zyroxfx0": 1
+  },
+  "KZ": {
+   "zyroxfx0": 1
+  },
+  "CA": {
+   "zyroxfx0": 1
+  },
+  "CL": {
+   "zyroxfx0": 1
+  },
+  "JP": {
+   "zyroxfx0": 1
+  },
+  "KR": {
+   "zyroxfx0": 1
+  },
+  "NG": {
+   "zyroxfx0": 1
+  },
+  "ZA": {
+   "zyroxfx0": 1
+  },
+  "PT": {
+   "zyroxfx0": 1
+  },
+  "NP": {
+   "zyroxfx0": 1
+  },
+  "BT": {
+   "zyroxfx0": 1
+  },
+  "LK": {
+   "zyroxfx0": 1
+  },
+  "PK": {
+   "zyroxfx0": 1
+  },
+  "BD": {
+   "zyroxfx0": 1
   }
  },
  "counted": [
@@ -56,7 +113,22 @@
   "18350124208281921:blitzkriegwithknowledge:NO",
   "18350124208281921:harry.melando:ES",
   "18350124208281921:lazartodorov_2012:BG",
-  "18136393594763400:gage__f:ES"
+  "18136393594763400:gage__f:ES",
+  "18350124208281921:zyroxfx0:UZ",
+  "18350124208281921:zyroxfx0:KZ",
+  "18350124208281921:zyroxfx0:CA",
+  "18350124208281921:zyroxfx0:CL",
+  "18350124208281921:zyroxfx0:JP",
+  "18350124208281921:zyroxfx0:KR",
+  "18350124208281921:zyroxfx0:NG",
+  "18350124208281921:zyroxfx0:ZA",
+  "18350124208281921:zyroxfx0:ES",
+  "18350124208281921:zyroxfx0:PT",
+  "18350124208281921:zyroxfx0:NP",
+  "18350124208281921:zyroxfx0:BT",
+  "18350124208281921:zyroxfx0:LK",
+  "18350124208281921:zyroxfx0:PK",
+  "18350124208281921:zyroxfx0:BD"
  ],
  "recent": [
   [
@@ -102,6 +174,66 @@
   [
    "gage__f",
    "ES"
+  ],
+  [
+   "zyroxfx0",
+   "UZ"
+  ],
+  [
+   "zyroxfx0",
+   "KZ"
+  ],
+  [
+   "zyroxfx0",
+   "CA"
+  ],
+  [
+   "zyroxfx0",
+   "CL"
+  ],
+  [
+   "zyroxfx0",
+   "JP"
+  ],
+  [
+   "zyroxfx0",
+   "KR"
+  ],
+  [
+   "zyroxfx0",
+   "NG"
+  ],
+  [
+   "zyroxfx0",
+   "ZA"
+  ],
+  [
+   "zyroxfx0",
+   "ES"
+  ],
+  [
+   "zyroxfx0",
+   "PT"
+  ],
+  [
+   "zyroxfx0",
+   "NP"
+  ],
+  [
+   "zyroxfx0",
+   "BT"
+  ],
+  [
+   "zyroxfx0",
+   "LK"
+  ],
+  [
+   "zyroxfx0",
+   "PK"
+  ],
+  [
+   "zyroxfx0",
+   "BD"
   ]
  ],
  "past": [
@@ -211,10 +343,12 @@
    "by": "sumya__bn910",
    "at": "2026-11-12",
    "fans": [
-    "sumya__bn910"
+    "sumya__bn910",
+    "zyroxfx0"
    ],
    "cids": {
-    "sumya__bn910": "18099526211445963"
+    "sumya__bn910": "18099526211445963",
+    "zyroxfx0": "18164025364506490"
    }
   },
   "SK": {
@@ -318,10 +452,12 @@
    "by": "pixel_phantom26",
    "at": "2026-11-19",
    "fans": [
-    "pixel_phantom26"
+    "pixel_phantom26",
+    "zyroxfx0"
    ],
    "cids": {
-    "pixel_phantom26": "18099468014405417"
+    "pixel_phantom26": "18099468014405417",
+    "zyroxfx0": "18007179756009335"
    }
   },
   "AF": {
@@ -504,11 +640,13 @@
    "at": "2026-11-24",
    "fans": [
     "harry.melando",
-    "gage__f"
+    "gage__f",
+    "zyroxfx0"
    ],
    "cids": {
     "harry.melando": "18092929583256356",
-    "gage__f": "18108764768201472"
+    "gage__f": "18108764768201472",
+    "zyroxfx0": "18120116963015458"
    }
   },
   "BG": {
@@ -519,6 +657,126 @@
    ],
    "cids": {
     "lazartodorov_2012": "18117980693137944"
+   }
+  },
+  "UZ": {
+   "by": "zyroxfx0",
+   "at": "2026-11-25",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "18377209255209369"
+   }
+  },
+  "KZ": {
+   "by": "zyroxfx0",
+   "at": "2026-11-25",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "18134431945700584"
+   }
+  },
+  "CA": {
+   "by": "zyroxfx0",
+   "at": "2026-11-25",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "17927654517445322"
+   }
+  },
+  "CL": {
+   "by": "zyroxfx0",
+   "at": "2026-11-25",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "18124939034057545"
+   }
+  },
+  "JP": {
+   "by": "zyroxfx0",
+   "at": "2026-11-25",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "17960261643281554"
+   }
+  },
+  "NG": {
+   "by": "zyroxfx0",
+   "at": "2026-11-25",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "18122231963071349"
+   }
+  },
+  "ZA": {
+   "by": "zyroxfx0",
+   "at": "2026-11-25",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "18115959845202599"
+   }
+  },
+  "PT": {
+   "by": "zyroxfx0",
+   "at": "2026-11-25",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "18132133051848839"
+   }
+  },
+  "NP": {
+   "by": "zyroxfx0",
+   "at": "2026-11-25",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "18137943205825728"
+   }
+  },
+  "BT": {
+   "by": "zyroxfx0",
+   "at": "2026-11-25",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "18104414294072710"
+   }
+  },
+  "LK": {
+   "by": "zyroxfx0",
+   "at": "2026-11-25",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "17954643681084165"
+   }
+  },
+  "BD": {
+   "by": "zyroxfx0",
+   "at": "2026-11-25",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "18120756142814767"
    }
   }
  },
