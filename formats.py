@@ -130,10 +130,10 @@ def _ranking_items(used, rng, avoid):
                    render(rows, t, gname, accent, out, seed=seed, fact=fact, teaser=_teaser(fact)))
 
 
-def _h2h_items(used, rng):
+def _h2h_items(used, rng, pairs=None):
     """«X vs Y, годы» — две страны по годам с самым острым сравнением (16.11; на YouTube такие — лучшие)."""
     import h2h
-    pairs = list(h2h.PAIRS)
+    pairs = list(pairs or h2h.PAIRS)
     rng.shuffle(pairs)
     hot = BIG if YOUTUBE else _hot_countries()  # 20.11: на YouTube — пары с большими странами
     # 16.11: пары, уже бывшие дуэлью, — в конец (пользователь заметил «USA vs China уже есть»)
@@ -339,6 +339,17 @@ def _duel_items(used, rng, avoid):
 
 
 SOURCES = {"ranking": _ranking_items, "race": _race_items, "duel": _duel_items}
+
+
+def request_item(a, b, used, by=None):
+    """25.11: заказ зрителя YouTube «A vs B» — сначала «по годам» (лучший формат YouTube), иначе дуэль по раундам."""
+    by = [u.lstrip("@") for u in (by or [])]
+    item = next(_h2h_items(set(used), random.Random(f"{a}{b}"), pairs=[(a, b)]), None)
+    if item:
+        credit = f"Requested by {' '.join('@' + u for u in by[:5])} 🙌\n" if by else ""
+        item["description"] = credit + item["description"]
+        return item
+    return make_duel(a, b, by=by or None)
 
 
 def item_by_key(key, used, rng=None):

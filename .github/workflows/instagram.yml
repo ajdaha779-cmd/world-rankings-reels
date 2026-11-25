@@ -60,7 +60,7 @@ jobs:
           python yt_replies.py
           git config user.name "reels-bot"
           git config user.email "reels-bot@users.noreply.github.com"
-          git add data/yt_replied.json
+          git add data/yt_replied.json data/yt_requests.json
           git diff --cached --quiet && exit 0
           git commit -q -m "YouTube: ответы на комментарии"
           for i in 1 2 3; do git push && exit 0; sleep $((i * 15)); git pull --rebase -q || true; done

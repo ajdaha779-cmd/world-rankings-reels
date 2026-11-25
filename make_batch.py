@@ -91,6 +91,17 @@ def main():
             item = item_by_key(keys[i], used)
             if not item:
                 print(f"тема {keys[i]} недоступна — беру автоподбор", flush=True)
+        req = None
+        if args.daily and not item and not any(m.get("request") for m in meta):  # 25.11: заказ зрителя YouTube — первым
+            import yt_requests
+            req = yt_requests.top(used)
+            if req:
+                from formats import request_item
+                item = request_item(req["a"], req["b"], used, by=req["users"])
+                print(f"заказ зрителей YouTube: {req['a']}-{req['b']} ({req['votes']} голосов)", flush=True)
+                if not item:
+                    yt_requests.mark(req, None, None)
+                    req = None
         item = item or next_item(i, used, rng, avoid=recent[-2:], kind=kind)
         if not item:
             notify("Темы закончились — нужно добавить новые в catalog.py")
@@ -115,7 +126,9 @@ def main():
                 except Exception as e:
                     print(f"загрузка не удалась ({attempt + 1}/3): {str(e)[:200]}", flush=True)
                     time.sleep(30)
-        meta.append({"file": fname, "kind": item["kind"], "publish_us_east": when.isoformat(),
+        if req and item.get("video_id"):
+            yt_requests.mark(req, item["video_id"], utc)
+        meta.append({"request": bool(req), "file": fname, "kind": item["kind"], "publish_us_east": when.isoformat(),
                      "publish_baku": loc.isoformat(), "title": item["title"], "description": item["description"],
                      "caption_tiktok_instagram": item["short"], "video_id": item.get("video_id")})
         plan.append(f"── {i + 1:02d}. {fname}\n"
