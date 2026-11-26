@@ -15,6 +15,7 @@
 "h2h:CN-US",
 "h2h:IN-JP",
 "h2h:JP-KR",
+"h2h:JP-PK",
 "h2h:JP-RU",
 "h2h:KR-TW",
 "h2h:KZ-UZ",
@@ -31,6 +32,7 @@
 "race:life:asia",
 "race:life:europe",
 "race:life:world",
+"race:online:africa",
 "race:online:americas",
 "race:online:asia",
 "race:online:europe",
@@ -41,5 +43,6 @@
 "race:rich:americas",
 "race:rich:asia",
 "race:rich:exussr",
-"race:rich:world"
+"race:rich:world",
+"shrink:asia"
 ]
