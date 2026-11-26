@@ -24,7 +24,8 @@
   "BT": 1,
   "LK": 1,
   "PK": 1,
-  "BD": 1
+  "BD": 1,
+  "IQ": 1
  },
  "fans": {
   "RO": {
@@ -100,6 +101,9 @@
   },
   "BD": {
    "zyroxfx0": 1
+  },
+  "IQ": {
+   "sssentinelsss": 1
   }
  },
  "counted": [
@@ -128,7 +132,8 @@
   "18350124208281921:zyroxfx0:BT",
   "18350124208281921:zyroxfx0:LK",
   "18350124208281921:zyroxfx0:PK",
-  "18350124208281921:zyroxfx0:BD"
+  "18350124208281921:zyroxfx0:BD",
+  "17887303965626391:sssentinelsss:IQ"
  ],
  "recent": [
   [
@@ -234,6 +239,10 @@
   [
    "zyroxfx0",
    "BD"
+  ],
+  [
+   "sssentinelsss",
+   "IQ"
   ]
  ],
  "past": [
@@ -777,6 +786,16 @@
    ],
    "cids": {
     "zyroxfx0": "18120756142814767"
+   }
+  },
+  "IQ": {
+   "by": "sssentinelsss",
+   "at": "2026-11-26",
+   "fans": [
+    "sssentinelsss"
+   ],
+   "cids": {
+    "sssentinelsss": "18139907635637832"
    }
   }
  },
