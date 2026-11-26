@@ -25,7 +25,8 @@
   "LK": 1,
   "PK": 1,
   "BD": 1,
-  "IQ": 1
+  "IQ": 1,
+  "MD": 1
  },
  "fans": {
   "RO": {
@@ -104,6 +105,9 @@
   },
   "IQ": {
    "sssentinelsss": 1
+  },
+  "MD": {
+   "zelisaw_zrodowski": 1
   }
  },
  "counted": [
@@ -133,7 +137,8 @@
   "18350124208281921:zyroxfx0:LK",
   "18350124208281921:zyroxfx0:PK",
   "18350124208281921:zyroxfx0:BD",
-  "17887303965626391:sssentinelsss:IQ"
+  "17887303965626391:sssentinelsss:IQ",
+  "18093747500293873:zelisaw_zrodowski:MD"
  ],
  "recent": [
   [
@@ -243,6 +248,10 @@
   [
    "sssentinelsss",
    "IQ"
+  ],
+  [
+   "zelisaw_zrodowski",
+   "MD"
   ]
  ],
  "past": [
@@ -796,6 +805,16 @@
    ],
    "cids": {
     "sssentinelsss": "18139907635637832"
+   }
+  },
+  "MD": {
+   "by": "zelisaw_zrodowski",
+   "at": "2026-11-26",
+   "fans": [
+    "zelisaw_zrodowski"
+   ],
+   "cids": {
+    "zelisaw_zrodowski": "18122449115073815"
    }
   }
  },
