@@ -1,20 +1,20 @@
 {
  "season": "2026-W48",
  "points": {
-  "RO": 1,
+  "RO": 2,
   "TD": 1,
   "FI": 1,
   "GT": 1,
   "MM": 1,
   "ID": 1,
   "VN": 1,
-  "NO": 1,
+  "NO": 2,
   "ES": 3,
   "BG": 1,
   "UZ": 1,
   "KZ": 1,
   "CA": 1,
-  "CL": 1,
+  "CL": 2,
   "JP": 1,
   "KR": 1,
   "NG": 1,
@@ -26,11 +26,23 @@
   "PK": 1,
   "BD": 1,
   "IQ": 1,
-  "MD": 1
+  "MD": 1,
+  "MX": 1,
+  "NZ": 1,
+  "CZ": 1,
+  "IN": 1,
+  "AR": 1,
+  "BR": 1,
+  "IR": 1,
+  "HU": 1,
+  "ZW": 1,
+  "ZM": 1,
+  "RW": 1
  },
  "fans": {
   "RO": {
-   "xeroquiz": 1
+   "xeroquiz": 1,
+   "itz_amarboi": 1
   },
   "TD": {
    "xeroquiz": 1
@@ -51,7 +63,8 @@
    "zyroxfx0": 1
   },
   "NO": {
-   "blitzkriegwithknowledge": 1
+   "blitzkriegwithknowledge": 1,
+   "zyroxfx0": 1
   },
   "ES": {
    "harry.melando": 1,
@@ -71,7 +84,8 @@
    "zyroxfx0": 1
   },
   "CL": {
-   "zyroxfx0": 1
+   "zyroxfx0": 1,
+   "itz_amarboi": 1
   },
   "JP": {
    "zyroxfx0": 1
@@ -108,6 +122,39 @@
   },
   "MD": {
    "zelisaw_zrodowski": 1
+  },
+  "MX": {
+   "zyroxfx0": 1
+  },
+  "NZ": {
+   "zyroxfx0": 1
+  },
+  "CZ": {
+   "matej_vlcek2": 1
+  },
+  "IN": {
+   "itz_amarboi": 1
+  },
+  "AR": {
+   "itz_amarboi": 1
+  },
+  "BR": {
+   "itz_amarboi": 1
+  },
+  "IR": {
+   "itz_amarboi": 1
+  },
+  "HU": {
+   "itz_amarboi": 1
+  },
+  "ZW": {
+   "itz_amarboi": 1
+  },
+  "ZM": {
+   "itz_amarboi": 1
+  },
+  "RW": {
+   "itz_amarboi": 1
   }
  },
  "counted": [
@@ -138,7 +185,21 @@
   "18350124208281921:zyroxfx0:PK",
   "18350124208281921:zyroxfx0:BD",
   "17887303965626391:sssentinelsss:IQ",
-  "18093747500293873:zelisaw_zrodowski:MD"
+  "18093747500293873:zelisaw_zrodowski:MD",
+  "18031593902922042:zyroxfx0:NO",
+  "18031593902922042:zyroxfx0:MX",
+  "18031593902922042:zyroxfx0:NZ",
+  "18031593902922042:matej_vlcek2:CZ",
+  "18031593902922042:itz_amarboi:IN",
+  "18031593902922042:itz_amarboi:AR",
+  "18031593902922042:itz_amarboi:BR",
+  "18031593902922042:itz_amarboi:IR",
+  "18031593902922042:itz_amarboi:CL",
+  "18031593902922042:itz_amarboi:HU",
+  "18031593902922042:itz_amarboi:ZW",
+  "18031593902922042:itz_amarboi:ZM",
+  "18031593902922042:itz_amarboi:RW",
+  "18031593902922042:itz_amarboi:RO"
  ],
  "recent": [
   [
@@ -252,6 +313,62 @@
   [
    "zelisaw_zrodowski",
    "MD"
+  ],
+  [
+   "zyroxfx0",
+   "NO"
+  ],
+  [
+   "zyroxfx0",
+   "MX"
+  ],
+  [
+   "zyroxfx0",
+   "NZ"
+  ],
+  [
+   "matej_vlcek2",
+   "CZ"
+  ],
+  [
+   "itz_amarboi",
+   "IN"
+  ],
+  [
+   "itz_amarboi",
+   "AR"
+  ],
+  [
+   "itz_amarboi",
+   "BR"
+  ],
+  [
+   "itz_amarboi",
+   "IR"
+  ],
+  [
+   "itz_amarboi",
+   "CL"
+  ],
+  [
+   "itz_amarboi",
+   "HU"
+  ],
+  [
+   "itz_amarboi",
+   "ZW"
+  ],
+  [
+   "itz_amarboi",
+   "ZM"
+  ],
+  [
+   "itz_amarboi",
+   "RW"
+  ],
+  [
+   "itz_amarboi",
+   "RO"
   ]
  ],
  "past": [
@@ -305,11 +422,13 @@
    "at": "2026-11-11",
    "fans": [
     "saro0onh18",
-    "ay_han8136"
+    "ay_han8136",
+    "itz_amarboi"
    ],
    "cids": {
     "ay_han8136": "18095233871695835",
-    "saro0onh18": "18176088733397388"
+    "saro0onh18": "18176088733397388",
+    "itz_amarboi": "18167954578494163"
    }
   },
   "FR": {
@@ -338,10 +457,12 @@
    "by": "ay_han8136",
    "at": "2026-11-12",
    "fans": [
-    "ay_han8136"
+    "ay_han8136",
+    "itz_amarboi"
    ],
    "cids": {
-    "ay_han8136": "17908626210668454"
+    "ay_han8136": "17908626210668454",
+    "itz_amarboi": "18101778026663227"
    }
   },
   "MN": {
@@ -459,11 +580,13 @@
    "by": "zyroxfx0",
    "at": "2026-11-18",
    "fans": [
-    "zyroxfx0"
+    "zyroxfx0",
+    "itz_amarboi"
    ],
    "cids": {
     "zyroxfx0": "18134473648809705",
-    "jsh_7.12": "17922168459537090"
+    "jsh_7.12": "17922168459537090",
+    "itz_amarboi": "18053063975817197"
    }
   },
   "PK": {
@@ -492,10 +615,12 @@
    "by": "davilucasss_11",
    "at": "2026-11-19",
    "fans": [
-    "davilucasss_11"
+    "davilucasss_11",
+    "itz_amarboi"
    ],
    "cids": {
-    "davilucasss_11": "17946511152376047"
+    "davilucasss_11": "17946511152376047",
+    "itz_amarboi": "18346919974278943"
    }
   },
   "KG": {
@@ -557,20 +682,24 @@
    "by": "nezoroki_pictures",
    "at": "2026-11-21",
    "fans": [
-    "nezoroki_pictures"
+    "nezoroki_pictures",
+    "itz_amarboi"
    ],
    "cids": {
-    "nezoroki_pictures": "17962770363279640"
+    "nezoroki_pictures": "17962770363279640",
+    "itz_amarboi": "18102303569542472"
    }
   },
   "RO": {
    "by": "xeroquiz",
    "at": "2026-11-21",
    "fans": [
-    "xeroquiz"
+    "xeroquiz",
+    "itz_amarboi"
    ],
    "cids": {
-    "xeroquiz": "18134309053875160"
+    "xeroquiz": "18134309053875160",
+    "itz_amarboi": "18170283967521940"
    }
   },
   "TD": {
@@ -689,10 +818,12 @@
    "by": "zyroxfx0",
    "at": "2026-11-25",
    "fans": [
-    "zyroxfx0"
+    "zyroxfx0",
+    "itz_amarboi"
    ],
    "cids": {
-    "zyroxfx0": "18124939034057545"
+    "zyroxfx0": "18124939034057545",
+    "itz_amarboi": "18216180148366885"
    }
   },
   "JP": {
@@ -783,6 +914,76 @@
    ],
    "cids": {
     "sssentinelsss": "18139907635637832"
+   }
+  },
+  "NO": {
+   "by": "zyroxfx0",
+   "at": "2026-11-26",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "18124651301319499"
+   }
+  },
+  "MX": {
+   "by": "zyroxfx0",
+   "at": "2026-11-26",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "18388278178232483"
+   }
+  },
+  "NZ": {
+   "by": "zyroxfx0",
+   "at": "2026-11-26",
+   "fans": [
+    "zyroxfx0"
+   ],
+   "cids": {
+    "zyroxfx0": "18342160609302817"
+   }
+  },
+  "CZ": {
+   "by": "matej_vlcek2",
+   "at": "2026-11-26",
+   "fans": [
+    "matej_vlcek2"
+   ],
+   "cids": {
+    "matej_vlcek2": "18138507133746865"
+   }
+  },
+  "ZW": {
+   "by": "itz_amarboi",
+   "at": "2026-11-26",
+   "fans": [
+    "itz_amarboi"
+   ],
+   "cids": {
+    "itz_amarboi": "17937611643148136"
+   }
+  },
+  "ZM": {
+   "by": "itz_amarboi",
+   "at": "2026-11-26",
+   "fans": [
+    "itz_amarboi"
+   ],
+   "cids": {
+    "itz_amarboi": "18160827691547887"
+   }
+  },
+  "RW": {
+   "by": "itz_amarboi",
+   "at": "2026-11-26",
+   "fans": [
+    "itz_amarboi"
+   ],
+   "cids": {
+    "itz_amarboi": "18122877973962226"
    }
   }
  },
