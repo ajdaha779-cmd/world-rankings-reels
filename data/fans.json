@@ -10,7 +10,7 @@
   "VN": 1,
   "NO": 2,
   "ES": 3,
-  "BG": 1,
+  "BG": 2,
   "UZ": 1,
   "KZ": 1,
   "CA": 1,
@@ -38,7 +38,8 @@
   "ZW": 1,
   "ZM": 1,
   "RW": 1,
-  "OM": 1
+  "OM": 1,
+  "MK": 1
  },
  "fans": {
   "RO": {
@@ -74,7 +75,8 @@
    "zyroxfx0": 1
   },
   "BG": {
-   "lazartodorov_2012": 1
+   "lazartodorov_2012": 1,
+   "kotsakabgpro": 1
   },
   "UZ": {
    "zyroxfx0": 1
@@ -160,6 +162,9 @@
   },
   "OM": {
    "lawatimaithamal": 1
+  },
+  "MK": {
+   "kotsakabgpro": 1
   }
  },
  "counted": [
@@ -206,7 +211,9 @@
   "18031593902922042:itz_amarboi:RW",
   "18031593902922042:itz_amarboi:RO",
   "18078991679756662:lawatimaithamal:OM",
-  "18231289522336818:da_best_femboy_fr_:GT"
+  "18231289522336818:da_best_femboy_fr_:GT",
+  "18031593902922042:kotsakabgpro:BG",
+  "18031593902922042:kotsakabgpro:MK"
  ],
  "recent": [
   [
@@ -384,6 +391,14 @@
   [
    "da_best_femboy_fr_",
    "GT"
+  ],
+  [
+   "kotsakabgpro",
+   "BG"
+  ],
+  [
+   "kotsakabgpro",
+   "MK"
   ]
  ],
  "past": [
@@ -1011,6 +1026,26 @@
    ],
    "cids": {
     "lawatimaithamal": "18156808063533708"
+   }
+  },
+  "BG": {
+   "by": "kotsakabgpro",
+   "at": "2026-11-26",
+   "fans": [
+    "kotsakabgpro"
+   ],
+   "cids": {
+    "kotsakabgpro": "18089628554510643"
+   }
+  },
+  "MK": {
+   "by": "kotsakabgpro",
+   "at": "2026-11-26",
+   "fans": [
+    "kotsakabgpro"
+   ],
+   "cids": {
+    "kotsakabgpro": "18185351539431356"
    }
   }
  },
