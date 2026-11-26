@@ -643,38 +643,16 @@
     "zyroxfx0": "17954434533301857"
    }
   },
-  "NO": {
-   "by": "blitzkriegwithknowledge",
-   "at": "2026-11-24",
-   "fans": [
-    "blitzkriegwithknowledge"
-   ],
-   "cids": {
-    "blitzkriegwithknowledge": "17978802105156989"
-   }
-  },
   "ES": {
-   "by": "harry.melando",
+   "by": "zyroxfx0",
    "at": "2026-11-24",
    "fans": [
-    "harry.melando",
-    "gage__f",
     "zyroxfx0"
    ],
    "cids": {
     "harry.melando": "18092929583256356",
     "gage__f": "18108764768201472",
     "zyroxfx0": "18120116963015458"
-   }
-  },
-  "BG": {
-   "by": "lazartodorov_2012",
-   "at": "2026-11-24",
-   "fans": [
-    "lazartodorov_2012"
-   ],
-   "cids": {
-    "lazartodorov_2012": "18117980693137944"
    }
   },
   "UZ": {
@@ -806,16 +784,6 @@
    "cids": {
     "sssentinelsss": "18139907635637832"
    }
-  },
-  "MD": {
-   "by": "zelisaw_zrodowski",
-   "at": "2026-11-26",
-   "fans": [
-    "zelisaw_zrodowski"
-   ],
-   "cids": {
-    "zelisaw_zrodowski": "18122449115073815"
-   }
   }
  },
  "lit_shown": [
@@ -853,7 +821,21 @@
   "GT",
   "MM",
   "ID",
-  "VN"
+  "VN",
+  "ES",
+  "UZ",
+  "KZ",
+  "CA",
+  "CL",
+  "JP",
+  "NG",
+  "ZA",
+  "PT",
+  "NP",
+  "BT",
+  "LK",
+  "BD",
+  "IQ"
  ],
  "fans_shown": [
   "AZ:sardvr",
@@ -896,9 +878,25 @@
   "GT:prussia_da_best_kingdom",
   "MM:zyroxfx0",
   "ID:zyroxfx0",
-  "VN:zyroxfx0"
+  "VN:zyroxfx0",
+  "KR:zyroxfx0",
+  "PK:zyroxfx0",
+  "ES:zyroxfx0",
+  "UZ:zyroxfx0",
+  "KZ:zyroxfx0",
+  "CA:zyroxfx0",
+  "CL:zyroxfx0",
+  "JP:zyroxfx0",
+  "NG:zyroxfx0",
+  "ZA:zyroxfx0",
+  "PT:zyroxfx0",
+  "NP:zyroxfx0",
+  "BT:zyroxfx0",
+  "LK:zyroxfx0",
+  "BD:zyroxfx0",
+  "IQ:sssentinelsss"
  ],
- "map_at": "2026-11-24T17:11:12.919786Z",
+ "map_at": "2026-11-26T17:10:49.679470Z",
  "notified": [
   "RU:zoktay_16_",
   "IR:ay_han8136",
@@ -944,7 +942,23 @@
   "GT:prussia_da_best_kingdom",
   "MM:zyroxfx0",
   "ID:zyroxfx0",
-  "VN:zyroxfx0"
+  "VN:zyroxfx0",
+  "KR:zyroxfx0",
+  "PK:zyroxfx0",
+  "ES:zyroxfx0",
+  "UZ:zyroxfx0",
+  "KZ:zyroxfx0",
+  "CA:zyroxfx0",
+  "CL:zyroxfx0",
+  "JP:zyroxfx0",
+  "NG:zyroxfx0",
+  "ZA:zyroxfx0",
+  "PT:zyroxfx0",
+  "NP:zyroxfx0",
+  "BT:zyroxfx0",
+  "LK:zyroxfx0",
+  "BD:zyroxfx0",
+  "IQ:sssentinelsss"
  ],
  "blocked": [
   "anurag.kairi",
@@ -984,7 +998,12 @@
   "mohalwah1",
   "salami_jr27",
   "topiko2163",
-  "miska_malmi"
+  "miska_malmi",
+  "blitzkriegwithknowledge",
+  "gage__f",
+  "harry.melando",
+  "lazartodorov_2012",
+  "zelisaw_zrodowski"
  ],
  "mention_ok": [
   "ay_han8136",
@@ -1016,6 +1035,7 @@
   "mato.yvl",
   "nezoroki_pictures",
   "xeroquiz",
-  "prussia_da_best_kingdom"
+  "prussia_da_best_kingdom",
+  "sssentinelsss"
  ]
 }
