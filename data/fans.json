@@ -37,7 +37,8 @@
   "HU": 1,
   "ZW": 1,
   "ZM": 1,
-  "RW": 1
+  "RW": 1,
+  "OM": 1
  },
  "fans": {
   "RO": {
@@ -155,6 +156,9 @@
   },
   "RW": {
    "itz_amarboi": 1
+  },
+  "OM": {
+   "lawatimaithamal": 1
   }
  },
  "counted": [
@@ -199,7 +203,8 @@
   "18031593902922042:itz_amarboi:ZW",
   "18031593902922042:itz_amarboi:ZM",
   "18031593902922042:itz_amarboi:RW",
-  "18031593902922042:itz_amarboi:RO"
+  "18031593902922042:itz_amarboi:RO",
+  "18078991679756662:lawatimaithamal:OM"
  ],
  "recent": [
   [
@@ -369,6 +374,10 @@
   [
    "itz_amarboi",
    "RO"
+  ],
+  [
+   "lawatimaithamal",
+   "OM"
   ]
  ],
  "past": [
@@ -984,6 +993,16 @@
    ],
    "cids": {
     "itz_amarboi": "18122877973962226"
+   }
+  },
+  "OM": {
+   "by": "lawatimaithamal",
+   "at": "2026-11-26",
+   "fans": [
+    "lawatimaithamal"
+   ],
+   "cids": {
+    "lawatimaithamal": "18156808063533708"
    }
   }
  },
