@@ -40,7 +40,11 @@
   "RW": 1,
   "OM": 1,
   "MK": 1,
-  "ET": 1
+  "ET": 1,
+  "BF": 1,
+  "LS": 1,
+  "NA": 1,
+  "MR": 1
  },
  "fans": {
   "RO": {
@@ -169,6 +173,18 @@
   },
   "ET": {
    "zaki27_9": 1
+  },
+  "BF": {
+   "nikail.b": 1
+  },
+  "LS": {
+   "nikail.b": 1
+  },
+  "NA": {
+   "nikail.b": 1
+  },
+  "MR": {
+   "nikail.b": 1
   }
  },
  "counted": [
@@ -219,7 +235,11 @@
   "18031593902922042:kotsakabgpro:BG",
   "18031593902922042:kotsakabgpro:MK",
   "18031593902922042:zaki27_9:ET",
-  "18148677307597816:kotsakabgpro:BG"
+  "18148677307597816:kotsakabgpro:BG",
+  "18031593902922042:nikail.b:BF",
+  "18031593902922042:nikail.b:LS",
+  "18031593902922042:nikail.b:NA",
+  "18031593902922042:nikail.b:MR"
  ],
  "recent": [
   [
@@ -409,6 +429,22 @@
   [
    "zaki27_9",
    "ET"
+  ],
+  [
+   "nikail.b",
+   "BF"
+  ],
+  [
+   "nikail.b",
+   "LS"
+  ],
+  [
+   "nikail.b",
+   "NA"
+  ],
+  [
+   "nikail.b",
+   "MR"
   ]
  ],
  "past": [
@@ -1066,6 +1102,46 @@
    ],
    "cids": {
     "zaki27_9": "18388204219239325"
+   }
+  },
+  "BF": {
+   "by": "nikail.b",
+   "at": "2026-11-27",
+   "fans": [
+    "nikail.b"
+   ],
+   "cids": {
+    "nikail.b": "18104901449547338"
+   }
+  },
+  "LS": {
+   "by": "nikail.b",
+   "at": "2026-11-27",
+   "fans": [
+    "nikail.b"
+   ],
+   "cids": {
+    "nikail.b": "18383472844301121"
+   }
+  },
+  "NA": {
+   "by": "nikail.b",
+   "at": "2026-11-27",
+   "fans": [
+    "nikail.b"
+   ],
+   "cids": {
+    "nikail.b": "18084387302432749"
+   }
+  },
+  "MR": {
+   "by": "nikail.b",
+   "at": "2026-11-27",
+   "fans": [
+    "nikail.b"
+   ],
+   "cids": {
+    "nikail.b": "18084387302432749"
    }
   }
  },
