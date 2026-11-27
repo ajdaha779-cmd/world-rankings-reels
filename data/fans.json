@@ -44,7 +44,8 @@
   "BF": 1,
   "LS": 1,
   "NA": 1,
-  "MR": 1
+  "MR": 1,
+  "PH": 1
  },
  "fans": {
   "RO": {
@@ -185,6 +186,9 @@
   },
   "MR": {
    "nikail.b": 1
+  },
+  "PH": {
+   "lalalincodalcaraz": 1
   }
  },
  "counted": [
@@ -239,7 +243,8 @@
   "18031593902922042:nikail.b:BF",
   "18031593902922042:nikail.b:LS",
   "18031593902922042:nikail.b:NA",
-  "18031593902922042:nikail.b:MR"
+  "18031593902922042:nikail.b:MR",
+  "18031593902922042:lalalincodalcaraz:PH"
  ],
  "recent": [
   [
@@ -445,6 +450,10 @@
   [
    "nikail.b",
    "MR"
+  ],
+  [
+   "lalalincodalcaraz",
+   "PH"
   ]
  ],
  "past": [
@@ -1142,6 +1151,26 @@
    ],
    "cids": {
     "nikail.b": "18084387302432749"
+   }
+  },
+  "TV": {
+   "by": "sombrerotequilaq",
+   "at": "2026-11-19",
+   "fans": [
+    "sombrerotequilaq"
+   ],
+   "cids": {
+    "sombrerotequilaq": "18039303674903970"
+   }
+  },
+  "PH": {
+   "by": "lalalincodalcaraz",
+   "at": "2026-11-27",
+   "fans": [
+    "lalalincodalcaraz"
+   ],
+   "cids": {
+    "lalalincodalcaraz": "18105395600380846"
    }
   }
  },
