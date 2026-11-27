@@ -10,7 +10,7 @@
   "VN": 1,
   "NO": 2,
   "ES": 3,
-  "BG": 2,
+  "BG": 3,
   "UZ": 1,
   "KZ": 1,
   "CA": 1,
@@ -39,7 +39,8 @@
   "ZM": 1,
   "RW": 1,
   "OM": 1,
-  "MK": 1
+  "MK": 1,
+  "ET": 1
  },
  "fans": {
   "RO": {
@@ -76,7 +77,7 @@
   },
   "BG": {
    "lazartodorov_2012": 1,
-   "kotsakabgpro": 1
+   "kotsakabgpro": 2
   },
   "UZ": {
    "zyroxfx0": 1
@@ -165,6 +166,9 @@
   },
   "MK": {
    "kotsakabgpro": 1
+  },
+  "ET": {
+   "zaki27_9": 1
   }
  },
  "counted": [
@@ -213,7 +217,9 @@
   "18078991679756662:lawatimaithamal:OM",
   "18231289522336818:da_best_femboy_fr_:GT",
   "18031593902922042:kotsakabgpro:BG",
-  "18031593902922042:kotsakabgpro:MK"
+  "18031593902922042:kotsakabgpro:MK",
+  "18031593902922042:zaki27_9:ET",
+  "18148677307597816:kotsakabgpro:BG"
  ],
  "recent": [
   [
@@ -399,6 +405,10 @@
   [
    "kotsakabgpro",
    "MK"
+  ],
+  [
+   "zaki27_9",
+   "ET"
   ]
  ],
  "past": [
@@ -1046,6 +1056,16 @@
    ],
    "cids": {
     "kotsakabgpro": "18185351539431356"
+   }
+  },
+  "ET": {
+   "by": "zaki27_9",
+   "at": "2026-11-27",
+   "fans": [
+    "zaki27_9"
+   ],
+   "cids": {
+    "zaki27_9": "18388204219239325"
    }
   }
  },
