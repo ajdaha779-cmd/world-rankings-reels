@@ -1,6 +1,7 @@
 [
 "boom:europe",
 "boom:world",
+"danger:asia",
 "danger:mideast",
 "duel:BR-PT",
 "duel:CN-JP",
@@ -25,7 +26,9 @@
 "moveout:americas",
 "offline:asia",
 "race:army:africa",
+"race:co2:americas",
 "race:co2:europe",
+"race:danger:americas",
 "race:danger:exussr",
 "race:danger:world",
 "race:economy:asia",
