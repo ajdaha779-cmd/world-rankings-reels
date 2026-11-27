@@ -27,7 +27,7 @@
   "BD": 1,
   "IQ": 1,
   "MD": 1,
-  "MX": 1,
+  "MX": 2,
   "NZ": 1,
   "CZ": 1,
   "IN": 1,
@@ -38,14 +38,16 @@
   "ZW": 1,
   "ZM": 1,
   "RW": 1,
-  "OM": 1,
+  "OM": 2,
   "MK": 1,
   "ET": 1,
   "BF": 1,
   "LS": 1,
   "NA": 1,
   "MR": 1,
-  "PH": 1
+  "PH": 1,
+  "EG": 1,
+  "SA": 1
  },
  "fans": {
   "RO": {
@@ -134,7 +136,8 @@
    "zelisaw_zrodowski": 1
   },
   "MX": {
-   "zyroxfx0": 1
+   "zyroxfx0": 1,
+   "asser_rites": 1
   },
   "NZ": {
    "zyroxfx0": 1
@@ -167,7 +170,8 @@
    "itz_amarboi": 1
   },
   "OM": {
-   "lawatimaithamal": 1
+   "lawatimaithamal": 1,
+   "asser_rites": 1
   },
   "MK": {
    "kotsakabgpro": 1
@@ -189,6 +193,12 @@
   },
   "PH": {
    "lalalincodalcaraz": 1
+  },
+  "EG": {
+   "asser_rites": 1
+  },
+  "SA": {
+   "asser_rites": 1
   }
  },
  "counted": [
@@ -244,7 +254,11 @@
   "18031593902922042:nikail.b:LS",
   "18031593902922042:nikail.b:NA",
   "18031593902922042:nikail.b:MR",
-  "18031593902922042:lalalincodalcaraz:PH"
+  "18031593902922042:lalalincodalcaraz:PH",
+  "18031593902922042:asser_rites:EG",
+  "18031593902922042:asser_rites:SA",
+  "18031593902922042:asser_rites:OM",
+  "18031593902922042:asser_rites:MX"
  ],
  "recent": [
   [
@@ -454,6 +468,22 @@
   [
    "lalalincodalcaraz",
    "PH"
+  ],
+  [
+   "asser_rites",
+   "EG"
+  ],
+  [
+   "asser_rites",
+   "SA"
+  ],
+  [
+   "asser_rites",
+   "OM"
+  ],
+  [
+   "asser_rites",
+   "MX"
   ]
  ],
  "past": [
@@ -1017,10 +1047,12 @@
    "by": "zyroxfx0",
    "at": "2026-11-26",
    "fans": [
-    "zyroxfx0"
+    "zyroxfx0",
+    "asser_rites"
    ],
    "cids": {
-    "zyroxfx0": "18388278178232483"
+    "zyroxfx0": "18388278178232483",
+    "asser_rites": "18156359989545773"
    }
   },
   "NZ": {
@@ -1077,10 +1109,12 @@
    "by": "lawatimaithamal",
    "at": "2026-11-26",
    "fans": [
-    "lawatimaithamal"
+    "lawatimaithamal",
+    "asser_rites"
    ],
    "cids": {
-    "lawatimaithamal": "18156808063533708"
+    "lawatimaithamal": "18156808063533708",
+    "asser_rites": "18042118703849740"
    }
   },
   "BG": {
@@ -1171,6 +1205,26 @@
    ],
    "cids": {
     "lalalincodalcaraz": "18105395600380846"
+   }
+  },
+  "EG": {
+   "by": "asser_rites",
+   "at": "2026-11-27",
+   "fans": [
+    "asser_rites"
+   ],
+   "cids": {
+    "asser_rites": "18112192736366198"
+   }
+  },
+  "SA": {
+   "by": "asser_rites",
+   "at": "2026-11-27",
+   "fans": [
+    "asser_rites"
+   ],
+   "cids": {
+    "asser_rites": "18443925100182253"
    }
   }
  },
