@@ -47,7 +47,11 @@
   "MR": 1,
   "PH": 1,
   "EG": 1,
-  "SA": 1
+  "SA": 1,
+  "DZ": 1,
+  "AF": 2,
+  "IT": 1,
+  "TR": 2
  },
  "fans": {
   "RO": {
@@ -199,6 +203,20 @@
   },
   "SA": {
    "asser_rites": 1
+  },
+  "DZ": {
+   "the_austrian_painter_fr": 1
+  },
+  "AF": {
+   "is4du11ah": 1,
+   "wongyjay1995": 1
+  },
+  "IT": {
+   "leontherobloxfan_rblx": 1
+  },
+  "TR": {
+   "wongyjay1995": 1,
+   "avrage_ark_player": 1
   }
  },
  "counted": [
@@ -258,17 +276,15 @@
   "18031593902922042:asser_rites:EG",
   "18031593902922042:asser_rites:SA",
   "18031593902922042:asser_rites:OM",
-  "18031593902922042:asser_rites:MX"
+  "18031593902922042:asser_rites:MX",
+  "18418744645090282:the_austrian_painter_fr:DZ",
+  "18418744645090282:is4du11ah:AF",
+  "18418744645090282:leontherobloxfan_rblx:IT",
+  "18418744645090282:wongyjay1995:AF",
+  "18418744645090282:wongyjay1995:TR",
+  "18418744645090282:avrage_ark_player:TR"
  ],
  "recent": [
-  [
-   "xeroquiz",
-   "RO"
-  ],
-  [
-   "xeroquiz",
-   "TD"
-  ],
   [
    "miska_malmi",
    "FI"
@@ -484,6 +500,30 @@
   [
    "asser_rites",
    "MX"
+  ],
+  [
+   "the_austrian_painter_fr",
+   "DZ"
+  ],
+  [
+   "is4du11ah",
+   "AF"
+  ],
+  [
+   "leontherobloxfan_rblx",
+   "IT"
+  ],
+  [
+   "wongyjay1995",
+   "AF"
+  ],
+  [
+   "wongyjay1995",
+   "TR"
+  ],
+  [
+   "avrage_ark_player",
+   "TR"
   ]
  ],
  "past": [
@@ -720,10 +760,14 @@
    "by": "mujib_rahmat_ogli_",
    "at": "2026-11-19",
    "fans": [
-    "mujib_rahmat_ogli_"
+    "mujib_rahmat_ogli_",
+    "is4du11ah",
+    "wongyjay1995"
    ],
    "cids": {
-    "mujib_rahmat_ogli_": "17922274188455099"
+    "mujib_rahmat_ogli_": "17922274188455099",
+    "is4du11ah": "18111747326300585",
+    "wongyjay1995": "17921580984523966"
    }
   },
   "BR": {
@@ -774,13 +818,17 @@
    "by": "tabiki_pooyyrrrr",
    "at": "2026-11-20",
    "fans": [
-    "tabiki_pooyyrrrr"
+    "tabiki_pooyyrrrr",
+    "wongyjay1995",
+    "avrage_ark_player"
    ],
    "cids": {
     "tabiki_pooyyrrrr": "18072967049507711",
     "komutankertenkele35": "17957408781038499",
     "topiko3321": "18113117420244052",
-    "topiko2163": "18113117420244052"
+    "topiko2163": "18113117420244052",
+    "wongyjay1995": "17921580984523966",
+    "avrage_ark_player": "18654391219031027"
    }
   },
   "GR": {
@@ -831,10 +879,12 @@
    "by": "drip.faker",
    "at": "2026-11-21",
    "fans": [
-    "drip.faker"
+    "drip.faker",
+    "the_austrian_painter_fr"
    ],
    "cids": {
-    "drip.faker": "18115118225139417"
+    "drip.faker": "18115118225139417",
+    "the_austrian_painter_fr": "18184862287433033"
    }
   },
   "AU": {
@@ -1225,6 +1275,16 @@
    ],
    "cids": {
     "asser_rites": "18443925100182253"
+   }
+  },
+  "IT": {
+   "by": "leontherobloxfan_rblx",
+   "at": "2026-11-28",
+   "fans": [
+    "leontherobloxfan_rblx"
+   ],
+   "cids": {
+    "leontherobloxfan_rblx": "18380739784212993"
    }
   }
  },
